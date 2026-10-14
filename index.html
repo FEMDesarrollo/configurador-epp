@@ -1855,9 +1855,16 @@ function datosRegistro(){
     traje:{ tipo:val('tipoTraje'), modelo:val('modelo'), configuracion:val('composicion') },
     secciones:recopilarDatos(), personal:personasValidas(), version:'V2 demo' };
 }
+/* Cada registro va a la subcarpeta de quien inició sesión (ej. "Registro de configuraciones/Sebastian Lara").
+   SharePoint crea la carpeta sola la primera vez. */
+function carpetaPersona(){
+  var n=(SESION && (SESION.name || (SESION.username||'').split('@')[0])) || 'Sin nombre';
+  n=n.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/["*:<>?\/\\|#%&{}~]/g,'').replace(/\s+/g,' ').trim();
+  return n.slice(0,80) || 'Sin nombre';
+}
 function subirArchivoSP(nombre, contenido, esBase64, conflicto){
   if(SESION){
-    var url='https://graph.microsoft.com/v1.0/drives/'+SP.driveId+'/items/'+SP.carpetaRegistro+':/'+encodeURIComponent(nombre)+':/content?@microsoft.graph.conflictBehavior='+(conflicto||'fail');
+    var url='https://graph.microsoft.com/v1.0/drives/'+SP.driveId+'/items/'+SP.carpetaRegistro+':/'+encodeURIComponent(carpetaPersona())+'/'+encodeURIComponent(nombre)+':/content?@microsoft.graph.conflictBehavior='+(conflicto||'fail');
     return tokenGraph().then(function(t){
       return fetch(url,{ method:'PUT', headers:{ 'Authorization':'Bearer '+t, 'Content-Type': (contenido instanceof Blob) ? 'application/pdf' : 'application/json' }, body:contenido });
     }).then(function(r){ if(r.ok) return r.json(); var e=new Error('HTTP '+r.status); e.status=r.status; if(r.status===409) e.message='nameAlreadyExists'; throw e; });
