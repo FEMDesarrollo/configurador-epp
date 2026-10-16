@@ -233,6 +233,31 @@ body.bloqueado .gate{display:flex}
 .mc-tabla .vacio td{color:var(--muted);text-align:center;padding:22px}
 .chip-pdf{display:inline-block;white-space:nowrap;font:700 10.5px var(--font-title);border-radius:4px;padding:3px 6px;background:var(--ok-bg);color:var(--ok)}
 .chip-pdf.no{background:var(--warn-bg);color:var(--warn)}
+.adj-zona{margin-top:14px}
+.adj-drop{display:flex;gap:12px;align-items:center;padding:14px 16px;border:2px dashed var(--border);border-radius:8px;background:var(--surface-2);color:var(--muted);font-size:13px;cursor:pointer;transition:border-color .15s,background .15s}
+.adj-drop b{color:var(--heading);font-size:14px}
+.adj-drop svg{flex:none;color:var(--heading)}
+.adj-drop:hover,.adj-drop.sobre{border-color:var(--heading);background:var(--surface)}
+#adjInput:focus-visible + .adj-drop{outline:3px solid var(--heading);outline-offset:2px}
+.adj-lista{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
+.adj-lista li{display:flex;align-items:center;gap:10px;padding:6px 8px;border:1px solid var(--divider);border-radius:6px;background:var(--surface);font-size:13px}
+.adj-lista .mini{flex:none;width:40px;height:40px;border-radius:4px;background:var(--surface-2) center/contain no-repeat;border:1px solid var(--divider);display:flex;align-items:center;justify-content:center;font:700 9px var(--font-title);color:var(--muted)}
+.adj-lista .nom{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
+.adj-lista .tam{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.adj-lista .est{font-size:11.5px;font-weight:600;white-space:nowrap;color:var(--muted)}
+.adj-lista .est.ok{color:var(--ok)}
+.adj-lista .quitar{background:none;color:var(--muted);font-size:18px;min-height:36px;min-width:36px;padding:0}
+.adj-lista .quitar:hover{color:var(--secondary)}
+.adj-correo{display:grid;gap:6px;margin-top:10px;padding:10px 12px;border:1px dashed var(--border);border-radius:6px;background:var(--surface-2);font-size:13px}
+.adj-correo .tit{font-weight:600;color:var(--heading);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.adj-correo .tit span{font-weight:400;color:var(--muted);font-variant-numeric:tabular-nums}
+.adj-correo label{display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--text)}
+.adj-correo input[type=checkbox]{width:18px;height:18px;min-height:0;margin:0;flex:none;accent-color:var(--primary)}
+.adj-correo .fijo{display:flex;align-items:center;gap:8px;color:var(--text)}
+.adj-correo .pdf{flex:none;font:700 10px var(--font-title);color:#fff;background:var(--secondary);border-radius:4px;padding:3px 5px}
+.adj-correo .t{color:var(--muted);font-size:12px;margin-left:auto;font-variant-numeric:tabular-nums;white-space:nowrap}
+.adj-correo .nota{color:var(--muted);font-size:12px}
+.chip-adj{display:inline-block;margin-left:4px;font:700 10.5px var(--font-title);border-radius:4px;padding:3px 6px;background:var(--surface-2);color:var(--heading);white-space:nowrap}
 @media (prefers-reduced-motion: reduce){ *{transition:none!important;scroll-behavior:auto!important} }
 
 /* Responsivo */
@@ -362,8 +387,8 @@ body.bloqueado .gate{display:flex}
 
   <h3>Marcado institucional espalda · Zona 1</h3>
   <div class="grid-2">
-    <div class="field"><label for="z1Aplica">¿Lleva marcado institucional?</label>
-      <select id="z1Aplica" data-toggle="z1Sub"></select></div>
+    <div class="field"><label for="z1Aplica">¿Lleva marcado institucional? <span class="req">*</span></label>
+      <select id="z1Aplica" data-req="Indica si lleva marcado institucional en la espalda (zona 1)" data-toggle="z1Sub"></select></div>
   </div>
   <div class="sub hidden" id="z1Sub"><div class="grid-2">
     <div class="field"><label for="z1Fijacion">Mecanismo de fijación</label><select id="z1Fijacion"></select></div>
@@ -375,8 +400,8 @@ body.bloqueado .gate{display:flex}
 
   <h3>Marcado personal posterior · Zona 2</h3>
   <div class="grid-2">
-    <div class="field"><label for="z2Aplica">¿Lleva marcado personal posterior?</label>
-      <select id="z2Aplica" data-toggle="z2Sub"></select></div>
+    <div class="field"><label for="z2Aplica">¿Lleva marcado personal posterior? <span class="req">*</span></label>
+      <select id="z2Aplica" data-req="Indica si lleva marcado personal posterior (zona 2)" data-toggle="z2Sub"></select></div>
   </div>
   <div class="sub hidden" id="z2Sub"><div class="grid-2">
     <div class="field"><label for="z2Fijacion">Mecanismo de fijación</label><select id="z2Fijacion"></select></div>
@@ -388,8 +413,8 @@ body.bloqueado .gate{display:flex}
 
   <h3>Logos, logotipos y banderas</h3>
   <div class="grid-2">
-    <div class="field"><label for="logoAplica">¿Lleva logos, logotipos o banderas?</label>
-      <select id="logoAplica" data-toggle="logoSub"></select></div>
+    <div class="field"><label for="logoAplica">¿Lleva logos, logotipos o banderas? <span class="req">*</span></label>
+      <select id="logoAplica" data-req="Indica si lleva logos, logotipos o banderas" data-toggle="logoSub"></select></div>
   </div>
   <div class="sub hidden" id="logoSub"><div class="grid-3">
     <div class="field"><label for="logoFijacion">Mecanismo de fijación</label><select id="logoFijacion"></select></div>
@@ -397,13 +422,21 @@ body.bloqueado .gate{display:flex}
     <div class="field"><label for="logoUbicacion">Ubicación</label><select id="logoUbicacion"></select></div>
     <div class="field full"><label for="logoObs">Observaciones</label>
       <input id="logoObs" placeholder="Colores, medidas, número de piezas…">
-      <div class="hint">Las imágenes de logos o banderas se envían como adjunto en el correo a Producción.</div></div>
+      <div class="hint">Adjunta abajo las imágenes: se guardan en SharePoint junto con el folio y se envían como adjunto en el correo.</div></div>
+  </div>
+  <div class="adj-zona">
+    <input type="file" id="adjInput" class="sr" multiple accept="image/*,.pdf,.svg,.ai,.eps,.cdr" onchange="agregarAdjuntos(this.files); this.value='';">
+    <label for="adjInput" class="adj-drop" id="adjDrop">
+      <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.4 11.1l-8.5 8.5a5.5 5.5 0 0 1-7.8-7.8l8.5-8.5a3.7 3.7 0 0 1 5.2 5.2l-8.5 8.5a1.8 1.8 0 0 1-2.6-2.6l7.8-7.8"/></svg>
+      <span><b>Adjuntar logos, logotipos o banderas</b><br>Arrastra los archivos aquí o haz clic para elegirlos · PNG, JPG, SVG, PDF, AI, EPS · máx. 20 MB c/u</span>
+    </label>
+    <ul class="adj-lista" id="adjLista" aria-label="Archivos adjuntos"></ul>
   </div></div>
 
   <h3>Marcado personal frontal</h3>
   <div class="grid-2">
-    <div class="field"><label for="frAplica">¿Lleva marcado personal frontal?</label>
-      <select id="frAplica" data-toggle="frSub"></select></div>
+    <div class="field"><label for="frAplica">¿Lleva marcado personal frontal? <span class="req">*</span></label>
+      <select id="frAplica" data-req="Indica si lleva marcado personal frontal" data-toggle="frSub"></select></div>
   </div>
   <div class="sub hidden" id="frSub"><div class="grid-2">
     <div class="field"><label for="frFijacion">Mecanismo de fijación</label><select id="frFijacion"></select></div>
@@ -565,7 +598,7 @@ body.bloqueado .gate{display:flex}
         <button type="button" class="btn-ghost btn-sm" onclick="cargarMisConfig(true)">↻ Actualizar</button>
       </div>
       <div class="mc-tabla"><table>
-        <thead><tr><th scope="col">Folio</th><th scope="col">Fecha</th><th scope="col">Cliente</th><th scope="col">Traje</th><th scope="col">PDF</th><th scope="col"><span class="sr">Acciones</span></th></tr></thead>
+        <thead><tr><th scope="col">Folio</th><th scope="col">Fecha</th><th scope="col">Cliente</th><th scope="col">Traje</th><th scope="col">Archivos</th><th scope="col"><span class="sr">Acciones</span></th></tr></thead>
         <tbody id="mcBody"></tbody>
       </table></div>
       <div class="ul na hidden" id="mcEstado"></div>
@@ -959,7 +992,7 @@ function inicializar(){
 
   var d=datosProducto;
   llenarSelect('tipoTraje', Object.keys(d.tipos));
-  ['z1Aplica','z2Aplica','logoAplica','frAplica'].forEach(function(id){ llenarSelect(id, d.siNo); $(id).value='No'; });
+  ['z1Aplica','z2Aplica','logoAplica','frAplica'].forEach(function(id){ llenarSelect(id, d.siNo); $(id).value=''; });
   llenarSelect('z1Fijacion', d.fijacionZona1); llenarSelect('z1Tamano', d.tamanos);
   llenarSelect('z2Fijacion', d.fijacionZona2); llenarSelect('z2Tamano', d.tamanos);
   llenarSelect('logoFijacion', d.fijacionLogos); llenarSelect('logoTipo', d.tipoMarcado); llenarSelect('logoUbicacion', d.ubicacionLogo);
@@ -1011,6 +1044,7 @@ function inicializar(){
     el.addEventListener(el.tagName==='SELECT'?'change':'input', function(){ el.classList.remove('invalid'); });
   });
   document.addEventListener('keydown', function(e){ if(e.key==='Escape') cerrarModalEmail(); });
+  prepararZonaAdjuntos();
 }
 
 /* =====================================================================
@@ -1056,6 +1090,7 @@ function recopilarDatos(){
       filas.push([lab.textContent.replace(/\s+/g,' ').trim(), v]);
     });
     // Datos calculados
+    if(sec.querySelector('#adjLista') && adjuntosActivos().length) filas.push(['Archivos de logos adjuntos', adjuntosActivos().map(function(a){ return a.nombre; }).join(', ')]);
     if(sec.querySelector('#ulInfo') && !$('ulInfo').classList.contains('na')) filas.push(['Verificación UL', $('ulInfo').textContent.replace(/^[✔⚠]\s*/,'')]);
     secciones.push({ titulo: sec.getAttribute('data-sec'), filas: filas });
   });
@@ -1268,7 +1303,12 @@ function construirEmail(conAdjunto){
         (personasValidas().length ? 'Personas en el pedido: '+personasValidas().length+'\n' : '');
   if(conAdjunto) t+='\nSe adjunta el PDF con el detalle completo de la configuración y la ficha visual del traje.\n';
   else t+='\nDetalle de la configuración:\n'+detalleTexto()+personalTexto();
-  if(val('logoAplica')==='Sí') t+='\nNota: las imágenes de logos o banderas se envían por separado.\n';
+  if(val('logoAplica')==='Sí'){
+    var na=adjuntosActivos().length;
+    if(conAdjunto && na) t+='Se adjunta'+(na>1?'n ':' ')+na+' archivo'+(na>1?'s':'')+' de logos/banderas: '+adjuntosActivos().map(function(a){ return a.nombre; }).join(', ')+'.\n';
+    else if(na) t+='\nArchivos de logos/banderas guardados en SharePoint con el folio: '+adjuntosActivos().map(function(a){ return a.nombre; }).join(', ')+'.\n';
+    else t+='\nNota: no se adjuntaron imágenes de logos o banderas; se enviarán por separado.\n';
+  }
   t+='\nSaludos,\n'+val('repVentas');
   return t;
 }
@@ -1298,7 +1338,8 @@ function abrirModalEmail2(){
   if(modo==='graph'){ txt.innerHTML='Se adjuntará <b></b> al enviar.'; txt.querySelector('b').textContent=nombreArchivo(); }
   else if(modo==='mcp'){ txt.textContent='Desde Claude el correo no puede llevar adjuntos: el detalle va en el cuerpo del mensaje. Descarga el PDF aparte si lo necesitas.'; }
   else { txt.textContent='Se descargará '+nombreArchivo()+' y se abrirá Outlook con el mensaje listo; solo arrastra el PDF al correo y envía.'; }
-  ad.appendChild(chip); ad.appendChild(txt);
+  ad.className='adjunto'; ad.appendChild(chip); ad.appendChild(txt);
+  pintarAdjuntosModal();
   resetConfirmacion();
   estadoOutlook('', '');
   $('emailModal').classList.add('active');
@@ -1379,48 +1420,32 @@ function enviarGraph(){
   if(!para.length || para.some(function(x){ return !re.test(x); })){ $('emailDest').classList.add('invalid'); estadoOutlook('Revisa los correos en “Para”.','warn'); return; }
   if(cc.some(function(x){ return !re.test(x); })){ $('emailCc').classList.add('invalid'); estadoOutlook('Revisa los correos en CC.','warn'); return; }
   $('emailDest').classList.remove('invalid'); $('emailCc').classList.remove('invalid');
+  var extras=LISTA_CORREO.filter(function(x){ return x.incluir; });
   var btn=$('btnGraphEnviar');
   if(!confirmandoGraph){
     confirmandoGraph=true; btn.textContent='✔ Confirmar envío a '+para.length+' destinatario'+(para.length>1?'s':'');
-    estadoOutlook('Pulsa de nuevo para confirmar. Se enviará desde tu cuenta de Outlook con el PDF adjunto.','na');
+    estadoOutlook('Pulsa de nuevo para confirmar. Se enviará desde tu cuenta de Outlook con el PDF'+(extras.length?' y '+extras.length+' logo'+(extras.length>1?'s':''):'')+' adjunto'+(extras.length?'s':'')+'.','na');
     return;
   }
   confirmandoGraph=false; btn.textContent='📤 Enviar con PDF adjunto'; btn.disabled=true;
   var asunto=(val('emailSubject')||asuntoEmail).slice(0,255), texto=$('emailContent').value.trim();
-  var token;
   estadoOutlook('Iniciando sesión con tu cuenta de Microsoft…','na');
-  tokenGraph().then(function(t){
-    token=t; estadoOutlook('Generando el PDF…','na');
+  tokenGraph().then(function(){
+    estadoOutlook('Generando el PDF…','na');
     return obtenerPDF();
   }).then(function(pdf){
     ultimoPDF=pdf;
-    return blobABase64(pdf.blob).then(function(b64){ return { pdf:pdf, b64:b64 }; });
-  }).then(function(x){
-    estadoOutlook('Enviando correo…','na');
-    var dir=function(a){ return { emailAddress:{ address:a } }; };
-    var msg={ message:{
-      subject:asunto,
-      body:{ contentType:'HTML', content:cuerpoHTML(texto, tituloCorreo(destinoCorreo)) },
-      toRecipients:para.map(dir), ccRecipients:cc.map(dir),
-      attachments:[{ '@odata.type':'#microsoft.graph.fileAttachment', name:x.pdf.filename, contentType:'application/pdf', contentBytes:x.b64 }]
-    }, saveToSentItems:true };
-    return fetch('https://graph.microsoft.com/v1.0/me/sendMail',{ method:'POST', headers:{ 'Authorization':'Bearer '+token, 'Content-Type':'application/json' }, body:JSON.stringify(msg) })
-      .then(function(r){ if(r.status===202) return; return r.text().then(function(t){ var e=new Error('HTTP '+r.status); e.detalle=t; e.status=r.status; throw e; }); });
+    var adj=[{ name:pdf.filename, type:'application/pdf', blob:pdf.blob }].concat(extras.map(function(x){ return { name:x.ref.nombre, type:x.ref.type, blob:x.ref.file }; }));
+    return enviarCorreoGraph({ para:para, cc:cc, asunto:asunto, html:cuerpoHTML(texto, tituloCorreo(destinoCorreo)), adjuntos:adj, progreso:function(m){ estadoOutlook(m,'na'); } });
   }).then(function(){
-    estadoOutlook('✔ Correo enviado a '+para.join(', ')+' con el PDF adjunto. Queda en tu carpeta de Enviados.','ok');
+    var n=extras.length;
+    estadoOutlook('✔ Correo enviado a '+para.join(', ')+' con el PDF'+(n?' y '+n+' logo'+(n>1?'s':''):'')+'. Queda en tu carpeta de Enviados.','ok');
     if(destinoCorreo==='produccion'){ paraProduccion=$('emailDest').value; ccProduccion=$('emailCc').value; }
     if(ultimoPDF) registrar(ultimoPDF);
     mostrarMensaje('✅ Configuración enviada por correo','ok');
-  }).catch(function(err){
-    var m='No se pudo enviar el correo.';
-    if(err && /user_cancelled|popup_window_error|BrowserAuthError/i.test((err.errorCode||'')+' '+(err.name||''))) m='No se completó el inicio de sesión de Microsoft (ventana cerrada o bloqueada). Permite ventanas emergentes y vuelve a intentar.';
-    else if(err && err.status===401) m='Tu sesión de Microsoft expiró. Vuelve a intentar para iniciar sesión.';
-    else if(err && err.status===403) m='Tu cuenta no tiene permiso para enviar correo desde esta página. Pide a TI que revise el permiso Mail.Send de la app.';
-    else if(err && err.status) m='Outlook rechazó el correo ('+err.status+'). Revisa los destinatarios e intenta de nuevo.';
-    estadoOutlook(m,'warn');
-  }).then(function(){ btn.disabled=false; });
+  }).catch(function(err){ estadoOutlook(mensajeErrorEnvio(err, true),'warn'); })
+  .then(function(){ btn.disabled=false; });
 }
-
 /* =====================================================================
    OUTLOOK (conector Microsoft 365, solo cuando la página corre dentro de Claude)
    ===================================================================== */
@@ -1932,10 +1957,10 @@ function datosRegistro(){
   return { folio:FOLIO, fecha:new Date().toISOString(), representante:val('repVentas'),
     cliente:{ nombre:val('clientName'), email:val('clientEmail'), telefono:val('clientPhone'), empresa:val('clientCompany') },
     traje:{ tipo:val('tipoTraje'), modelo:val('modelo'), configuracion:val('composicion') },
-    secciones:recopilarDatos(), personal:personasValidas(), version:'V2 demo' };
+    secciones:recopilarDatos(), personal:personasValidas(), adjuntos:adjuntosActivos().map(function(a){ return a.nombre; }), version:'V3' };
 }
-/* Cada registro va a la subcarpeta de quien inició sesión (ej. "Registro de configuraciones/Sebastian Lara").
-   SharePoint crea la carpeta sola la primera vez. */
+/* Cada registro va a la subcarpeta de quien inició sesión y, dentro, a una carpeta por folio
+   (ej. "Registro de configuraciones/Sebastian Lara/FEM-2610-AB12C/"). SharePoint crea las carpetas solas. */
 function carpetaPersona(){
   var n=(SESION && (SESION.name || (SESION.username||'').split('@')[0])) || 'Sin nombre';
   n=n.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/["*:<>?\/\\|#%&{}~]/g,'').replace(/\s+/g,' ').trim();
@@ -1943,9 +1968,9 @@ function carpetaPersona(){
 }
 function subirArchivoSP(nombre, contenido, esBase64, conflicto){
   if(SESION){
-    var url='https://graph.microsoft.com/v1.0/drives/'+SP.driveId+'/items/'+SP.carpetaRegistro+':/'+encodeURIComponent(carpetaPersona())+'/'+encodeURIComponent(nombre)+':/content?@microsoft.graph.conflictBehavior='+(conflicto||'fail');
+    var url='https://graph.microsoft.com/v1.0/drives/'+SP.driveId+'/items/'+SP.carpetaRegistro+':/'+encodeURIComponent(carpetaPersona())+'/'+encodeURIComponent(FOLIO)+'/'+encodeURIComponent(nombre)+':/content?@microsoft.graph.conflictBehavior='+(conflicto||'fail');
     return tokenGraph().then(function(t){
-      return fetch(url,{ method:'PUT', headers:{ 'Authorization':'Bearer '+t, 'Content-Type': (contenido instanceof Blob) ? 'application/pdf' : 'application/json' }, body:contenido });
+      return fetch(url,{ method:'PUT', headers:{ 'Authorization':'Bearer '+t, 'Content-Type': (contenido instanceof Blob) ? (contenido.type||'application/octet-stream') : 'application/json' }, body:contenido });
     }).then(function(r){ if(r.ok) return r.json(); var e=new Error('HTTP '+r.status); e.status=r.status; if(r.status===409) e.message='nameAlreadyExists'; throw e; });
   }
   var input={ driveId:SP.driveId, parentItemId:SP.carpetaRegistro, filename:nombre, conflictBehavior:conflicto||'fail' };
@@ -2019,10 +2044,179 @@ function elegirDestino(d){
   }
   $('emailDest').value=b.para; $('emailCc').value=b.cc; $('emailSubject').value=b.asunto; $('emailContent').value=b.cuerpo;
   $('emailDest').classList.remove('invalid'); $('emailCc').classList.remove('invalid');
+  pintarAdjuntosModal();
   resetConfirmacion(); estadoOutlook('', '');
   if(d==='cliente' && !val('clientEmail')) estadoOutlook('No hay email del cliente en Datos del cliente; escríbelo en “Para”.','warn');
 }
 
+
+/* =====================================================================
+   ADJUNTOS DE LOGOS / BANDERAS
+   Se guardan en SharePoint: Registro de configuraciones/<Persona>/<FOLIO>/
+   ===================================================================== */
+var ADJ=[], ADJ_SEQ=0, ADJ_MAX_MB=20, ADJ_MAX_N=12;
+function tamTxt(b){ return b>=1048576 ? (b/1048576).toFixed(1)+' MB' : Math.max(1,Math.round(b/1024))+' KB'; }
+function nombreSeguro(n){
+  n=String(n||'archivo').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/["*:<>?\/\\|#%&{}~]/g,'').replace(/\s+/g,' ').trim();
+  return n.slice(-120)||'archivo';
+}
+function nombreLibre(n, usados){
+  var base=n, ext='', m=n.match(/^(.*?)(\.[A-Za-z0-9]{1,6})$/); if(m){ base=m[1]; ext=m[2]; }
+  var k=1, c=n; while(usados.indexOf(c.toLowerCase())>=0){ k++; c=base+' ('+k+')'+ext; } return c;
+}
+function agregarAdjuntos(lista){
+  var omitidos=[];
+  [].forEach.call(lista||[], function(f){
+    if(ADJ.length>=ADJ_MAX_N){ omitidos.push(f.name+' (máximo '+ADJ_MAX_N+' archivos)'); return; }
+    if(f.size>ADJ_MAX_MB*1048576){ omitidos.push(f.name+' (pesa más de '+ADJ_MAX_MB+' MB)'); return; }
+    if(!f.size){ omitidos.push(f.name+' (archivo vacío)'); return; }
+    var nombre=nombreLibre(nombreSeguro(f.name), ADJ.map(function(a){ return a.nombre.toLowerCase(); }));
+    ADJ.push({ id:++ADJ_SEQ, file:f, nombre:nombre, size:f.size, type:f.type||'application/octet-stream', subido:false, itemId:null,
+               vista:/^image\//.test(f.type) ? URL.createObjectURL(f) : null });
+  });
+  if(omitidos.length) mostrarMensaje('No se agregaron: '+omitidos.join(', '),'error');
+  pintarAdjuntos(); actualizarVista();
+  if(registrado && SESION) subirAdjuntosPendientes().catch(function(){});
+}
+function quitarAdjunto(id){
+  var a=ADJ.filter(function(x){ return x.id===id; })[0]; if(!a) return;
+  ADJ=ADJ.filter(function(x){ return x.id!==id; });
+  if(a.vista) URL.revokeObjectURL(a.vista);
+  if(a.itemId && SESION){
+    tokenGraph().then(function(t){ return fetch('https://graph.microsoft.com/v1.0/drives/'+SP.driveId+'/items/'+a.itemId,{ method:'DELETE', headers:{ 'Authorization':'Bearer '+t } }); }).catch(function(){});
+  }
+  pintarAdjuntos(); actualizarVista();
+}
+function pintarAdjuntos(){
+  var ul=$('adjLista'); if(!ul) return; ul.innerHTML='';
+  ADJ.forEach(function(a){
+    var li=document.createElement('li');
+    var mini=document.createElement('span'); mini.className='mini';
+    if(a.vista) mini.style.backgroundImage='url("'+a.vista+'")'; else mini.textContent=(a.nombre.split('.').pop()||'').toUpperCase().slice(0,4);
+    var nom=document.createElement('span'); nom.className='nom'; nom.textContent=a.nombre; nom.title=a.nombre;
+    var tam=document.createElement('span'); tam.className='tam'; tam.textContent=tamTxt(a.size);
+    var est=document.createElement('span'); est.className='est'+(a.subido?' ok':''); est.textContent=a.subido?'✔ En SharePoint':(a.subiendo?'Subiendo…':'');
+    var q=document.createElement('button'); q.type='button'; q.className='quitar'; q.textContent='×'; q.setAttribute('aria-label','Quitar '+a.nombre); q.onclick=function(){ quitarAdjunto(a.id); };
+    li.appendChild(mini); li.appendChild(nom); li.appendChild(tam); li.appendChild(est); li.appendChild(q); ul.appendChild(li);
+  });
+}
+function adjuntosActivos(){ return val('logoAplica')==='Sí' ? ADJ : []; }
+function prepararZonaAdjuntos(){
+  var z=$('adjDrop'); if(!z) return;
+  ['dragenter','dragover'].forEach(function(ev){ z.addEventListener(ev,function(e){ e.preventDefault(); z.classList.add('sobre'); }); });
+  ['dragleave','drop'].forEach(function(ev){ z.addEventListener(ev,function(e){ e.preventDefault(); z.classList.remove('sobre'); }); });
+  z.addEventListener('drop',function(e){ if(e.dataTransfer && e.dataTransfer.files) agregarAdjuntos(e.dataTransfer.files); });
+}
+/* Sube a la carpeta del folio los adjuntos que aún no están en SharePoint */
+function subirAdjuntosPendientes(){
+  if(!SESION) return Promise.resolve();
+  var pend=adjuntosActivos().filter(function(a){ return !a.subido && !a.subiendo; });
+  var fallas=0;
+  return pend.reduce(function(p,a){
+    return p.then(function(){
+      a.subiendo=true; pintarAdjuntos();
+      return subirArchivoSP(a.nombre, a.file, false, 'replace').then(function(r){ a.subido=true; a.itemId=r && r.id; },
+        function(){ fallas++; }).then(function(){ a.subiendo=false; pintarAdjuntos(); });
+    });
+  }, Promise.resolve()).then(function(){ if(fallas){ var e=new Error('adjuntos'); e.fallas=fallas; throw e; } });
+}
+
+/* =====================================================================
+   ENVÍO CON ADJUNTOS POR MICROSOFT GRAPH
+   Hasta ~2.8 MB en total: sendMail directo (permiso Mail.Send).
+   Más grande: borrador + carga por partes + enviar (pide también Mail.ReadWrite).
+   ===================================================================== */
+var LIMITE_DIRECTO=2.8*1048576, LIMITE_TOTAL=30*1048576;
+function tokenGraphCon(alcances){
+  var pedido={ scopes:alcances };
+  return obtenerMsal().then(function(app){
+    var cuenta=app.getActiveAccount()||app.getAllAccounts()[0];
+    if(!cuenta) return app.acquireTokenPopup(pedido);
+    return app.acquireTokenSilent(Object.assign({account:cuenta},pedido)).catch(function(){ return app.acquireTokenPopup(pedido); });
+  }).then(function(r){ return r.accessToken; });
+}
+function graphFetch(token, metodo, ruta, cuerpo){
+  return fetch('https://graph.microsoft.com/v1.0'+ruta,{ method:metodo, headers:{ 'Authorization':'Bearer '+token, 'Content-Type':'application/json' }, body:cuerpo?JSON.stringify(cuerpo):undefined })
+    .then(function(r){ if(r.ok) return r.status===202||r.status===204 ? null : r.json(); var e=new Error('HTTP '+r.status); e.status=r.status; throw e; });
+}
+/* o: { para:[], cc:[], asunto, html, adjuntos:[{name,type,blob}], progreso:fn } */
+function enviarCorreoGraph(o){
+  var dir=function(a){ return { emailAddress:{ address:a } }; };
+  var adj=o.adjuntos||[], total=adj.reduce(function(t,a){ return t+a.blob.size; },0), avisa=o.progreso||function(){};
+  var msg={ subject:o.asunto, body:{ contentType:'HTML', content:o.html }, toRecipients:o.para.map(dir), ccRecipients:(o.cc||[]).map(dir) };
+  if(total>LIMITE_TOTAL){ var e=new Error('grande'); e.grande=true; return Promise.reject(e); }
+  if(total<=LIMITE_DIRECTO){
+    return tokenGraph().then(function(t){
+      return Promise.all(adj.map(function(a){ return blobABase64(a.blob); })).then(function(b64){
+        msg.attachments=adj.map(function(a,i){ return { '@odata.type':'#microsoft.graph.fileAttachment', name:a.name, contentType:a.type||'application/octet-stream', contentBytes:b64[i] }; });
+        avisa('Enviando correo…');
+        return graphFetch(t,'POST','/me/sendMail',{ message:msg, saveToSentItems:true });
+      });
+    });
+  }
+  var token, id;
+  avisa('El correo pesa '+tamTxt(total)+': preparándolo por partes…');
+  return tokenGraphCon(['Mail.ReadWrite','Mail.Send']).then(function(t){ token=t; return graphFetch(t,'POST','/me/messages',msg); })
+  .then(function(m){
+    id=m.id;
+    return adj.reduce(function(p,a,i){
+      return p.then(function(){
+        avisa('Adjuntando '+(i+1)+' de '+adj.length+': '+a.name+'…');
+        if(a.blob.size<3*1048576){
+          return blobABase64(a.blob).then(function(b64){ return graphFetch(token,'POST','/me/messages/'+id+'/attachments',{ '@odata.type':'#microsoft.graph.fileAttachment', name:a.name, contentType:a.type||'application/octet-stream', contentBytes:b64 }); });
+        }
+        return graphFetch(token,'POST','/me/messages/'+id+'/attachments/createUploadSession',{ AttachmentItem:{ attachmentType:'file', name:a.name, size:a.blob.size, contentType:a.type||'application/octet-stream' } })
+          .then(function(ses){ return subirPorPartes(ses.uploadUrl, a.blob); });
+      });
+    }, Promise.resolve());
+  }).then(function(){ avisa('Enviando correo…'); return graphFetch(token,'POST','/me/messages/'+id+'/send'); })
+  .catch(function(err){ if(id) err.borrador=true; throw err; });
+}
+function subirPorPartes(url, blob){
+  var PARTE=3*1048576, total=blob.size;
+  var parte=function(ini){
+    if(ini>=total) return Promise.resolve();
+    var fin=Math.min(ini+PARTE,total);
+    return fetch(url,{ method:'PUT', headers:{ 'Content-Range':'bytes '+ini+'-'+(fin-1)+'/'+total }, body:blob.slice(ini,fin) })
+      .then(function(r){ if(!r.ok){ var e=new Error('HTTP '+r.status); e.status=r.status; throw e; } return parte(fin); });
+  };
+  return parte(0);
+}
+function mensajeErrorEnvio(err, conPDF){
+  if(err && err.grande) return 'Los adjuntos pasan de '+tamTxt(LIMITE_TOTAL)+'. Quita algunos archivos o envíalos por separado.';
+  if(err && /user_cancelled|popup_window_error|BrowserAuthError/i.test((err.errorCode||'')+' '+(err.name||''))) return 'No se completó el inicio de sesión de Microsoft (ventana cerrada o bloqueada). Permite ventanas emergentes y vuelve a intentar.';
+  if(err && /AADSTS65001|consent_required|invalid_grant|interaction_required/i.test((err.errorCode||'')+' '+(err.errorMessage||err.message||''))) return 'Para enviar correos de más de 3 MB la app necesita el permiso Mail.ReadWrite. Pide a TI que lo agregue a la app de Entra, o quita adjuntos.';
+  if(err && err.status===401) return 'Tu sesión de Microsoft expiró. Vuelve a intentar para iniciar sesión.';
+  if(err && err.status===403) return 'Tu cuenta no tiene permiso para enviar este correo desde la página. Pide a TI que revise los permisos Mail.Send y Mail.ReadWrite de la app.';
+  if(err && err.status===413) return 'Los adjuntos son demasiado grandes para el correo. Quita algunos archivos.';
+  if(err && err.borrador) return 'El correo quedó a medias en tu carpeta de Borradores de Outlook ('+(err.status||'error')+'). Revísalo ahí antes de volver a intentar.';
+  if(err && err.status) return 'Outlook rechazó el correo ('+err.status+'). Revisa los destinatarios e intenta de nuevo.';
+  return conPDF ? 'No se pudieron preparar los adjuntos. Intenta de nuevo.' : 'No se pudo enviar el correo.';
+}
+/* Lista de adjuntos con casillas, para el modal de correo y el de reenvío */
+function pintarListaCorreo(cont, pdf, extras, nota){
+  cont.innerHTML=''; cont.className='adj-correo';
+  var tit=document.createElement('div'); tit.className='tit'; tit.textContent='Adjuntos del correo';
+  var tot=document.createElement('span'); tit.appendChild(tot); cont.appendChild(tit);
+  var suma=function(){ var t=(pdf&&pdf.size)||0; extras.forEach(function(x){ if(x.incluir) t+=x.size||0; }); tot.textContent=(pdf&&!pdf.size?'PDF + ':'')+tamTxt(t)+(t>LIMITE_DIRECTO?' · se envía por partes':''); };
+  if(pdf){ var f=document.createElement('div'); f.className='fijo'; f.innerHTML='<span class="pdf">PDF</span><b></b>'; f.querySelector('b').textContent=pdf.name; cont.appendChild(f); }
+  extras.forEach(function(x){
+    var l=document.createElement('label'); var c=document.createElement('input'); c.type='checkbox'; c.checked=!!x.incluir;
+    c.onchange=function(){ x.incluir=c.checked; suma(); };
+    var n=document.createElement('span'); n.textContent=x.name; var t=document.createElement('span'); t.className='t'; t.textContent=x.size?tamTxt(x.size):'';
+    l.appendChild(c); l.appendChild(n); l.appendChild(t); cont.appendChild(l);
+  });
+  if(nota){ var p=document.createElement('div'); p.className='nota'; p.textContent=nota; cont.appendChild(p); }
+  suma();
+}
+var LISTA_CORREO=[];
+function pintarAdjuntosModal(){
+  var modo=modoCorreo(), cont=$('adjuntoInfo');
+  if(modo!=='graph'){ return; }
+  LISTA_CORREO=adjuntosActivos().map(function(a){ return { name:a.nombre, size:a.size, ref:a, incluir:destinoCorreo!=='cliente' }; });
+  pintarListaCorreo(cont, { name:nombreArchivo() }, LISTA_CORREO,
+    LISTA_CORREO.length ? (destinoCorreo==='cliente' ? 'Marca los logos si también quieres mandárselos al cliente.' : '') : '');
+}
 /* =====================================================================
    MIS CONFIGURACIONES (lee la carpeta de registro de quien inició sesión)
    Registro de configuraciones/<Nombre> › FOLIO.json + FOLIO_Empresa.pdf
@@ -2056,15 +2250,18 @@ function cargarMisConfig(forzar){
   if(MC.cargando) return MC.cargando;
   if(!SESION){ MC.items=[]; pintarMisConfig(); mcEstado('Inicia sesión con Microsoft para ver tus configuraciones.','warn'); return Promise.resolve(); }
   MC.items=[]; MC.cargado=false; pintarMisConfig('Cargando tus configuraciones…'); mcEstado('');
+  var RX=/^(FEM-[A-Z0-9]{4}-[A-Z0-9]{5})/i;
   MC.cargando=listarRegistro().then(function(archivos){
     var porFolio={};
+    var item=function(f){ return porFolio[f]=porFolio[f]||{ folio:f, adjuntos:[] }; };
     archivos.forEach(function(f){
-      if(!f.file) return;
-      var m;
-      if((m=f.name.match(/^(FEM-[A-Z0-9]{4}-[A-Z0-9]{5})\.json$/i))){ (porFolio[m[1]]=porFolio[m[1]]||{folio:m[1]}).json=f; }
-      else if((m=f.name.match(/^(FEM-[A-Z0-9]{4}-[A-Z0-9]{5})_.*\.pdf$/i))){ (porFolio[m[1]]=porFolio[m[1]]||{folio:m[1]}).pdf=f; }
+      var m=f.name.match(RX); if(!m) return;
+      var it=item(m[1].toUpperCase());
+      if(f.folder && f.name.toUpperCase()===it.folio){ it.carpeta=f; return; }   // formato nuevo: una carpeta por folio
+      if(!f.file) return;                                                         // formato anterior: archivos sueltos
+      if(/\.json$/i.test(f.name)) it.json=f; else if(/\.pdf$/i.test(f.name)) it.pdf=f;
     });
-    MC.items=Object.keys(porFolio).map(function(k){ var it=porFolio[k]; var base=it.json||it.pdf; it.fecha=base.createdDateTime||base.lastModifiedDateTime; return it; });
+    MC.items=Object.keys(porFolio).map(function(k){ var it=porFolio[k]; var base=it.carpeta||it.json||it.pdf; it.fecha=base.createdDateTime||base.lastModifiedDateTime; it.pendiente=!!it.carpeta; return it; });
     MC.items.sort(function(a,b){ return String(b.fecha).localeCompare(String(a.fecha)); });
     MC.cargado=true; pintarMisConfig();
     return cargarDetalles();
@@ -2078,14 +2275,30 @@ function cargarMisConfig(forzar){
   return MC.cargando;
 }
 /* Lee los JSON de cada folio (de 4 en 4) para mostrar cliente y traje */
+function contenidoCarpeta(it){
+  if(!it.carpeta || !it.pendiente) return Promise.resolve();
+  return graphJSON('https://graph.microsoft.com/v1.0/drives/'+SP.driveId+'/items/'+it.carpeta.id+'/children?$top=200').then(function(r){
+    (r.value||[]).forEach(function(f){
+      if(!f.file) return;
+      if(f.name.toUpperCase()===it.folio+'.JSON') it.json=f;
+      else if(/\.pdf$/i.test(f.name) && f.name.toUpperCase().indexOf(it.folio+'_')===0) it.pdf=f;
+      else it.adjuntos.push(f);
+    });
+    it.pendiente=false;
+  }).catch(function(){ it.pendiente=false; });
+}
+/* Lee cada folio (de 4 en 4): contenido de su carpeta y su JSON, para mostrar cliente, traje y adjuntos */
 function cargarDetalles(){
-  var pend=MC.items.filter(function(it){ return it.json && !it.datos; }), i=0;
+  var pend=MC.items.filter(function(it){ return !it.datos; }), i=0;
   var siguiente=function(){
     if(i>=pend.length) return Promise.resolve();
     var it=pend[i++];
-    return bajarArchivo(it.json).then(function(b){ return b.text(); }).then(function(t){
-      try{ it.datos=JSON.parse(t); if(it.datos.fecha) it.fecha=it.datos.fecha; }catch(e){ it.datos={}; }
-    }).catch(function(){ it.datos={}; }).then(function(){ pintarMisConfig(); return siguiente(); });
+    return contenidoCarpeta(it).then(function(){
+      if(!it.json){ it.datos={}; return; }
+      return bajarArchivo(it.json).then(function(b){ return b.text(); }).then(function(t){
+        try{ it.datos=JSON.parse(t); if(it.datos.fecha) it.fecha=it.datos.fecha; }catch(e){ it.datos={}; }
+      });
+    }).catch(function(){ it.datos=it.datos||{}; }).then(function(){ pintarMisConfig(); return siguiente(); });
   };
   return Promise.all([siguiente(),siguiente(),siguiente(),siguiente()]);
 }
@@ -2118,7 +2331,9 @@ function pintarMisConfig(msgCarga){
     var tc=td(); var n=document.createElement('span'); n.textContent = d ? (c.empresa||c.nombre||empresaDePDF(it)||'—') : (empresaDePDF(it)||'Cargando…'); tc.appendChild(n);
     if(d && (c.nombre||c.email)){ var s=document.createElement('span'); s.className='mc-sub'; s.textContent=[c.empresa?c.nombre:'', c.email].filter(Boolean).join(' · '); tc.appendChild(s); }
     td().textContent = d ? (trajeDe(d)||'—') : '';
-    var tp=td(); var ch=document.createElement('span'); ch.className='chip-pdf'+(it.pdf?'':' no'); ch.textContent=it.pdf?'PDF':'Sin PDF'; tp.appendChild(ch);
+    var tp=td();
+    if(d){ var ch=document.createElement('span'); ch.className='chip-pdf'+(it.pdf?'':' no'); ch.textContent=it.pdf?'PDF':'Sin PDF'; tp.appendChild(ch);
+      if(it.adjuntos.length){ var ca=document.createElement('span'); ca.className='chip-adj'; ca.textContent='📎 '+it.adjuntos.length; ca.title=it.adjuntos.map(function(f){ return f.name; }).join('\n'); tp.appendChild(ca); } }
     var ta=td(); var acc=document.createElement('div'); acc.className='acc'; ta.appendChild(acc);
     if(it.pdf){ var bd=document.createElement('button'); bd.type='button'; bd.className='btn-ghost'; bd.textContent='📥 PDF'; bd.setAttribute('aria-label','Descargar PDF del folio '+it.folio); bd.onclick=function(){ descargarPDFRegistro(it, bd); }; acc.appendChild(bd); }
     var br=document.createElement('button'); br.type='button'; br.className='btn-secondary'; br.textContent='✉️ Reenviar'; br.setAttribute('aria-label','Reenviar el folio '+it.folio); br.onclick=function(){ abrirReenvio(it); }; acc.appendChild(br);
@@ -2166,30 +2381,32 @@ function borradorReenvio(dest){
     (d.representante ? 'Representante de ventas: '+d.representante+'\n' : '')+
     ((d.personal||[]).length ? 'Personas en el pedido: '+d.personal.length+'\n' : '')+
     (adj ? '\nSe adjunta el PDF con el detalle completo de la configuración y la ficha visual del traje.\n' : '\nDetalle de la configuración:\n'+detalleDeRegistro(d))+
+    (it.adjuntos.length ? 'Archivos de logos/banderas del folio: '+it.adjuntos.map(function(f){ return f.name; }).join(', ')+'.\n' : '')+
     '\nSaludos,\n'+firma;
   return { para: dest==='produccion' ? EMAIL_PRODUCCION : '', cc:'', asunto:(dest==='produccion'?'Reenvío configuración EPP – ':'Configuración EPP – ')+(c.empresa||c.nombre||'')+' – '+it.folio, cuerpo:t };
 }
 function abrirReenvio(it){
   RE.it=it; RE.borr={}; RE.destino='';
   $('reTitle').textContent='✉️ REENVIAR CONFIGURACIÓN · '+it.folio;
-  var ad=$('reAdjunto'); ad.innerHTML='';
-  var chip=document.createElement('span'); chip.className='pdf'; chip.textContent='PDF';
-  var txt=document.createElement('span');
-  if(it.pdf){ txt.innerHTML='Se adjuntará <b></b> al enviar.'; txt.querySelector('b').textContent=it.pdf.name; }
-  else txt.textContent='Este folio no tiene PDF guardado en SharePoint: el detalle de la configuración va en el cuerpo del correo.';
-  ad.appendChild(chip); ad.appendChild(txt);
   $('btnReOutlook').textContent = it.pdf ? '📨 Descargar PDF y abrir Outlook' : '📨 Abrir en Outlook';
   reEstado('');
   var listo=function(){ reDestino('cliente'); $('reModal').classList.add('active'); };
-  if(it.json && !it.datos){
+  if(it.pendiente || (it.json && !it.datos)){
     reEstado('Cargando datos del folio…','na'); $('reModal').classList.add('active');
-    bajarArchivo(it.json).then(function(b){ return b.text(); }).then(function(t){ try{ it.datos=JSON.parse(t); }catch(e){ it.datos={}; } })
-      .catch(function(){ it.datos={}; }).then(function(){ reEstado(''); listo(); });
+    contenidoCarpeta(it).then(function(){ if(!it.json || it.datos) return; return bajarArchivo(it.json).then(function(b){ return b.text(); }).then(function(t){ try{ it.datos=JSON.parse(t); }catch(e){ it.datos={}; } }); })
+      .catch(function(){ it.datos=it.datos||{}; }).then(function(){ reEstado(''); listo(); });
   } else listo();
+}
+function pintarAdjuntosReenvio(){
+  var it=RE.it;
+  RE.extras=it.adjuntos.map(function(f){ return { name:f.name, size:f.size, ref:f, incluir:RE.destino!=='cliente' }; });
+  pintarListaCorreo($('reAdjunto'), it.pdf ? { name:it.pdf.name, size:it.pdf.size } : null, RE.extras,
+    !it.pdf ? 'Este folio no tiene PDF guardado en SharePoint: el detalle de la configuración va en el cuerpo del correo.' :
+    (RE.extras.length && RE.destino==='cliente' ? 'Marca los logos si también quieres mandárselos al cliente.' : ''));
 }
 function cerrarReenvio(){ $('reModal').classList.remove('active'); }
 function reEstado(msg, tipo){ var b=$('reEstado'); if(!msg){ b.classList.add('hidden'); return; } b.className='ul '+(tipo||'na'); b.textContent=msg; }
-function reResetConfirmacion(){ RE.confirmando=false; $('btnReEnviar').textContent = RE.it && RE.it.pdf ? '📤 Enviar con PDF adjunto' : '📤 Enviar'; }
+function reResetConfirmacion(){ RE.confirmando=false; $('btnReEnviar').textContent = RE.it && (RE.it.pdf||RE.it.adjuntos.length) ? '📤 Enviar con adjuntos' : '📤 Enviar'; }
 function reDestino(dest){
   if(RE.destino) RE.borr[RE.destino]={ para:$('reDest').value, cc:$('reCc').value, asunto:$('reAsunto').value, cuerpo:$('reCuerpo').value };
   RE.destino=dest;
@@ -2197,6 +2414,7 @@ function reDestino(dest){
   var b=RE.borr[dest] || borradorReenvio(dest);
   $('reDest').value=b.para; $('reCc').value=b.cc; $('reAsunto').value=b.asunto; $('reCuerpo').value=b.cuerpo;
   $('reDest').classList.remove('invalid'); $('reCc').classList.remove('invalid');
+  pintarAdjuntosReenvio();
   reResetConfirmacion(); reEstado('');
   if(dest==='cliente' && !b.para) reEstado('Este folio no tiene email del cliente; escríbelo en “Para”.','warn');
   if(dest==='otro') setTimeout(function(){ $('reDest').focus(); }, 30);
@@ -2210,41 +2428,30 @@ function enviarReenvio(){
   $('reDest').classList.remove('invalid'); $('reCc').classList.remove('invalid');
   var texto=$('reCuerpo').value.trim();
   if(!texto){ reEstado('El mensaje está vacío.','warn'); return; }
+  var extras=(RE.extras||[]).filter(function(x){ return x.incluir; });
+  var archivos=(it.pdf?[it.pdf]:[]).concat(extras.map(function(x){ return x.ref; }));
   var btn=$('btnReEnviar');
   if(!RE.confirmando){
     RE.confirmando=true; btn.textContent='✔ Confirmar envío a '+para.length+' destinatario'+(para.length>1?'s':'');
-    reEstado('Pulsa de nuevo para confirmar. Se enviará desde tu cuenta de Outlook'+(it.pdf?' con el PDF adjunto':'')+'.','na');
+    reEstado('Pulsa de nuevo para confirmar. Se enviará desde tu cuenta de Outlook'+(archivos.length?' con '+archivos.length+' archivo'+(archivos.length>1?'s':'')+' adjunto'+(archivos.length>1?'s':''):'')+'.','na');
     return;
   }
   reResetConfirmacion(); btn.disabled=true;
-  var asunto=(val('reAsunto')||('Configuración EPP – '+it.folio)).slice(0,255), token;
+  var asunto=(val('reAsunto')||('Configuración EPP – '+it.folio)).slice(0,255);
   reEstado('Preparando el correo…','na');
-  tokenGraph().then(function(t){
-    token=t;
-    if(!it.pdf) return null;
-    reEstado('Descargando el PDF desde SharePoint…','na');
-    return bajarArchivo(it.pdf).then(blobABase64);
-  }).then(function(b64){
-    reEstado('Enviando correo…','na');
-    var dir=function(a){ return { emailAddress:{ address:a } }; };
-    var msg={ message:{ subject:asunto, body:{ contentType:'HTML', content:cuerpoHTML(texto, tituloCorreo(RE.destino==='cliente'?'cliente':'produccion')) },
-      toRecipients:para.map(dir), ccRecipients:cc.map(dir) }, saveToSentItems:true };
-    if(b64) msg.message.attachments=[{ '@odata.type':'#microsoft.graph.fileAttachment', name:it.pdf.name, contentType:'application/pdf', contentBytes:b64 }];
-    return fetch('https://graph.microsoft.com/v1.0/me/sendMail',{ method:'POST', headers:{ 'Authorization':'Bearer '+token, 'Content-Type':'application/json' }, body:JSON.stringify(msg) })
-      .then(function(r){ if(r.status===202) return; var e=new Error('HTTP '+r.status); e.status=r.status; throw e; });
+  tokenGraph().then(function(){
+    var i=0;
+    return archivos.reduce(function(p,f){ return p.then(function(lista){
+      reEstado('Descargando de SharePoint '+(++i)+' de '+archivos.length+': '+f.name+'…','na');
+      return bajarArchivo(f).then(function(b){ lista.push({ name:f.name, type:(f.file&&f.file.mimeType)||b.type||'application/octet-stream', blob:b }); return lista; });
+    }); }, Promise.resolve([]));
+  }).then(function(adj){
+    return enviarCorreoGraph({ para:para, cc:cc, asunto:asunto, html:cuerpoHTML(texto, tituloCorreo(RE.destino==='cliente'?'cliente':'produccion')), adjuntos:adj, progreso:function(m){ reEstado(m,'na'); } });
   }).then(function(){
-    reEstado('✔ Correo enviado a '+para.join(', ')+(it.pdf?' con el PDF adjunto':'')+'. Queda en tu carpeta de Enviados.','ok');
+    reEstado('✔ Correo enviado a '+para.join(', ')+(archivos.length?' con '+archivos.length+' adjunto'+(archivos.length>1?'s':''):'')+'. Queda en tu carpeta de Enviados.','ok');
     mostrarMensaje('✅ Configuración '+it.folio+' reenviada','ok');
-  }).catch(function(err){
-    var m='No se pudo enviar el correo.';
-    if(err && /user_cancelled|popup_window_error|BrowserAuthError/i.test((err.errorCode||'')+' '+(err.name||''))) m='No se completó el inicio de sesión de Microsoft (ventana cerrada o bloqueada). Permite ventanas emergentes y vuelve a intentar.';
-    else if(err && err.status===401) m='Tu sesión de Microsoft expiró. Vuelve a intentar para iniciar sesión.';
-    else if(err && err.status===403) m='Tu cuenta no tiene permiso para enviar correo desde esta página. Pide a TI que revise el permiso Mail.Send de la app.';
-    else if(err && err.status===413) m='El PDF es demasiado grande para enviarlo adjunto. Usa “Descargar PDF y abrir Outlook”.';
-    else if(err && err.status) m='Outlook rechazó el correo ('+err.status+'). Revisa los destinatarios e intenta de nuevo.';
-    else if(it.pdf) m='No se pudo descargar el PDF desde SharePoint. Intenta de nuevo.';
-    reEstado(m,'warn');
-  }).then(function(){ btn.disabled=false; });
+  }).catch(function(err){ reEstado(mensajeErrorEnvio(err, archivos.length>0),'warn'); })
+  .then(function(){ btn.disabled=false; });
 }
 function reenvioOutlookWeb(){
   var it=RE.it; if(!it) return;
@@ -2268,12 +2475,14 @@ function registrar(pdf){
     if(!pdf) return;
     if(SESION) return subirArchivoSP(pdf.filename, pdf.blob, false, 'replace');
     return blobABase64(pdf.blob).then(function(b64){ return subirArchivoSP(pdf.filename, b64, true, 'replace'); });
-  }).then(function(){ pillRegistro('✔ Registrado en SharePoint','ok'); MC.cargado=false; return true; },
+  }).then(function(){
+    if(adjuntosActivos().length) pillRegistro('Subiendo logos…');
+    return subirAdjuntosPendientes().then(function(){ return true; }, function(e){ pillRegistro('Registrado; '+e.fallas+' logo'+(e.fallas>1?'s':'')+' no se pudo subir','warn'); return 'parcial'; });
+  }).then(function(r){ if(r===true) pillRegistro('✔ Registrado en SharePoint','ok'); MC.cargado=false; return true; },
           function(){ pillRegistro('Folio reservado; no se pudo guardar el PDF','warn'); return false; })
     .then(function(r){ registrando=null; return r; });
   return registrando;
 }
-
 /* =====================================================================
    V2 · CATÁLOGO (solo el dueño de la página lo ve)
    ===================================================================== */
