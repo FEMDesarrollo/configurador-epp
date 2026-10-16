@@ -318,6 +318,8 @@ body.bloqueado .gate{display:flex}
   .guia-fig img{max-width:180px}
   .chk{margin-left:0}
 }
+.cintas-pers{display:flex;justify-content:center;margin:-2px 16px 6px}
+.cintas-pers span{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:14px;background:var(--primary);color:var(--on-dark);font:700 11.5px var(--font-title);letter-spacing:.5px;text-transform:uppercase}
 @media (prefers-reduced-motion: reduce){ *{transition:none!important;scroll-behavior:auto!important} }
 
 /* Responsivo */
@@ -431,9 +433,13 @@ body.bloqueado .gate{display:flex}
   <h2><span class="num">04</span>Disposición de cintas<small id="cnt4"></small></h2>
   <div class="grid-2">
     <div class="field full"><label for="cintaChaqueta">Chaqueta / camisa</label>
-      <select id="cintaChaqueta"></select></div>
+      <select id="cintaChaqueta" data-pers="wrapCintaChaqPers"></select></div>
+    <div class="field full hidden" id="wrapCintaChaqPers"><label for="cintaChaqPers">Cintas personalizadas · chaqueta / camisa <span class="req">*</span></label>
+      <textarea id="cintaChaqPers" rows="3" style="min-height:84px" placeholder="Describe la disposición: ubicación, número de cintas, orientación, ancho, color…"></textarea></div>
     <div class="field full"><label for="cintaPantalon">Pantalón</label>
-      <select id="cintaPantalon"></select></div>
+      <select id="cintaPantalon" data-pers="wrapCintaPanPers"></select></div>
+    <div class="field full hidden" id="wrapCintaPanPers"><label for="cintaPanPers">Cintas personalizadas · pantalón <span class="req">*</span></label>
+      <textarea id="cintaPanPers" rows="3" style="min-height:84px" placeholder="Describe la disposición: ubicación, número de cintas, orientación, ancho, color…"></textarea></div>
     <div class="field full"><label for="cintaOtro">Otro (especificar, sujeto a validación)</label>
       <input id="cintaOtro" placeholder="Describe una disposición distinta, si aplica"></div>
   </div>
@@ -618,6 +624,7 @@ body.bloqueado .gate{display:flex}
     <button type="button" class="vista-btn" data-vista="espalda" aria-pressed="true" onclick="fijarVista('espalda',true)">Espalda</button>
   </div>
   <div class="prev"><svg id="prevSvg" viewBox="0 0 240 420" role="img" aria-label="Vista previa del EPP"></svg></div>
+  <div class="cintas-pers hidden" id="cintasPersTag"><span>Cintas personalizadas</span></div>
   <div class="prev-cap" id="prevCap">Vista previa de la espalda · color y marcado de referencia</div>
   <div class="aviso-color" role="note"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><span>Los colores de esta vista son solo una representación de referencia. Por temas de imagen y pantalla no corresponden al color exacto de la tela; confirma el tono con tu asesor o con el muestrario físico.</span></div>
   <dl class="fv-lista">
@@ -877,16 +884,48 @@ function mostrarMensaje(msg, tipo){
   toastTimer=setTimeout(function(){ t.className=tipo||'info'; }, 4200);
 }
 
-/* Folio FEM: FEM-AAMM-XXXXX (5 caracteres base 32 sin letras confusas).
-   Se arma con el momento exacto (milisegundos) y un valor aleatorio; al registrarlo en
-   SharePoint el archivo no puede repetirse, así que un folio duplicado se detecta y se cambia. */
+/* Folio FEM: FEM-AAMMDD-REP-TIPO-MODELO  (ej. FEM-261016-SL-EST-FUS)
+   AAMMDD = fecha · REP = iniciales del representante · TIPO y MODELO = claves cortas.
+   Si ese folio ya existe en SharePoint se agrega un consecutivo: -02, -03…
+   Las claves de tipo y modelo se pueden fijar en el catálogo (columnas "Clave tipo" y "Clave modelo"
+   de la hoja Tipos_Modelos); si no existen se calculan solas. */
 var B32='0123456789ABCDEFGHJKMNPQRSTVWXYZ';
-function generarFolio(){
+function generarFolio(consecutivo){
   var d=new Date(), p=function(n){return (n<10?'0':'')+n;};
-  var n=(Date.now()%33554432) ^ Math.floor(Math.random()*33554432), c='';
-  try{ var a=new Uint32Array(1); crypto.getRandomValues(a); n=(n ^ a[0])>>>0; }catch(e){}
-  for(var i=0;i<5;i++){ c=B32[n%32]+c; n=Math.floor(n/32); }
-  return 'FEM-'+String(d.getFullYear()).slice(2)+p(d.getMonth()+1)+'-'+c;
+  var partes=['FEM', String(d.getFullYear()).slice(2)+p(d.getMonth()+1)+p(d.getDate()),
+              inicialesRep(val('repVentas'))||'XX', claveTipo(val('tipoTraje'))||'XXX', claveModelo(val('modelo'))||'XXX'];
+  if(consecutivo && consecutivo>1) partes.push(p(consecutivo));
+  return partes.join('-');
+}
+function limpiaClave(t){ return String(t||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().replace(/[^A-Z0-9 ]+/g,' ').replace(/\s+/g,' ').trim(); }
+var PARTICULAS=['DE','DEL','LA','LAS','LOS','Y','E','DA','DI','VAN','VON'];
+function inicialesRep(nombre){
+  var w=limpiaClave(nombre).split(' ').filter(function(x){ return x && PARTICULAS.indexOf(x)<0 && /^[A-Z]/.test(x); });
+  return w.slice(0,3).map(function(x){ return x[0]; }).join('');
+}
+var CLAVES_TIPO={ 'ESTRUCTURAL':'EST', 'APROXIMACION':'APX', 'FORESTAL':'FOR', 'INDUSTRIAL':'IND', 'RESCATE':'RES' };
+function claveTipo(tipo){
+  if(!tipo) return '';
+  if(datosProducto.claves && datosProducto.claves[tipo]) return limpiaClave(datosProducto.claves[tipo]).replace(/ /g,'').slice(0,5);
+  var t=limpiaClave(etiqueta(tipo)||tipo);
+  for(var k in CLAVES_TIPO){ if(t.indexOf(k)===0) return CLAVES_TIPO[k]; }
+  return t.replace(/ /g,'').slice(0,3);
+}
+function claveModelo(mod){
+  if(!mod) return '';
+  if(datosProducto.claves && datosProducto.claves[mod]) return limpiaClave(datosProducto.claves[mod]).replace(/ /g,'').slice(0,6);
+  var w=limpiaClave(mod).split(' ').filter(Boolean);
+  if(!w.length) return '';
+  return (w[0].slice(0,3)+w.slice(1).map(function(x){ return /^\d+$/.test(x) ? x : x[0]; }).join('')).slice(0,8);
+}
+/* Mientras no se registra, el folio se arma en vivo con los datos capturados */
+function actualizarFolio(){
+  if(registrado || reservando) return;
+  var f=generarFolio();
+  if(f===FOLIO) return;
+  FOLIO=f;
+  if($('folioTxt')) $('folioTxt').textContent=FOLIO;
+  if($('fvFolio')) $('fvFolio').textContent=FOLIO;
 }
 function fechaLarga(){
   return new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
@@ -996,9 +1035,22 @@ function verificarUL(){
 function actualizarCintas(){
   var modelo=val('modelo');
   var c = modelo ? datosProducto.cintas[modelo] : null;
-  llenarSelect('cintaChaqueta', c ? c.chaqueta : [], modelo ? 'Selecciona...' : 'Primero elige el modelo');
-  llenarSelect('cintaPantalon', c ? c.pantalon : [], modelo ? 'Selecciona...' : 'Primero elige el modelo');
+  llenarSelect('cintaChaqueta', modelo ? (c ? c.chaqueta : []).concat([CINTA_PERS]) : [], modelo ? 'Selecciona...' : 'Primero elige el modelo');
+  llenarSelect('cintaPantalon', modelo ? (c ? c.pantalon : []).concat([CINTA_PERS]) : [], modelo ? 'Selecciona...' : 'Primero elige el modelo');
+  mostrarCintasPers();
 }
+/* ---------- Cintas personalizadas ---------- */
+var CINTA_PERS='Personalizado';
+function cintaPers(id){ return val(id)===CINTA_PERS; }
+function hayCintasPers(){ return cintaPers('cintaChaqueta') || cintaPers('cintaPantalon'); }
+function mostrarCintasPers(){
+  mostrar('wrapCintaChaqPers', cintaPers('cintaChaqueta'));
+  mostrar('wrapCintaPanPers', cintaPers('cintaPantalon'));
+  if($('cintasPersTag')) mostrar('cintasPersTag', hayCintasPers());
+}
+document.addEventListener('change', function(e){ if(e.target && (e.target.id==='cintaChaqueta'||e.target.id==='cintaPantalon')){ mostrarCintasPers(); if(cintaPers(e.target.id)) setTimeout(function(){ $(e.target.id==='cintaChaqueta'?'cintaChaqPers':'cintaPanPers').focus(); },0); } });
+document.addEventListener('input', function(e){ if(e.target && (e.target.id==='cintaChaqPers'||e.target.id==='cintaPanPers')) e.target.classList.remove('invalid'); });
+function textoCinta(id, idTxt){ var v=val(id); if(!v) return ''; return v===CINTA_PERS ? 'Personalizado'+(val(idTxt)?' – '+val(idTxt):'') : v; }
 
 function actualizarResumen(){
   var t=val('tipoTraje'), m=val('modelo'), c=val('composicion'), r=$('resumenGeneral');
@@ -1159,6 +1211,8 @@ function validarFormulario(){
     if(!String(el.value||'').trim()) return error(el, el.getAttribute('data-req'));
   }
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val('clientEmail'))) return error($('clientEmail'),'El email del cliente no es válido');
+  if(cintaPers('cintaChaqueta') && !val('cintaChaqPers')) return error($('cintaChaqPers'),'Describe las cintas personalizadas de la chaqueta / camisa');
+  if(cintaPers('cintaPantalon') && !val('cintaPanPers')) return error($('cintaPanPers'),'Describe las cintas personalizadas del pantalón');
   if(val('clientPhone').replace(/\D/g,'').length<8) return error($('clientPhone'),'El teléfono debe tener al menos 8 dígitos');
   return { ok:true };
   function error(el,msg){
@@ -1294,10 +1348,10 @@ function bloqueFichaPDF(imgF, imgE){
         fila('Color', col)+
         fila('Capas', [ext,val('matHumedad'),val('matTermica')].filter(Boolean).join(' / '))+
         fila('UL', comb ? 'TPP '+comb[4].toFixed(1)+' cal/cm²'+(comb[3]!==null?' · THL '+comb[3].toFixed(1)+' W/m²':'') : '')+
-        fila('Cintas', [val('cintaChaqueta') ? 'Chaqueta: '+val('cintaChaqueta') : '', val('cintaPantalon') ? 'Pantalón: '+val('cintaPantalon') : ''])+
+        fila('Cintas', [val('cintaChaqueta') ? 'Chaqueta: '+textoCinta('cintaChaqueta','cintaChaqPers') : '', val('cintaPantalon') ? 'Pantalón: '+textoCinta('cintaPantalon','cintaPanPers') : ''])+
         fila('Marcado', marc)+
       '</table></td></tr></table>'+
-    '<div style="font-size:8.5px;color:#777;margin-top:3px;">Vista esquemática de referencia; las medidas, colores y ubicaciones finales las valida Producción. Los colores mostrados son solo una representación: por temas de imagen no corresponden al color exacto de la tela.</div>'+
+    '<div style="font-size:8.5px;color:#777;margin-top:3px;">'+(hayCintasPers() ? '<b>Cintas personalizadas:</b> no se muestran en la vista; ver la descripción en la sección de cintas. ' : '')+'Vista esquemática de referencia; las medidas, colores y ubicaciones finales las valida Producción. Los colores mostrados son solo una representación: por temas de imagen no corresponden al color exacto de la tela.</div>'+
     '</div>';
 }
 
@@ -1710,7 +1764,8 @@ function actualizarFicha(){
     chip.textContent = comb ? 'UL · TPP '+comb[4].toFixed(1)+(comb[3]!==null?' · THL '+comb[3].toFixed(1):'') : 'Sujeta a validación';
     dd.appendChild(document.createElement('br')); dd.appendChild(chip);
   }
-  fijarDato('fvCintas', [val('cintaChaqueta'), val('cintaPantalon')].filter(Boolean).map(function(x){ return x.replace(/^(Estándar|Opcional|Otra):\s*/,''); }).join(' / '));
+  fijarDato('fvCintas', [val('cintaChaqueta'), val('cintaPantalon')].filter(Boolean).map(function(x){ return x===CINTA_PERS ? 'Personalizadas' : x.replace(/^(Estándar|Opcional|Otra):\s*/,''); }).join(' / '));
+  mostrarCintasPers();
   fijarDato('fvCliente', [val('clientCompany'), val('clientName')].filter(Boolean).join(' · '));
   $('fvFolio').textContent=FOLIO||'';
 }
@@ -1784,7 +1839,7 @@ function dibujarPreview(){
   }
   // Cintas del pantalón
   var cp=val('cintaPantalon');
-  if(tape && cp && !/Sin cinta/.test(cp)){
+  if(tape && cp && !/Sin cinta/.test(cp) && cp!==CINTA_PERS){
     if(/vertical/.test(cp)){ el('rect',{x:64,y:Pw+12,width:7,height:legLen-14,fill:tape},g); el('rect',{x:169,y:Pw+12,width:7,height:legLen-14,fill:tape},g); }
     if(/Piping/i.test(cp)){ el('line',{x1:63,y1:Pw+10,x2:66,y2:Pw+legLen,stroke:tape,'stroke-width':2.5},g); el('line',{x1:177,y1:Pw+10,x2:174,y2:Pw+legLen,stroke:tape,'stroke-width':2.5},g); }
     if(/bordes de los bolsillos/.test(cp) && frente && pt){ el('rect',{x:72,y:Pw+22,width:26,height:30,fill:'none',stroke:tape,'stroke-width':3},g); el('rect',{x:142,y:Pw+22,width:26,height:30,fill:'none',stroke:tape,'stroke-width':3},g); }
@@ -1845,7 +1900,7 @@ function dibujarPreview(){
 
   // Cintas de la prenda superior
   var cinta=val('cintaChaqueta');
-  if(tape && cinta && !/Sin cinta/.test(cinta)){
+  if(tape && cinta && !/Sin cinta/.test(cinta) && cinta!==CINTA_PERS){
     var bajaY=bajo-22;
     el('rect',{x:60,y:bajaY,width:120,height:10,fill:tape},g);
     var op3=/Opción 3/.test(cinta);
@@ -1922,6 +1977,7 @@ function iniciarTema(){
 }
 
 function actualizarVista(){
+  actualizarFolio();
   try{ pintarSwatches(); actualizarAvance(); actualizarFicha(); dibujarPreview(); }catch(e){ console.error(e); }
 }
 function seguirPasos(){
@@ -2385,16 +2441,15 @@ function reservarFolio(){
   if(!(CAP.mcp||SESION) || registrado) return Promise.resolve();
   if(reservando) return reservando;
   pillRegistro('Reservando folio…');
-  var intento=function(reintentos){
+  var fijar=function(n){ FOLIO=generarFolio(n); $('folioTxt').textContent=FOLIO; $('fvFolio').textContent=FOLIO; };
+  fijar(1);
+  var intento=function(n){
     return subirArchivoSP(FOLIO+'.json', JSON.stringify(datosRegistro(),null,1), false, 'fail').catch(function(err){
-      if(esConflicto(err) && reintentos>0){
-        FOLIO=generarFolio(); $('folioTxt').textContent=FOLIO; $('fvFolio').textContent=FOLIO;
-        return intento(reintentos-1);
-      }
+      if(esConflicto(err) && n<99){ fijar(n+1); return intento(n+1); }
       throw err;
     });
   };
-  reservando=intento(3).then(function(){ registrado=true; pillRegistro('Folio reservado','ok'); })
+  reservando=intento(1).then(function(){ registrado=true; pillRegistro('Folio reservado','ok'); })
     .catch(function(err){ pillRegistro(err && err.status===403 ? 'Sin registrar: sin permiso en la carpeta de registro' : (err && (err.code==='server_not_connected'||err.code==='needs_reauth') ? 'Sin registrar: conecta Microsoft 365' : 'Sin registrar: no se pudo guardar'),'warn'); })
     .then(function(){ reservando=null; });
   return reservando;
@@ -2650,16 +2705,17 @@ function cargarMisConfig(forzar){
   if(MC.cargando) return MC.cargando;
   if(!SESION){ MC.items=[]; pintarMisConfig(); mcEstado('Inicia sesión con Microsoft para ver tus configuraciones.','warn'); return Promise.resolve(); }
   MC.items=[]; MC.cargado=false; pintarMisConfig('Cargando tus configuraciones…'); mcEstado('');
-  var RX=/^(FEM-[A-Z0-9]{4}-[A-Z0-9]{5})/i;
+  /* Folio = FEM- seguido de letras, números y guiones (formato nuevo FEM-AAMMDD-REP-TIPO-MOD y anterior FEM-AAMM-XXXXX) */
+  var RX_CARPETA=/^(FEM-[A-Z0-9-]+)$/i, RX_JSON=/^(FEM-[A-Z0-9-]+)\.json$/i, RX_PDF=/^(FEM-[A-Z0-9-]+)_.*\.pdf$/i;
   MC.cargando=listarRegistro().then(function(archivos){
     var porFolio={};
-    var item=function(f){ return porFolio[f]=porFolio[f]||{ folio:f, adjuntos:[] }; };
+    var item=function(f){ f=f.toUpperCase(); return porFolio[f]=porFolio[f]||{ folio:f, adjuntos:[] }; };
     archivos.forEach(function(f){
-      var m=f.name.match(RX); if(!m) return;
-      var it=item(m[1].toUpperCase());
-      if(f.folder && f.name.toUpperCase()===it.folio){ it.carpeta=f; return; }   // formato nuevo: una carpeta por folio
-      if(!f.file) return;                                                         // formato anterior: archivos sueltos
-      if(/\.json$/i.test(f.name)) it.json=f; else if(/\.pdf$/i.test(f.name)) it.pdf=f;
+      var m;
+      if(f.folder){ if((m=f.name.match(RX_CARPETA))) item(m[1]).carpeta=f; return; }   // una carpeta por folio
+      if(!f.file) return;                                                               // archivos sueltos (registros anteriores)
+      if((m=f.name.match(RX_JSON))) item(m[1]).json=f;
+      else if((m=f.name.match(RX_PDF))) item(m[1]).pdf=f;
     });
     MC.items=Object.keys(porFolio).map(function(k){ var it=porFolio[k]; var base=it.carpeta||it.json||it.pdf; it.fecha=base.createdDateTime||base.lastModifiedDateTime; it.pendiente=!!it.carpeta; return it; });
     MC.items.sort(function(a,b){ return String(b.fecha).localeCompare(String(a.fecha)); });
@@ -2707,7 +2763,7 @@ function fechaCorta(iso){
   return d.toLocaleDateString('es-MX',{ day:'2-digit', month:'short', year:'numeric' })+' · '+d.toLocaleTimeString('es-MX',{ hour:'2-digit', minute:'2-digit' });
 }
 function trajeDe(d){ var t=d && d.traje; if(!t) return ''; return [etiqueta(t.tipo||''), etiqueta(t.modelo||''), t.configuracion||''].filter(Boolean).join(' · '); }
-function empresaDePDF(it){ if(!it.pdf) return ''; return it.pdf.name.replace(/^FEM-[A-Z0-9]{4}-[A-Z0-9]{5}_/i,'').replace(/\.pdf$/i,'').replace(/_/g,' '); }
+function empresaDePDF(it){ if(!it.pdf) return ''; return it.pdf.name.replace(/^FEM-[A-Z0-9-]+_/i,'').replace(/\.pdf$/i,'').replace(/_/g,' '); }
 function pintarMisConfig(msgCarga){
   var tb=$('mcBody'); tb.innerHTML='';
   var q=val('mcBuscar').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
@@ -2969,6 +3025,9 @@ function construirCatalogo(wb){
     (d.tipos[tipo]=d.tipos[tipo]||[]).push(mod);
     if(t(r['Etiqueta tipo']) && t(r['Etiqueta tipo'])!==tipo) d.etiquetas[tipo]=t(r['Etiqueta tipo']);
     if(t(r['Etiqueta modelo']) && t(r['Etiqueta modelo'])!==mod) d.etiquetas[mod]=t(r['Etiqueta modelo']);
+    d.claves=d.claves||{};
+    if(t(r['Clave tipo'])) d.claves[tipo]=t(r['Clave tipo']);
+    if(t(r['Clave modelo'])) d.claves[mod]=t(r['Clave modelo']);
   });
   filas(wb,'Configuraciones').filter(function(r){ return activo(r); }).sort(function(a,b){ return (+a['Orden']||0)-(+b['Orden']||0); }).forEach(function(r){
     (d.modelos[t(r['Modelo'])]=d.modelos[t(r['Modelo'])]||[]).push(t(r['Configuración']));
