@@ -68,7 +68,9 @@ header.top .in{max-width:1320px;margin:0 auto;padding-block:14px;padding-inline:
 
 /* Estructura de 3 columnas */
 .shell{max-width:1320px;margin:0 auto;padding-block:20px 120px;padding-inline:16px;display:grid;grid-template-columns:220px minmax(0,1fr) 340px;gap:24px;align-items:start}
-.rail,.ficha-viva{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px)}
+.rail,.col-ficha{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px)}
+.col-ficha{display:flex;flex-direction:column;gap:12px;min-width:0;align-self:start}
+.col-ficha>*{flex:none}
 
 /* Riel de pasos */
 .rail{display:flex;flex-direction:column;gap:14px}
@@ -401,25 +403,22 @@ body.bloqueado .gate{display:flex}
 .axo-globo.ver{opacity:1;transform:none}
 /* ---- v5: capas, cintas, logos, bolsillos, fabricación, filtros ---- */
 @media (min-width:1181px){
-  .ficha-viva{max-height:calc(100vh - 32px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
-  .ficha-viva .prev svg{max-height:31vh}
+  .col-ficha{max-height:calc(100vh - 32px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-bottom:2px}
   .ficha-viva .fv-lista{grid-template-columns:1fr 1fr;gap:8px 14px;padding:2px 14px 12px}
   .ficha-viva .fv-lista div{padding-top:6px;align-content:start}
-  .ficha-viva .fv-lista div:has(#fvCapas){display:none}
   .ficha-viva .fv-lista dd{font-size:12.5px;line-height:1.3}
-  .ficha-viva .vistas{margin-bottom:0}
-  .ficha-viva .prev-cap{padding-bottom:6px}
-  .ficha-viva .capas-viz{padding:6px 9px;margin-bottom:8px}
-  .ficha-viva .capa{padding:2px 0}
-  .ficha-viva .capa .muestra{width:30px;height:18px}
-  .ficha-viva .aviso-color{margin-bottom:8px;padding:6px 9px;font-size:11.5px}
 }
-@media (min-width:1181px) and (max-height:820px){
-  .ficha-viva .prev svg{max-height:23vh}
-  .ficha-viva .capa small{display:inline;margin-left:4px}
-  .ficha-viva .prev-cap{display:none}
-  .ficha-viva .vistas{padding-top:6px;padding-bottom:6px}
-}
+.ficha-viva .fv-lista div:has(#fvCapas){display:none}
+.aviso-base{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;justify-content:space-between;margin:0 0 14px;padding:10px 14px;border-radius:8px;background:var(--ok-bg);color:var(--ok);font-size:13.5px;border:1px solid color-mix(in srgb,var(--ok) 35%,transparent)}
+.aviso-base b{color:var(--heading)}
+.aviso-base .btn-link{min-height:32px;padding:4px 6px;color:var(--ok)}
+.capas-card{background:var(--surface);border:1px solid var(--divider);border-radius:10px;overflow:hidden}
+.capas-card .cab{background:var(--primary);color:var(--on-dark);padding:10px 16px;font-family:var(--font-title);font-weight:700;font-size:12.5px;letter-spacing:.6px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.capas-card .cab .chip{font:600 10.5px var(--font-body);text-transform:none;letter-spacing:0}
+.capas-card .capas-viz{margin:0;border:0;border-radius:0;background:transparent;padding:10px 16px 12px}
+.capas-card .capa{padding:5px 0;border-top:1px solid var(--divider)}
+.capas-card .capa:first-child{border-top:0}
+.capas-card .capa .muestra{width:44px;height:26px}
 .capas-viz{margin:0 16px 10px;border:1px solid var(--divider);border-radius:8px;padding:8px 10px;background:var(--surface-2)}
 .capas-viz .tit{font:700 11px var(--font-title);text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:6px}
 .capas-viz .tit .chip{font-size:10.5px;text-transform:none;letter-spacing:0}
@@ -428,8 +427,8 @@ body.bloqueado .gate{display:flex}
 .capa small{display:block;color:var(--muted)}
 .capa .muestra{flex:none;width:38px;height:22px;border-radius:4px;border:1px solid rgba(0,0,0,.18);box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
 .capas-viz.anima .capa{animation:capaEntra .5s cubic-bezier(.2,.8,.3,1) both}
-.capas-viz.anima .capa:nth-child(3){animation-delay:.08s}
-.capas-viz.anima .capa:nth-child(4){animation-delay:.16s}
+.capas-viz.anima .capa:nth-child(2){animation-delay:.08s}
+.capas-viz.anima .capa:nth-child(3){animation-delay:.16s}
 @keyframes capaEntra{from{opacity:0;transform:translateX(-10px) scaleX(.85)}to{opacity:1;transform:none}}
 .cinta-muestra{display:flex;gap:8px;align-items:center;margin-top:6px;font-size:12px;color:var(--muted)}
 .cinta-muestra i{display:inline-block;width:64px;height:14px;border-radius:2px;border:1px solid rgba(0,0,0,.2)}
@@ -496,11 +495,11 @@ body.bloqueado .gate{display:flex}
 /* Responsivo */
 @media (max-width:1180px){
   .shell{grid-template-columns:200px minmax(0,1fr)}
-  .ficha-viva{position:static;grid-column:2}
+  .col-ficha{position:static;grid-column:2}
 }
 @media (max-width:860px){
   .shell{grid-template-columns:minmax(0,1fr);gap:14px}
-  .ficha-viva{grid-column:auto}
+  .col-ficha{grid-column:auto}
   .rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--page);padding-block:8px;margin-inline:-16px;padding-inline:16px;gap:8px}
   .progreso{padding:10px 12px}
   .pasos{flex-direction:row;overflow-x:auto;gap:4px;padding-bottom:2px}
@@ -888,7 +887,8 @@ body.bloqueado .gate{display:flex}
 <div style="text-align:center;margin-top:8px"><button class="btn-link" type="button" id="btnNueva" onclick="nuevaConfiguracion()">Iniciar una nueva configuración</button></div>
 
 </main>
-<aside class="ficha-viva" aria-label="Ficha del EPP">
+<aside class="col-ficha" aria-label="Ficha del EPP">
+<div class="ficha-viva">
   <div class="cab">Ficha del EPP <span id="fvFolio"></span></div>
   <div class="vistas" role="group" aria-label="Lado de la prenda">
     <button type="button" class="vista-btn" data-vista="frente" aria-pressed="false" onclick="fijarVista('frente',true)">Frente</button>
@@ -898,7 +898,6 @@ body.bloqueado .gate{display:flex}
   <div class="cintas-pers hidden" id="cintasPersTag"><span>Cintas personalizadas</span></div>
   <div class="cintas-pers hidden" id="bolsasPersTag"><span>Bolsillos personalizados</span></div>
   <div class="prev-cap" id="prevCap">Vista previa de la espalda · color y marcado de referencia</div>
-  <div class="capas-viz hidden" id="capasViz" aria-live="polite"></div>
   <div class="aviso-color" role="note"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><span>Los colores son solo una representación de referencia: por temas de imagen no corresponden al color exacto de la tela. Confirma el tono con el muestrario físico.</span></div>
   <dl class="fv-lista">
     <div><dt>Traje</dt><dd id="fvTraje" class="vacio">Sin seleccionar</dd></div>
@@ -907,6 +906,11 @@ body.bloqueado .gate{display:flex}
     <div><dt>Bolsillos</dt><dd id="fvBolsillos" class="vacio">Sin seleccionar</dd></div>
     <div><dt>Cliente</dt><dd id="fvCliente" class="vacio">Sin capturar</dd></div>
   </dl>
+</div>
+<section class="capas-card hidden" id="capasCard" aria-label="Capas del traje">
+  <div class="cab"><span>Capa interna y barreras</span><span id="capasChip"></span></div>
+  <div class="capas-viz" id="capasViz" aria-live="polite"></div>
+</section>
 </aside>
 </div>
 
@@ -1209,6 +1213,9 @@ function generarFolio(consecutivo){
   if(consecutivo && consecutivo>1) partes.push(p(consecutivo));
   return partes.join('-');
 }
+/* Primer consecutivo libre según los folios que ya tiene la persona (Mis configuraciones) */
+function folioUsado(f){ return (MC.items||[]).some(function(it){ return it.folio===f; }); }
+function siguienteConsecutivo(){ var n=1; while(n<99 && folioUsado(generarFolio(n))) n++; return n; }
 function limpiaClave(t){ return String(t||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().replace(/[^A-Z0-9 ]+/g,' ').replace(/\s+/g,' ').trim(); }
 var PARTICULAS=['DE','DEL','LA','LAS','LOS','Y','E','DA','DI','VAN','VON'];
 function inicialesRep(nombre){
@@ -1233,11 +1240,12 @@ function claveModelo(mod){
 /* Mientras no se registra, el folio se arma en vivo con los datos capturados */
 function actualizarFolio(){
   if(registrado || reservando) return;
-  var f=generarFolio();
+  var f=generarFolio(siguienteConsecutivo());
   if(f===FOLIO) return;
   FOLIO=f;
   if($('folioTxt')) $('folioTxt').textContent=FOLIO;
   if($('fvFolio')) $('fvFolio').textContent=FOLIO;
+  var ab=$('avisoBase'); if(ab && ab.querySelector('b')) ab.querySelector('b').textContent=FOLIO;
 }
 function fechaLarga(){
   return new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
@@ -1473,7 +1481,7 @@ function inicializar(){
   llenarSelect('cChaqueta', d.cierresChaqueta); llenarSelect('cPantalon', d.cierresPantalon);
   llenarSelect('tirantas', d.tirantas);
   llenarSelect('punos', PUNOS); llenarSelect('pozo', POZO);
-  llenarSelect('cintaTipo', CINTAS_TIPO.map(function(c){ return c.v; })); $('cintaTipo').value=CINTAS_TIPO[0].v; pintarCintaMuestra();
+  llenarSelect('cintaTipo', CINTAS_TIPO.map(function(c){ return c.v; })); $('cintaTipo').value=''; pintarCintaMuestra();
   llenarSelect('rChaqUbic', d.refuerzosChaqueta); llenarSelect('rPanUbic', d.refuerzosPantalon);
 
   // Estados dependientes iniciales
@@ -2012,14 +2020,32 @@ var reiniciando=false;
 function nuevaConfiguracion(){
   var btn=$('btnNueva');
   if(!reiniciando){
-    reiniciando=true; btn.textContent='¿Seguro? Pulsa de nuevo para borrar todo';
+    reiniciando=true; btn.textContent='¿Seguro? Pulsa de nuevo para limpiar todo';
     setTimeout(function(){ reiniciando=false; btn.textContent='Iniciar una nueva configuración'; }, 5000);
     return;
   }
-  location.reload();
+  reiniciando=false; btn.textContent='Iniciar una nueva configuración';
+  limpiarConfiguracion();
+  quitarAvisoBase();
+  window.scrollTo({ top:0, behavior:'smooth' });
+  mostrarMensaje('✅ Nueva configuración lista ('+FOLIO+')','ok');
 }
-
-
+/* Deja el formulario en blanco (sin recargar la página ni volver a iniciar sesión) */
+function limpiarConfiguracion(){
+  [].forEach.call(document.querySelectorAll('.logo-extra'), function(r){ r.remove(); });
+  controlesForm().forEach(function(c){
+    if(c.id==='repVentas') return;
+    if(c.tagName==='SELECT'){ if(c.value!==''){ c.value=''; c.dispatchEvent(new Event('change',{bubbles:true})); } }
+    else if(c.value!==''){ c.value=''; c.dispatchEvent(new Event('input',{bubbles:true})); }
+    c.classList.remove('invalid');
+  });
+  personal=[]; pintarPersonal();
+  ADJ.forEach(function(a){ if(a.vista) URL.revokeObjectURL(a.vista); }); ADJ=[]; pintarAdjuntos();
+  registrado=false; reservando=null; registrando=null; pillRegistro('Sin registrar');
+  borradorDest={}; destinoCorreo='produccion';
+  FOLIO=''; $('fechaTxt').textContent=fechaLarga();
+  pintarCintaMuestra(); actualizarVista();
+}
 /* =====================================================================
    PROPUESTA B: muestras de color, avance por paso, ficha viva y vista previa
    ===================================================================== */
@@ -2092,7 +2118,7 @@ function actualizarFicha(){
     chip.textContent = comb ? 'UL · TPP '+comb[4].toFixed(1)+(comb[3]!==null?' · THL '+comb[3].toFixed(1):'') : 'Sujeta a validación';
     dd.appendChild(document.createElement('br')); dd.appendChild(chip);
   }
-  var tipoCinta = (val('cintaTipo') && !$('wrapCintaTipo').classList.contains('hidden') && (val('cintaChaqueta')||val('cintaPantalon'))) ? ' · '+cintaColores().nombre : '';
+  var tipoCinta = (val('cintaTipo') && cintaColores().v && !$('wrapCintaTipo').classList.contains('hidden') && (val('cintaChaqueta')||val('cintaPantalon'))) ? ' · '+cintaColores().nombre : '';
   fijarDato('fvCintas', [val('cintaChaqueta'), val('cintaPantalon')].filter(Boolean).map(function(x){ return x===CINTA_PERS ? 'Personalizadas' : x.replace(/^(Estándar|Opcional|Otra):\s*/,''); }).join(' / ')+( [val('cintaChaqueta'), val('cintaPantalon')].some(Boolean) ? tipoCinta : ''));
   fijarDato('fvBolsillos', resumenBolsillos());
   mostrarBolsasPers(); pintarCapas();
@@ -2792,14 +2818,14 @@ function reservarFolio(){
   if(reservando) return reservando;
   pillRegistro('Reservando folio…');
   var fijar=function(n){ FOLIO=generarFolio(n); $('folioTxt').textContent=FOLIO; $('fvFolio').textContent=FOLIO; };
-  fijar(1);
+  var n0=siguienteConsecutivo(); fijar(n0);
   var intento=function(n){
     return subirArchivoSP(FOLIO+'.json', JSON.stringify(datosRegistro(),null,1), false, 'fail').catch(function(err){
       if(esConflicto(err) && n<99){ fijar(n+1); return intento(n+1); }
       throw err;
     });
   };
-  reservando=intento(1).then(function(){ registrado=true; pillRegistro('Folio reservado','ok'); })
+  reservando=intento(n0).then(function(){ registrado=true; pillRegistro('Folio reservado','ok'); })
     .catch(function(err){ pillRegistro(err && err.status===403 ? 'Sin registrar: sin permiso en la carpeta de registro' : (err && (err.code==='server_not_connected'||err.code==='needs_reauth') ? 'Sin registrar: conecta Microsoft 365' : 'Sin registrar: no se pudo guardar'),'warn'); })
     .then(function(){ reservando=null; });
   return reservando;
@@ -3036,9 +3062,10 @@ var CINTAS_TIPO=[
   { v:'Opción 5: 3M™ 8987 (cosida) · Lima (letras o letreros)', nombre:'Lima', base:LIMA },
   { v:'Opción 6: Piping P302 (cordón reflectivo) · Plata (en costuras del traje)', nombre:'Piping plata', base:PLATA, fino:true }
 ];
-function cintaColores(){ var v=val('cintaTipo'); return CINTAS_TIPO.filter(function(c){ return c.v===v; })[0] || CINTAS_TIPO[0]; }
+var CINTA_SIN_TIPO={ v:'', nombre:'', base:'#d9dbe0' };
+function cintaColores(){ var v=val('cintaTipo'); return CINTAS_TIPO.filter(function(c){ return c.v===v; })[0] || CINTA_SIN_TIPO; }
 function pintarCintaMuestra(){
-  var b=$('cintaMuestra'); if(!b) return; var c=cintaColores(); b.innerHTML='';
+  var b=$('cintaMuestra'); if(!b) return; var c=cintaColores(); b.innerHTML=''; if(!c.v) return;
   var i=document.createElement('i');
   var bg = c.fino ? 'linear-gradient(transparent 42%,'+c.base+' 42% 58%,transparent 58%)' :
            (c.centro ? 'linear-gradient('+c.base+' 0 33%,'+c.centro+' 33% 67%,'+c.base+' 67%)' : c.base);
@@ -3075,11 +3102,10 @@ function pintarCapas(){
   }
   var firma=JSON.stringify(filas)+chipTxt;
   if(firma===firmaCapas) return; firmaCapas=firma;
-  box.classList.toggle('hidden', !filas.length); box.innerHTML='';
+  $('capasCard').classList.toggle('hidden', !filas.length); box.innerHTML='';
+  var chipBox=$('capasChip'); chipBox.innerHTML='';
+  if(chipTxt){ var ch=document.createElement('span'); ch.className='chip '+chipCls; ch.textContent=chipTxt; chipBox.appendChild(ch); }
   if(!filas.length) return;
-  var tit=document.createElement('div'); tit.className='tit'; var tt=document.createElement('span'); tt.textContent='Capas del traje · color'; tit.appendChild(tt);
-  if(chipTxt){ var ch=document.createElement('span'); ch.className='chip '+chipCls; ch.textContent=chipTxt; tit.appendChild(ch); }
-  box.appendChild(tit);
   filas.forEach(function(f){
     var d=document.createElement('div'); d.className='capa';
     var sw=document.createElement('span'); sw.className='muestra';
@@ -3247,7 +3273,7 @@ function aplicarRegistro(d){
       }
     });
   }
-  if(!val('cintaTipo')){ $('cintaTipo').value=CINTAS_TIPO[0].v; pintarCintaMuestra(); }
+  pintarCintaMuestra();
   personal=(d.personal||[]).map(function(p){ return Object.assign(personaVacia(), p); });
   pintarPersonal();
   // es una configuración nueva: folio nuevo y sin registrar
@@ -3256,29 +3282,40 @@ function aplicarRegistro(d){
   FOLIO=''; actualizarVista();
 }
 var copiando=null;
+var copiando=null;
 function copiarConfiguracion(it, btn){
   if(!it.datos) return;
-  var hayDatos = val('clientName') || val('tipoTraje') || personasValidas().length;
-  if(hayDatos && copiando!==it.folio){
-    copiando=it.folio; btn.textContent='¿Reemplazar lo capturado? Pulsa de nuevo';
-    setTimeout(function(){ if(copiando===it.folio){ copiando=null; btn.textContent='📄 Copiar y editar'; } }, 4000);
+  var sinGuardar = !registrado && (val('clientName') || val('tipoTraje') || personasValidas().length);
+  if(sinGuardar && copiando!==it.folio){
+    copiando=it.folio; btn.textContent='Tienes cambios sin guardar · pulsa de nuevo';
+    setTimeout(function(){ if(copiando===it.folio){ copiando=null; btn.textContent='📄 Usar como base'; } }, 4500);
     return;
   }
   copiando=null; btn.disabled=true; btn.textContent='Copiando…';
   var asegurar = it.pendiente ? contenidoCarpeta(it) : Promise.resolve();
   asegurar.then(function(){
     aplicarRegistro(it.datos);
+    mostrarAvisoBase(it.folio);
     cerrarMisConfig(); window.scrollTo({ top:0, behavior:'smooth' });
-    mostrarMensaje('✅ Se copió '+it.folio+' en una nueva configuración ('+FOLIO+'). Revisa y ajusta lo necesario.','ok');
-    // logos guardados con el folio original: se traen como adjuntos de la nueva configuración
+    mostrarMensaje('✅ Nueva configuración '+FOLIO+' creada con los datos de '+it.folio,'ok');
     var logos=(it.adjuntos||[]).filter(function(f){ return f.size<=ADJ_MAX_MB*1048576; });
     if(logos.length && val('logoAplica')==='Sí'){
       Promise.all(logos.map(function(f){ return bajarArchivo(f).then(function(b){ return new File([b], f.name, { type:(f.file&&f.file.mimeType)||b.type||'application/octet-stream' }); }).catch(function(){ return null; }); }))
         .then(function(files){ agregarAdjuntos(files.filter(Boolean)); });
     }
   }).catch(function(){ mostrarMensaje('No se pudo copiar la configuración. Intenta de nuevo.','error'); })
-  .then(function(){ btn.disabled=false; btn.textContent='📄 Copiar y editar'; });
+  .then(function(){ btn.disabled=false; btn.textContent='📄 Usar como base'; });
 }
+function mostrarAvisoBase(folio){
+  var a=$('avisoBase');
+  if(!a){ a=document.createElement('div'); a.id='avisoBase'; a.className='aviso-base'; a.setAttribute('role','status'); var m=document.querySelector('main'); m.insertBefore(a, m.firstChild); }
+  a.innerHTML='';
+  var t=document.createElement('span'); t.innerHTML='Nueva configuración <b></b> basada en <b></b>. La original se queda guardada sin cambios; ajusta lo que necesites y guarda o envía esta como una nueva.';
+  t.querySelectorAll('b')[0].textContent=FOLIO; t.querySelectorAll('b')[1].textContent=folio;
+  var x=document.createElement('button'); x.type='button'; x.className='btn-link'; x.textContent='Cerrar'; x.onclick=quitarAvisoBase;
+  a.appendChild(t); a.appendChild(x);
+}
+function quitarAvisoBase(){ var a=$('avisoBase'); if(a) a.remove(); }
 /* =====================================================================
    MIS CONFIGURACIONES (lee la carpeta de registro de quien inició sesión)
    Registro de configuraciones/<Nombre> › FOLIO.json + FOLIO_Empresa.pdf
@@ -3400,7 +3437,7 @@ function pintarMisConfig(msgCarga){
       if(it.adjuntos.length){ var ca=document.createElement('span'); ca.className='chip-adj'; ca.textContent='📎 '+it.adjuntos.length; ca.title=it.adjuntos.map(function(f){ return f.name; }).join('\n'); tp.appendChild(ca); } }
     var ta=td(); var acc=document.createElement('div'); acc.className='acc'; ta.appendChild(acc);
     if(it.pdf){ var bd=document.createElement('button'); bd.type='button'; bd.className='btn-ghost'; bd.textContent='📥 PDF'; bd.setAttribute('aria-label','Descargar PDF del folio '+it.folio); bd.onclick=function(){ descargarPDFRegistro(it, bd); }; acc.appendChild(bd); }
-    var bc=document.createElement('button'); bc.type='button'; bc.className='btn-ghost'; bc.textContent='📄 Copiar y editar'; bc.setAttribute('aria-label','Copiar el folio '+it.folio+' en una nueva configuración'); bc.disabled=!d; bc.onclick=function(){ copiarConfiguracion(it, bc); }; acc.appendChild(bc);
+    var bc=document.createElement('button'); bc.type='button'; bc.className='btn-ghost'; bc.textContent='📄 Usar como base'; bc.title='Crea una configuración nueva con estos datos; la original no se modifica'; bc.setAttribute('aria-label','Usar el folio '+it.folio+' como base de una nueva configuración'); bc.disabled=!d; bc.onclick=function(){ copiarConfiguracion(it, bc); }; acc.appendChild(bc);
     var br=document.createElement('button'); br.type='button'; br.className='btn-secondary'; br.textContent='✉️ Reenviar'; br.setAttribute('aria-label','Reenviar el folio '+it.folio); br.onclick=function(){ abrirReenvio(it); }; acc.appendChild(br);
     tb.appendChild(tr);
   });
