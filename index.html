@@ -399,6 +399,63 @@ body.bloqueado .gate{display:flex}
 .axo-globo{position:absolute;left:0;top:0;z-index:4;max-width:190px;padding:8px 12px;border-radius:12px;background:#fff;color:#1f2545;border:2px solid #1f2545;font:700 12.5px/1.3 var(--font-title);box-shadow:0 4px 12px rgba(31,37,69,.15);pointer-events:none;opacity:0;transform:translateY(6px) scale(.9);transform-origin:20% 100%;transition:opacity .25s,transform .25s}
 .axo-globo::after{content:"";position:absolute;left:18px;bottom:-9px;width:14px;height:14px;background:#fff;border-right:2px solid #1f2545;border-bottom:2px solid #1f2545;transform:rotate(45deg)}
 .axo-globo.ver{opacity:1;transform:none}
+/* ---- v5: capas, cintas, logos, bolsillos, fabricación, filtros ---- */
+@media (min-width:1181px){
+  .ficha-viva{max-height:calc(100vh - 32px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+  .ficha-viva .prev svg{max-height:31vh}
+  .ficha-viva .fv-lista{grid-template-columns:1fr 1fr;gap:8px 14px;padding:2px 14px 12px}
+  .ficha-viva .fv-lista div{padding-top:6px;align-content:start}
+  .ficha-viva .fv-lista div:has(#fvCapas){display:none}
+  .ficha-viva .fv-lista dd{font-size:12.5px;line-height:1.3}
+  .ficha-viva .vistas{margin-bottom:0}
+  .ficha-viva .prev-cap{padding-bottom:6px}
+  .ficha-viva .capas-viz{padding:6px 9px;margin-bottom:8px}
+  .ficha-viva .capa{padding:2px 0}
+  .ficha-viva .capa .muestra{width:30px;height:18px}
+  .ficha-viva .aviso-color{margin-bottom:8px;padding:6px 9px;font-size:11.5px}
+}
+@media (min-width:1181px) and (max-height:820px){
+  .ficha-viva .prev svg{max-height:23vh}
+  .ficha-viva .capa small{display:inline;margin-left:4px}
+  .ficha-viva .prev-cap{display:none}
+  .ficha-viva .vistas{padding-top:6px;padding-bottom:6px}
+}
+.capas-viz{margin:0 16px 10px;border:1px solid var(--divider);border-radius:8px;padding:8px 10px;background:var(--surface-2)}
+.capas-viz .tit{font:700 11px var(--font-title);text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.capas-viz .tit .chip{font-size:10.5px;text-transform:none;letter-spacing:0}
+.capa{display:flex;gap:9px;align-items:center;font-size:12px;line-height:1.3;padding:3px 0;color:var(--text)}
+.capa b{color:var(--heading);font-weight:700}
+.capa small{display:block;color:var(--muted)}
+.capa .muestra{flex:none;width:38px;height:22px;border-radius:4px;border:1px solid rgba(0,0,0,.18);box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+.capas-viz.anima .capa{animation:capaEntra .5s cubic-bezier(.2,.8,.3,1) both}
+.capas-viz.anima .capa:nth-child(3){animation-delay:.08s}
+.capas-viz.anima .capa:nth-child(4){animation-delay:.16s}
+@keyframes capaEntra{from{opacity:0;transform:translateX(-10px) scaleX(.85)}to{opacity:1;transform:none}}
+.cinta-muestra{display:flex;gap:8px;align-items:center;margin-top:6px;font-size:12px;color:var(--muted)}
+.cinta-muestra i{display:inline-block;width:64px;height:14px;border-radius:2px;border:1px solid rgba(0,0,0,.2)}
+.logo-extra{margin-top:12px;padding-top:10px;border-top:1px dashed var(--border)}
+.logo-extra .cab-l{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font:700 12.5px var(--font-title);color:var(--heading)}
+.logo-extra .cab-l .btn-link{min-height:32px;padding:4px 6px}
+#btnLogoMas{margin-top:12px}
+.fab-resumen{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:14px 16px;border:1px dashed var(--border);border-radius:8px;background:var(--surface-2);margin:12px 0 4px}
+.fab-resumen .t{font:700 14px var(--font-title);color:var(--heading)}
+.fab-resumen .t span{font:600 13px var(--font-body);color:var(--muted);margin-left:6px}
+.modal .box.fab{max-width:min(1420px,96vw);height:92vh}
+.modal .box.fab .body{flex:1}
+.modal .box.fab h2{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.modal .box.fab h2 span{font:600 13px var(--font-body);opacity:.85;text-transform:none}
+.mc-filtros{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin:-2px 0 12px}
+.mc-filtros label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600;color:var(--heading)}
+.mc-filtros input,.mc-filtros select{min-height:38px;padding:6px 8px;font-size:13px;width:auto;min-width:150px}
+.mc-filtros .btn-link{min-height:38px}
+/* mascota: toca la pantalla */
+.axo.st-tap{z-index:3}
+.axo.st-tap .brazo-d{animation:axoToc .22s ease-in-out infinite alternate}
+.axo.st-tap .salto{animation:axoRespira 1.4s ease-in-out infinite}
+@keyframes axoToc{from{transform:rotate(-152deg)}to{transform:rotate(-122deg)}}
+.toque{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;border:3px solid rgba(31,37,69,.5);z-index:5;pointer-events:none;animation:toque .65s ease-out forwards}
+@keyframes toque{from{transform:scale(.3);opacity:1}to{transform:scale(3.4);opacity:0}}
+@media (prefers-reduced-motion: reduce){ .capas-viz.anima .capa,.toque{animation:none} }
 /* camión de bomberos de la llegada */
 .camion{position:absolute;left:0;top:0;width:260px;z-index:1;pointer-events:none;will-change:transform}
 .camion svg{width:100%;height:auto;display:block;overflow:visible}
@@ -518,7 +575,7 @@ body.bloqueado .gate{display:flex}
   <!-- linterna -->
   <rect x="80" y="115" width="12" height="9" rx="2" fill="#f2c230"/><circle cx="92" cy="119.5" r="3.6" fill="#fff6c8" stroke="#1c1e24" stroke-width="1"/>
   <!-- brazo adelante -->
-  <g class="brazo-d"><rect x="92" y="96" width="15" height="34" rx="7.5" fill="url(#axoTela3)"/><rect x="92" y="119" width="15" height="5" fill="#cfee00"/><rect x="92" y="120.6" width="15" height="1.8" fill="#eef2f6"/><rect x="92.5" y="127" width="14" height="11" rx="5" fill="#b8863b"/>
+  <g class="brazo-d"><rect x="92" y="96" width="15" height="34" rx="7.5" fill="url(#axoTela3)"/><rect x="92" y="119" width="15" height="5" fill="#cfee00"/><rect x="92" y="120.6" width="15" height="1.8" fill="#eef2f6"/><rect class="guante-d" x="92.5" y="127" width="14" height="11" rx="5" fill="#b8863b"/>
     <g class="boquilla"><rect x="96" y="137" width="8" height="14" rx="2" fill="#1f2545"/><rect x="95" y="148" width="10" height="6" rx="2" fill="#9aa3b5"/></g></g>
   <!-- branquias -->
   <g class="branq-i" fill="#ec6f9f">
@@ -653,6 +710,9 @@ body.bloqueado .gate{display:flex}
       <select id="cintaPantalon" data-pers="wrapCintaPanPers"></select></div>
     <div class="field full hidden" id="wrapCintaPanPers"><label for="cintaPanPers">Cintas personalizadas · pantalón <span class="req">*</span></label>
       <textarea id="cintaPanPers" rows="3" style="min-height:84px" placeholder="Describe la disposición: ubicación, número de cintas, orientación, ancho, color…"></textarea></div>
+    <div class="field full" id="wrapCintaTipo"><label for="cintaTipo">Tipo y color de cinta reflejante</label>
+      <select id="cintaTipo"></select>
+      <div class="cinta-muestra" id="cintaMuestra" aria-hidden="true"></div></div>
     <div class="field full"><label for="cintaOtro">Otro (especificar, sujeto a validación)</label>
       <input id="cintaOtro" placeholder="Describe una disposición distinta, si aplica"></div>
   </div>
@@ -703,6 +763,8 @@ body.bloqueado .gate{display:flex}
       <input id="logoObs" placeholder="Colores, medidas, número de piezas…">
       <div class="hint">Adjunta abajo las imágenes: se guardan en SharePoint junto con el folio y se envían como adjunto en el correo.</div></div>
   </div>
+  <div id="logosExtra"></div>
+  <button type="button" class="btn-ghost btn-sm" id="btnLogoMas" onclick="agregarLogo()">+ Agregar otra ubicación</button>
   <div class="adj-zona">
     <input type="file" id="adjInput" class="sr" multiple accept="image/*,.pdf,.svg,.ai,.eps,.cdr" onchange="agregarAdjuntos(this.files); this.value='';">
     <label for="adjInput" class="adj-drop" id="adjDrop">
@@ -734,6 +796,8 @@ body.bloqueado .gate{display:flex}
     <div class="field"><label for="bRadio">Bolsillo para radio y presilla para monófono</label><select id="bRadio"></select></div>
     <div class="field"><label for="bRadioTam">Tamaño del bolsillo para radio</label><select id="bRadioTam"></select></div>
     <div class="field full"><label for="bRadioObs">Observaciones (tamaño diferencial, bolsillo radio)</label><input id="bRadioObs"></div>
+    <div class="field full hidden" id="wrapBRadioPers"><label for="bRadioPers">Bolsillo para radio personalizado <span class="req">*</span></label>
+      <textarea id="bRadioPers" rows="2" style="min-height:64px" placeholder="Describe el bolsillo: ubicación, medidas, tipo de bolsillo y cierre…"></textarea></div>
   </div>
   <div class="grid-2 hidden" id="wrapPectoral" style="margin-top:14px">
     <div class="field"><label for="bPectoral">Bolsillo pectoral adicional (camisa / overol forestal)</label><select id="bPectoral"></select></div>
@@ -745,6 +809,8 @@ body.bloqueado .gate{display:flex}
     <div class="field"><label for="bFrontCierre">Cierre de bolsillos frontales</label><select id="bFrontCierre"></select></div>
     <div class="field"><label for="bFrontTam">Tamaño de bolsillos frontales</label><select id="bFrontTam"></select></div>
     <div class="field full"><label for="bFrontObs">Observaciones (tamaño diferencial, bolsillos frontales)</label><input id="bFrontObs"></div>
+    <div class="field full hidden" id="wrapBFrontPers"><label for="bFrontPers">Bolsillos frontales personalizados <span class="req">*</span></label>
+      <textarea id="bFrontPers" rows="2" style="min-height:64px" placeholder="Describe el bolsillo: ubicación, medidas, tipo de bolsillo y cierre…"></textarea></div>
   </div>
   <div class="grid-2" style="margin-top:14px">
     <div class="field"><label for="bInterior">Bolsillo interior (opcional)</label><select id="bInterior"></select></div>
@@ -758,6 +824,8 @@ body.bloqueado .gate{display:flex}
     <div class="field"><label for="pCierre">Cierre de bolsillos</label><select id="pCierre"></select></div>
     <div class="field"><label for="pTam">Tamaño de bolsillos laterales</label><select id="pTam"></select></div>
     <div class="field full"><label for="pObs">Observaciones (tamaño diferencial, bolsillos pantalón)</label><input id="pObs"></div>
+    <div class="field full hidden" id="wrapPPers"><label for="pPers">Bolsillos del pantalón personalizados <span class="req">*</span></label>
+      <textarea id="pPers" rows="2" style="min-height:64px" placeholder="Describe el bolsillo: ubicación, medidas, tipo de bolsillo y cierre…"></textarea></div>
   </div>
 </section>
 
@@ -775,6 +843,15 @@ body.bloqueado .gate{display:flex}
   <div class="grid-2">
     <div class="field full"><label for="ajuste">Ajustador lateral del pantalón</label><select id="ajuste"></select></div>
     <div class="field full"><label for="tirantas">Tirantas y montaje al pantalón</label><select id="tirantas"></select></div>
+  </div>
+  <div id="wrapPunos" class="hidden">
+    <h3>Puños y pozo del cuello (solo EPP estructural)</h3>
+    <div class="grid-2">
+      <div class="field"><label for="punos">Puños</label><select id="punos"></select></div>
+      <div class="field"><label for="pozo">Pozo del cuello</label><select id="pozo"></select></div>
+      <div class="field full hidden" id="wrapPunosOtro"><label for="punosOtro">Puños · especificar <span class="req">*</span></label><input id="punosOtro" placeholder="Describe el puño requerido"></div>
+      <div class="field full hidden" id="wrapPozoOtro"><label for="pozoOtro">Pozo del cuello · especificar <span class="req">*</span></label><input id="pozoOtro" placeholder="Describe el pozo requerido"></div>
+    </div>
   </div>
   <div id="wrapRefuerzos">
     <h3>Refuerzos (no aplica para EPP forestal)</h3>
@@ -794,28 +871,9 @@ body.bloqueado .gate{display:flex}
     <p class="hint-txt">Una fila por bombero con sus medidas, tallas y marcado personal. Puedes capturarla aquí o importar el formato de toma de medidas en Excel o CSV. Las medidas van en <b>centímetros</b> y la tabla calcula las pulgadas.</p>
     <button type="button" class="btn-secondary btn-sm" onclick="abrirGuia()">📏 Cómo tomar medidas</button>
   </div>
-  <h3>Tabla de medidas <span class="pers-total" id="persTotal">0 personas</span></h3>
-  <div class="pers-acciones" style="margin:0 0 10px;align-items:center">
-    <input type="file" id="medidasInput" class="sr" accept=".csv,.xlsx,.xls,.xlsm,.txt" onchange="importarArchivoMedidas(this.files[0]); this.value='';">
-    <label for="medidasInput" class="btn-secondary btn-sm btn-label">📂 Importar tabla (Excel o CSV)</label>
-    <button type="button" class="btn-ghost btn-sm" onclick="descargarFormato()">📥 Descargar formato vacío</button>
-    <button type="button" class="btn-ghost btn-sm" onclick="exportarMedidas()">📤 Exportar tabla</button>
-    <label class="chk"><input type="checkbox" id="verProd" checked onchange="pintarPersonal()"> Mostrar datos para orden de producción</label>
-  </div>
-  <div class="tabla-pers"><table id="tablaPersonal">
-    <thead id="personalHead"></thead>
-    <tbody id="personalBody"></tbody>
-  </table></div>
-  <div class="pers-acciones">
-    <button type="button" class="btn-ghost btn-sm" onclick="agregarPersona()">+ Agregar persona</button>
-    <button type="button" class="btn-ghost btn-sm" onclick="mostrarPegado()">Pegar desde Excel</button>
-    <button type="button" class="btn-link" id="btnVaciar" onclick="vaciarPersonal()">Quitar todas las filas</button>
-  </div>
-  <div class="tallas-res" id="tallasRes"></div>
-  <div class="pegado hidden" id="pegadoBox">
-    <label for="pegadoTxt">Pega aquí las filas copiadas del formato de Excel (con o sin encabezados)</label>
-    <textarea id="pegadoTxt" placeholder="Copia las filas del formato de toma de medidas y pégalas aquí"></textarea>
-    <div class="pers-acciones"><button type="button" class="btn-secondary btn-sm" onclick="importarPegado()">Agregar filas</button><button type="button" class="btn-link" onclick="mostrarPegado(false)">Cancelar</button></div>
+  <div class="fab-resumen">
+    <div><div class="t">Tabla de medidas<span id="persTotal">0 personas</span></div><div class="tallas-res" id="tallasRes"></div></div>
+    <button type="button" class="btn-secondary" onclick="abrirFab()">📋 Abrir tabla de medidas</button>
   </div>
   <div class="grid-2" style="margin-top:18px">
     <div class="field full"><label for="observaciones">Requerimientos no detallados previamente</label>
@@ -838,12 +896,15 @@ body.bloqueado .gate{display:flex}
   </div>
   <div class="prev"><svg id="prevSvg" viewBox="0 0 240 420" role="img" aria-label="Vista previa del EPP"></svg></div>
   <div class="cintas-pers hidden" id="cintasPersTag"><span>Cintas personalizadas</span></div>
+  <div class="cintas-pers hidden" id="bolsasPersTag"><span>Bolsillos personalizados</span></div>
   <div class="prev-cap" id="prevCap">Vista previa de la espalda · color y marcado de referencia</div>
-  <div class="aviso-color" role="note"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><span>Los colores de esta vista son solo una representación de referencia. Por temas de imagen y pantalla no corresponden al color exacto de la tela; confirma el tono con tu asesor o con el muestrario físico.</span></div>
+  <div class="capas-viz hidden" id="capasViz" aria-live="polite"></div>
+  <div class="aviso-color" role="note"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><span>Los colores son solo una representación de referencia: por temas de imagen no corresponden al color exacto de la tela. Confirma el tono con el muestrario físico.</span></div>
   <dl class="fv-lista">
     <div><dt>Traje</dt><dd id="fvTraje" class="vacio">Sin seleccionar</dd></div>
     <div><dt>Capas</dt><dd id="fvCapas" class="vacio">Sin seleccionar</dd></div>
     <div><dt>Cintas</dt><dd id="fvCintas" class="vacio">Sin seleccionar</dd></div>
+    <div><dt>Bolsillos</dt><dd id="fvBolsillos" class="vacio">Sin seleccionar</dd></div>
     <div><dt>Cliente</dt><dd id="fvCliente" class="vacio">Sin capturar</dd></div>
   </dl>
 </aside>
@@ -879,6 +940,37 @@ body.bloqueado .gate{display:flex}
     </div>
   </div>
 </div>
+<!-- Modal Tabla de medidas (fabricación) -->
+<div class="modal" id="fabModal" role="dialog" aria-modal="true" aria-labelledby="fabTitle">
+  <div class="box fab">
+    <h2 id="fabTitle">📋 TABLA DE MEDIDAS · FABRICACIÓN <span id="persTotalM">0 personas</span></h2>
+    <div class="body">
+  <div class="pers-acciones" style="margin:0 0 10px;align-items:center">
+    <input type="file" id="medidasInput" class="sr" accept=".csv,.xlsx,.xls,.xlsm,.txt" onchange="importarArchivoMedidas(this.files[0]); this.value='';">
+    <label for="medidasInput" class="btn-secondary btn-sm btn-label">📂 Importar tabla (Excel o CSV)</label>
+    <button type="button" class="btn-ghost btn-sm" onclick="descargarFormato()">📥 Descargar formato vacío</button>
+    <button type="button" class="btn-ghost btn-sm" onclick="exportarMedidas()">📤 Exportar tabla</button>
+    <label class="chk"><input type="checkbox" id="verProd" checked onchange="pintarPersonal()"> Mostrar datos para orden de producción</label>
+  </div>
+  <div class="tabla-pers"><table id="tablaPersonal">
+    <thead id="personalHead"></thead>
+    <tbody id="personalBody"></tbody>
+  </table></div>
+  <div class="pers-acciones">
+    <button type="button" class="btn-ghost btn-sm" onclick="agregarPersona()">+ Agregar persona</button>
+    <button type="button" class="btn-ghost btn-sm" onclick="mostrarPegado()">Pegar desde Excel</button>
+    <button type="button" class="btn-link" id="btnVaciar" onclick="vaciarPersonal()">Quitar todas las filas</button>
+  </div>
+  <div class="pegado hidden" id="pegadoBox">
+    <label for="pegadoTxt">Pega aquí las filas copiadas del formato de Excel (con o sin encabezados)</label>
+    <textarea id="pegadoTxt" placeholder="Copia las filas del formato de toma de medidas y pégalas aquí"></textarea>
+    <div class="pers-acciones"><button type="button" class="btn-secondary btn-sm" onclick="importarPegado()">Agregar filas</button><button type="button" class="btn-link" onclick="mostrarPegado(false)">Cancelar</button></div>
+  </div>
+    </div>
+    <div class="row"><button class="btn-ghost" type="button" onclick="abrirGuia()">📏 Cómo tomar medidas</button><button class="btn-secondary" type="button" onclick="cerrarFab()">Listo</button></div>
+  </div>
+</div>
+
 <!-- Modal Cómo tomar medidas -->
 <div class="modal" id="guiaModal" role="dialog" aria-modal="true" aria-labelledby="guiaTitle">
   <div class="box guia">
@@ -917,6 +1009,13 @@ body.bloqueado .gate{display:flex}
         <input id="mcBuscar" type="search" placeholder="Buscar por folio, cliente, empresa o traje…" oninput="pintarMisConfig()" aria-label="Buscar configuraciones">
         <span class="cuenta" id="mcCuenta"></span>
         <button type="button" class="btn-ghost btn-sm" onclick="cargarMisConfig(true)">↻ Actualizar</button>
+      </div>
+      <div class="mc-filtros">
+        <label>Desde<input type="date" id="mcDesde" onchange="pintarMisConfig()"></label>
+        <label>Hasta<input type="date" id="mcHasta" onchange="pintarMisConfig()"></label>
+        <label>Traje<select id="mcTraje" onchange="pintarMisConfig()"><option value="">Todos</option></select></label>
+        <label>Modelo<select id="mcModelo" onchange="pintarMisConfig()"><option value="">Todos</option></select></label>
+        <button type="button" class="btn-link" onclick="limpiarFiltrosMC()">Limpiar filtros</button>
       </div>
       <div class="mc-tabla"><table>
         <thead><tr><th scope="col">Folio</th><th scope="col">Fecha</th><th scope="col">Cliente</th><th scope="col">Traje</th><th scope="col">Archivos</th><th scope="col"><span class="sr">Acciones</span></th></tr></thead>
@@ -1262,7 +1361,7 @@ function mostrarCintasPers(){
   if($('cintasPersTag')) mostrar('cintasPersTag', hayCintasPers());
 }
 document.addEventListener('change', function(e){ if(e.target && (e.target.id==='cintaChaqueta'||e.target.id==='cintaPantalon')){ mostrarCintasPers(); if(cintaPers(e.target.id)) setTimeout(function(){ $(e.target.id==='cintaChaqueta'?'cintaChaqPers':'cintaPanPers').focus(); },0); } });
-document.addEventListener('input', function(e){ if(e.target && (e.target.id==='cintaChaqPers'||e.target.id==='cintaPanPers')) e.target.classList.remove('invalid'); });
+document.addEventListener('input', function(e){ if(e.target && /^(cintaChaqPers|cintaPanPers|bRadioPers|bFrontPers|pPers|punosOtro|pozoOtro)$/.test(e.target.id)) e.target.classList.remove('invalid'); });
 function textoCinta(id, idTxt){ var v=val(id); if(!v) return ''; return v===CINTA_PERS ? 'Personalizado'+(val(idTxt)?' – '+val(idTxt):'') : v; }
 
 function actualizarResumen(){
@@ -1279,6 +1378,9 @@ function aplicarReglasPorTipo(){
   var conCamisa = tipo==='Forestal' || tipo==='Industrial_2112';
   mostrar('wrapPectoral', conCamisa);
   mostrar('wrapRefuerzos', !forestal);
+  mostrar('wrapPunos', tipo==='Estructural');
+  mostrar('wrapCintaTipo', tipo!=='Aproximación');
+  mostrarOtrosS7();
   // Ajustadores: los marcados "(pantalón forestal)" solo para Forestal
   var aj = datosProducto.ajusteCintura.filter(function(a){ return forestal || a.indexOf('forestal')===-1; });
   llenarSelect('ajuste', aj);
@@ -1327,6 +1429,7 @@ function actualizarFrontal(){
 /* Bolsillos: tipo -> tamaño */
 function filtrarTamanos(tipoId, tamId, todos){
   var tipo=val(tipoId);
+  if(tipo===BOLSA_PERS){ llenarSelect(tamId, [], 'N/A · personalizado'); return; }
   var clave = tipo.replace('Bolsillo tipo ','').toLowerCase();
   var lista = tipo ? todos.filter(function(t){ return t.toLowerCase().indexOf(clave+' -')===0; }) : [];
   llenarSelect(tamId, lista, tipo ? 'Selecciona...' : 'Primero elige el tipo');
@@ -1334,6 +1437,7 @@ function filtrarTamanos(tipoId, tamId, todos){
 }
 function dependeDeSi(origenId, destinoId, lista){
   var v=val(origenId);
+  if(v===BOLSA_PERS){ llenarSelect(destinoId, [], 'N/A · personalizado'); return; }
   var aplica = v && v!=='No';
   llenarSelect(destinoId, aplica ? lista : [], !v ? 'Primero indica si aplica' : (aplica ? 'Selecciona...' : 'N/A'));
   if(aplica && lista.length===1) $(destinoId).value=lista[0];
@@ -1361,13 +1465,15 @@ function inicializar(){
   ['z1Aplica','z2Aplica','logoAplica','frAplica'].forEach(function(id){ llenarSelect(id, d.siNo); $(id).value=''; });
   llenarSelect('z1Fijacion', d.fijacionZona1); llenarSelect('z1Tamano', d.tamanos);
   llenarSelect('z2Fijacion', d.fijacionZona2); llenarSelect('z2Tamano', d.tamanos);
-  llenarSelect('logoFijacion', d.fijacionLogos); llenarSelect('logoTipo', d.tipoMarcado); llenarSelect('logoUbicacion', d.ubicacionLogo);
+  llenarSelect('logoFijacion', d.fijacionLogos); llenarSelect('logoTipo', d.tipoMarcado); llenarSelect('logoUbicacion', opcionesUbicacion());
   llenarSelect('frFijacion', d.fijacionFrontal); llenarSelect('frTamano', d.tamanosFrontal);
-  llenarSelect('bRadio', d.bolsilloRadio); llenarSelect('bPectoral', d.siNo); llenarSelect('bInterior', d.siNo);
-  llenarSelect('bFrontTipo', d.tiposBolsilloChaqueta); llenarSelect('bFrontCierre', d.cierreBolsilloChaqueta);
-  llenarSelect('pTipo', d.tiposBolsilloPantalon); llenarSelect('pCierre', d.cierreBolsilloPantalon);
+  llenarSelect('bRadio', d.bolsilloRadio.concat([BOLSA_PERS])); llenarSelect('bPectoral', d.siNo); llenarSelect('bInterior', d.siNo);
+  llenarSelect('bFrontTipo', d.tiposBolsilloChaqueta.concat([BOLSA_PERS])); llenarSelect('bFrontCierre', d.cierreBolsilloChaqueta);
+  llenarSelect('pTipo', d.tiposBolsilloPantalon.concat([BOLSA_PERS])); llenarSelect('pCierre', d.cierreBolsilloPantalon);
   llenarSelect('cChaqueta', d.cierresChaqueta); llenarSelect('cPantalon', d.cierresPantalon);
   llenarSelect('tirantas', d.tirantas);
+  llenarSelect('punos', PUNOS); llenarSelect('pozo', POZO);
+  llenarSelect('cintaTipo', CINTAS_TIPO.map(function(c){ return c.v; })); $('cintaTipo').value=CINTAS_TIPO[0].v; pintarCintaMuestra();
   llenarSelect('rChaqUbic', d.refuerzosChaqueta); llenarSelect('rPanUbic', d.refuerzosPantalon);
 
   // Estados dependientes iniciales
@@ -1426,6 +1532,13 @@ function validarFormulario(){
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val('clientEmail'))) return error($('clientEmail'),'El email del cliente no es válido');
   if(cintaPers('cintaChaqueta') && !val('cintaChaqPers')) return error($('cintaChaqPers'),'Describe las cintas personalizadas de la chaqueta / camisa');
   if(cintaPers('cintaPantalon') && !val('cintaPanPers')) return error($('cintaPanPers'),'Describe las cintas personalizadas del pantalón');
+  if(val('bRadio')===BOLSA_PERS && !val('bRadioPers')) return error($('bRadioPers'),'Describe el bolsillo para radio personalizado');
+  if(val('bFrontTipo')===BOLSA_PERS && !val('bFrontPers')) return error($('bFrontPers'),'Describe los bolsillos frontales personalizados');
+  if(val('pTipo')===BOLSA_PERS && !val('pPers')) return error($('pPers'),'Describe los bolsillos del pantalón personalizados');
+  if(!$('wrapPunos').classList.contains('hidden')){
+    if(/^Otro/.test(val('punos')) && !val('punosOtro')) return error($('punosOtro'),'Especifica el tipo de puño');
+    if(/^Otro/.test(val('pozo')) && !val('pozoOtro')) return error($('pozoOtro'),'Especifica el pozo del cuello');
+  }
   if(val('clientPhone').replace(/\D/g,'').length<8) return error($('clientPhone'),'El teléfono debe tener al menos 8 dígitos');
   return { ok:true };
   function error(el,msg){
@@ -1550,7 +1663,7 @@ function bloqueFichaPDF(imgF, imgE){
   if(val('z1Aplica')==='Sí') marc.push('Zona 1: '+[val('z1L1'),val('z1L2')].filter(Boolean).join(' / '));
   if(val('z2Aplica')==='Sí') marc.push('Zona 2: '+val('z2L1'));
   if(val('frAplica')==='Sí') marc.push('Frontal: '+[val('frL1'),val('frL2')].filter(Boolean).join(' / '));
-  if(val('logoAplica')==='Sí') marc.push((val('logoTipo')||'Logo')+': '+val('logoUbicacion'));
+  if(val('logoAplica')==='Sí') logosTodos().forEach(function(l){ marc.push((l.tipo||'Logo')+': '+(l.ubic||'ubicación por definir')); });
   var fig=function(src,cap){ return '<td style="width:24%;text-align:center;vertical-align:top;padding:0 4px;">'+(src?'<img src="'+src+'" width="150" height="262" style="width:150px;height:262px;border:1px solid #e4e6ec;border-radius:6px;">':'')+'<div style="font-size:9.5px;font-weight:bold;color:#1f2545;margin-top:4px;text-transform:uppercase;letter-spacing:.6px;">'+cap+'</div></td>'; };
   return '<div style="page-break-inside:avoid;margin-top:10px;">'+
     '<div style="background:#1f2545;color:#fff;font-weight:bold;font-size:11px;padding:6px 10px;border-left:4px solid #CF0A2C;text-transform:uppercase;">Ficha visual del EPP configurado</div>'+
@@ -1559,7 +1672,7 @@ function bloqueFichaPDF(imgF, imgE){
       '<td style="vertical-align:top;padding:10px 12px;border-left:1px solid #e4e6ec;"><table style="width:100%;border-collapse:collapse;">'+
         fila('Traje', etiqueta(val('tipoTraje'))+' · '+etiqueta(val('modelo'))+' · '+val('composicion'))+
         fila('Color', col)+
-        fila('Capas', [ext,val('matHumedad'),val('matTermica')].filter(Boolean).join(' / '))+
+        fila('Capas', [ext, val('matHumedad') ? val('matHumedad')+(colorCapa(val('matHumedad')) ? ' ('+colorCapa(val('matHumedad')).txt+')' : '') : '', val('matTermica') ? val('matTermica')+(colorCapa(val('matTermica')) ? ' ('+colorCapa(val('matTermica')).txt+')' : '') : ''].filter(Boolean))+
         fila('UL', comb ? 'TPP '+comb[4].toFixed(1)+' cal/cm²'+(comb[3]!==null?' · THL '+comb[3].toFixed(1)+' W/m²':'') : '')+
         fila('Cintas', [val('cintaChaqueta') ? 'Chaqueta: '+textoCinta('cintaChaqueta','cintaChaqPers') : '', val('cintaPantalon') ? 'Pantalón: '+textoCinta('cintaPantalon','cintaPanPers') : ''])+
         fila('Marcado', marc)+
@@ -1774,12 +1887,12 @@ function tokenGraph(){
 function blobABase64(blob){
   return new Promise(function(res, rej){ var fr=new FileReader(); fr.onload=function(){ res(String(fr.result).split(',')[1]); }; fr.onerror=rej; fr.readAsDataURL(blob); });
 }
-function cuerpoHTML(texto, titulo){
+function cuerpoHTML(texto, titulo, imgs){
   var e=function(x){ return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); };
   var parrafos=texto.split(/\n{2,}/).map(function(p){ return '<p style="margin:0 0 12px">'+e(p).replace(/\n/g,'<br>')+'</p>'; }).join('');
   return '<div style="font-family:Segoe UI,Arial,sans-serif;font-size:14px;color:#212121">'+
          '<div style="border-bottom:3px solid #CF0A2C;padding-bottom:8px;margin-bottom:14px;font-weight:700;color:#1f2545;font-size:16px">'+e(titulo||'FEM S.A. · Nueva configuración de EPP')+'</div>'+
-         parrafos+'</div>';
+         parrafos+bloqueVistasCorreo(imgs)+'</div>';
 }
 var confirmandoGraph=false, ultimoPDF=null;
 function enviarGraph(){
@@ -1804,7 +1917,9 @@ function enviarGraph(){
   }).then(function(pdf){
     ultimoPDF=pdf;
     var adj=[{ name:pdf.filename, type:'application/pdf', blob:pdf.blob }].concat(extras.map(function(x){ return { name:x.ref.nombre, type:x.ref.type, blob:x.ref.file }; }));
-    return enviarCorreoGraph({ para:para, cc:cc, asunto:asunto, html:cuerpoHTML(texto, tituloCorreo(destinoCorreo)), adjuntos:adj, progreso:function(m){ estadoOutlook(m,'na'); } });
+    return (destinoCorreo==='produccion' ? imagenesTrajeCorreo() : Promise.resolve([])).then(function(imgs){
+      return enviarCorreoGraph({ para:para, cc:cc, asunto:asunto, html:cuerpoHTML(texto, tituloCorreo(destinoCorreo), imgs), adjuntos:adj.concat(imgs), progreso:function(m){ estadoOutlook(m,'na'); } });
+    });
   }).then(function(){
     var n=extras.length;
     estadoOutlook('✔ Correo enviado a '+para.join(', ')+' con el PDF'+(n?' y '+n+' logo'+(n>1?'s':''):'')+'. Queda en tu carpeta de Enviados.','ok');
@@ -1977,7 +2092,10 @@ function actualizarFicha(){
     chip.textContent = comb ? 'UL · TPP '+comb[4].toFixed(1)+(comb[3]!==null?' · THL '+comb[3].toFixed(1):'') : 'Sujeta a validación';
     dd.appendChild(document.createElement('br')); dd.appendChild(chip);
   }
-  fijarDato('fvCintas', [val('cintaChaqueta'), val('cintaPantalon')].filter(Boolean).map(function(x){ return x===CINTA_PERS ? 'Personalizadas' : x.replace(/^(Estándar|Opcional|Otra):\s*/,''); }).join(' / '));
+  var tipoCinta = (val('cintaTipo') && !$('wrapCintaTipo').classList.contains('hidden') && (val('cintaChaqueta')||val('cintaPantalon'))) ? ' · '+cintaColores().nombre : '';
+  fijarDato('fvCintas', [val('cintaChaqueta'), val('cintaPantalon')].filter(Boolean).map(function(x){ return x===CINTA_PERS ? 'Personalizadas' : x.replace(/^(Estándar|Opcional|Otra):\s*/,''); }).join(' / ')+( [val('cintaChaqueta'), val('cintaPantalon')].some(Boolean) ? tipoCinta : ''));
+  fijarDato('fvBolsillos', resumenBolsillos());
+  mostrarBolsasPers(); pintarCapas();
   mostrarCintasPers();
   fijarDato('fvCliente', [val('clientCompany'), val('clientName')].filter(Boolean).join(' · '));
   $('fvFolio').textContent=FOLIO||'';
@@ -2011,9 +2129,23 @@ function dibujarPreview(){
   var claro=luminancia(hex)>0.55, tinta=claro?'#1f2545':'#ffffff';
   var linea=luminancia(hex)<0.3?'rgba(255,255,255,.42)':'rgba(0,0,0,.38)', detalle=claro?'rgba(31,37,69,.55)':'rgba(255,255,255,.55)';
   var refuerzo=sombra(hex, claro?0.72:0.6);
-  var tape = tipo==='Aproximación' ? null : (claro ? '#7d8089' : '#d9dbe0');
+  var CT=cintaColores();
+  var tape = tipo==='Aproximación' ? null : CT.base;
   var frente = vistaPrev==='frente';
   var g=el('g',{},svg);
+  /* Cinta reflejante según el tipo elegido: color base, franja central plata, segmentada o piping */
+  var cintaR=function(x,y,w,h,vert){
+    if(CT.fino){ if(vert) el('rect',{x:x+w/2-1.5,y:y,width:3,height:h,fill:CT.base},g); else el('rect',{x:x,y:y+h/2-1.5,width:w,height:3,fill:CT.base},g); return; }
+    el('rect',{x:x,y:y,width:w,height:h,fill:CT.base},g);
+    if(CT.centro){ if(vert) el('rect',{x:x+w/3,y:y,width:w/3,height:h,fill:CT.centro},g); else el('rect',{x:x,y:y+h/3,width:w,height:h/3,fill:CT.centro},g); }
+    if(CT.seg){ var p=11; if(vert){ for(var yy=y+p; yy<y+h-2; yy+=p) el('rect',{x:x,y:yy,width:w,height:1.8,fill:hex},g); } else { for(var xx=x+p; xx<x+w-2; xx+=p) el('rect',{x:xx,y:y,width:1.8,height:h,fill:hex},g); } }
+  };
+  var cintaL=function(p){
+    if(CT.fino){ el('line',{x1:p[0],y1:p[1],x2:p[2],y2:p[3],stroke:CT.base,'stroke-width':3},g); return; }
+    el('line',{x1:p[0],y1:p[1],x2:p[2],y2:p[3],stroke:CT.base,'stroke-width':9},g);
+    if(CT.centro) el('line',{x1:p[0],y1:p[1],x2:p[2],y2:p[3],stroke:CT.centro,'stroke-width':3},g);
+    if(CT.seg) el('line',{x1:p[0],y1:p[1],x2:p[2],y2:p[3],stroke:hex,'stroke-width':9,'stroke-dasharray':'1.8 9'},g);
+  };
 
   if(!comp){
     el('rect',{x:20,y:20,width:200,height:300,rx:12,fill:'none',stroke:'currentColor','stroke-dasharray':'6 6',opacity:.35},g);
@@ -2037,12 +2169,12 @@ function dibujarPreview(){
   // Refuerzos pantalón
   var rp=val('rPanUbic'); var hayRefPan = !$('wrapRefuerzos').classList.contains('hidden') && rp;
   if(hayRefPan && /Rodillas/.test(rp)){ el('rect',{x:70,y:Pw+92,width:36,height:28,rx:6,fill:refuerzo},g); el('rect',{x:134,y:Pw+92,width:36,height:28,rx:6,fill:refuerzo},g); }
-  if(hayRefPan && /Valencianas/.test(rp)){ el('rect',{x:65,y:Pw+legLen-12,width:48,height:12,fill:refuerzo},g); el('rect',{x:127,y:Pw+legLen-12,width:48,height:12,fill:refuerzo},g); }
+  if(hayRefPan && /valencianas/i.test(rp)){ el('rect',{x:65,y:Pw+legLen-12,width:48,height:12,fill:refuerzo},g); el('rect',{x:127,y:Pw+legLen-12,width:48,height:12,fill:refuerzo},g); }
   // Bolsillos cargo (costado de la pierna)
   if(cargo){ [[64,0],[156,0]].forEach(function(p){ el('rect',{x:p[0],y:Pw+66,width:20,height:34,rx:2,fill:sombra(hex,.9),stroke:linea,'stroke-width':1},g); el('line',{x1:p[0],y1:Pw+74,x2:p[0]+20,y2:Pw+74,stroke:linea,'stroke-width':1},g); }); }
   // Bolsillos laterales del pantalón (solo de frente)
   var pt=val('pTipo');
-  if(frente && pt){
+  if(frente && pt && pt!==BOLSA_PERS){
     [[72],[142]].forEach(function(p){
       var x=p[0], y=Pw+22;
       el('rect',{x:x,y:y,width:26,height:30,rx:2,fill:sombra(hex,.92),stroke:linea,'stroke-width':1},g);
@@ -2053,10 +2185,10 @@ function dibujarPreview(){
   // Cintas del pantalón
   var cp=val('cintaPantalon');
   if(tape && cp && !/Sin cinta/.test(cp) && cp!==CINTA_PERS){
-    if(/vertical/.test(cp)){ el('rect',{x:64,y:Pw+12,width:7,height:legLen-14,fill:tape},g); el('rect',{x:169,y:Pw+12,width:7,height:legLen-14,fill:tape},g); }
+    if(/vertical/.test(cp)){ cintaR(64,Pw+12,7,legLen-14,true); cintaR(169,Pw+12,7,legLen-14,true); }
     if(/Piping/i.test(cp)){ el('line',{x1:63,y1:Pw+10,x2:66,y2:Pw+legLen,stroke:tape,'stroke-width':2.5},g); el('line',{x1:177,y1:Pw+10,x2:174,y2:Pw+legLen,stroke:tape,'stroke-width':2.5},g); }
-    if(/bordes de los bolsillos/.test(cp) && frente && pt){ el('rect',{x:72,y:Pw+22,width:26,height:30,fill:'none',stroke:tape,'stroke-width':3},g); el('rect',{x:142,y:Pw+22,width:26,height:30,fill:'none',stroke:tape,'stroke-width':3},g); }
-    if(!/vertical|Piping|bordes/i.test(cp)){ el('rect',{x:65,y:Pw+legLen-30,width:48,height:10,fill:tape},g); el('rect',{x:127,y:Pw+legLen-30,width:48,height:10,fill:tape},g); }
+    if(/bordes de los bolsillos/.test(cp) && frente && pt && pt!==BOLSA_PERS){ el('rect',{x:72,y:Pw+22,width:26,height:30,fill:'none',stroke:tape,'stroke-width':3},g); el('rect',{x:142,y:Pw+22,width:26,height:30,fill:'none',stroke:tape,'stroke-width':3},g); }
+    if(!/vertical|Piping|bordes/i.test(cp)){ cintaR(65,Pw+legLen-30,48,10); cintaR(127,Pw+legLen-30,48,10); }
   }
 
   /* ---------- Prenda superior ---------- */
@@ -2096,7 +2228,7 @@ function dibujarPreview(){
   // Bolsillos de la prenda superior (frente)
   if(frente){
     var bt=val('bFrontTipo');
-    if(bt){ [[68],[140]].forEach(function(p){
+    if(bt && bt!==BOLSA_PERS){ [[68],[140]].forEach(function(p){
       var x=p[0], y=bajo-62;
       if(/oculto/.test(bt)){ el('path',{d:'M'+x+','+(y+4)+' L'+(x+32)+','+(y+4)+' L'+(x+32)+','+(y+12)+' L'+x+','+(y+12)+' Z',fill:sombra(hex,.88),stroke:linea,'stroke-width':1},g); }
       else {
@@ -2106,7 +2238,7 @@ function dibujarPreview(){
       }
     }); }
     var br=val('bRadio');
-    if(br && br!=='No'){ el('rect',{x:70,y:y0+28,width:18,height:30,rx:2,fill:sombra(hex,.9),stroke:linea,'stroke-width':1},g);
+    if(br && br!=='No' && br!==BOLSA_PERS){ el('rect',{x:70,y:y0+28,width:18,height:30,rx:2,fill:sombra(hex,.9),stroke:linea,'stroke-width':1},g);
       if(br==='Sí') el('rect',{x:90,y:y0+26,width:6,height:10,rx:1,fill:'none',stroke:linea,'stroke-width':1.4},g); }
     if(!$('wrapPectoral').classList.contains('hidden') && val('bPectoral')==='Sí') el('rect',{x:146,y:y0+32,width:22,height:22,rx:2,fill:sombra(hex,.9),stroke:linea,'stroke-width':1},g);
   }
@@ -2115,21 +2247,26 @@ function dibujarPreview(){
   var cinta=val('cintaChaqueta');
   if(tape && cinta && !/Sin cinta/.test(cinta) && cinta!==CINTA_PERS){
     var bajaY=bajo-22;
-    el('rect',{x:60,y:bajaY,width:120,height:10,fill:tape},g);
+    cintaR(60,bajaY,120,10);
     var op3=/Opción 3/.test(cinta);
-    if(frente){ if(/Opción 1|New York/.test(cinta)) el('rect',{x:60,y:y0+84,width:120,height:10,fill:tape},g); }
+    if(frente){ if(/Opción 1|New York/.test(cinta)) cintaR(60,y0+84,120,10); }
     else {
-      if(/Opción 1|New York/.test(cinta) && !op3) el('rect',{x:60,y:y0+96,width:120,height:10,fill:tape},g);
-      if(op3){ el('rect',{x:82,y:y0+86,width:10,height:bajaY-y0-86,fill:tape},g); el('rect',{x:148,y:y0+86,width:10,height:bajaY-y0-86,fill:tape},g); }
+      if(/Opción 1|New York/.test(cinta) && !op3) cintaR(60,y0+96,120,10);
+      if(op3){ cintaR(82,y0+86,10,bajaY-y0-86,true); cintaR(148,y0+86,10,bajaY-y0-86,true); }
     }
     if(frente && !esCamisa) el('rect',{x:116,y:y0+4,width:8,height:largo-4,fill:sombra(hex,.88),stroke:linea,'stroke-width':1},g);
-    banda(manga(.8),tape); banda(espejo(manga(.8)),tape);
-    if(/New York/.test(cinta)){ banda(manga(.45),tape); banda(espejo(manga(.45)),tape); }
+    cintaL(manga(.8)); cintaL(espejo(manga(.8)));
+    if(/New York/.test(cinta)){ cintaL(manga(.45)); cintaL(espejo(manga(.45))); }
+  }
+  // Puños y pozo del cuello (estructural)
+  if(!$('wrapPunos').classList.contains('hidden')){
+    if(/Nomex|pulgar/.test(val('punos'))){ banda(manga(.985),'#2b2e36',6); banda(espejo(manga(.985)),'#2b2e36',6); }
+    if(/alto/.test(val('pozo')) && !esCamisa) el('path',{d:'M98,'+(y0-15)+' L142,'+(y0-15)+' L144,'+(y0+4)+' L96,'+(y0+4)+' Z',fill:sombra(hex,.78),stroke:linea,'stroke-width':1},g);
   }
 
   // Logos / banderas en brazos o pecho
-  if(val('logoAplica')==='Sí' && val('logoUbicacion')){
-    var u=val('logoUbicacion'), parche=function(cx,cy){ el('circle',{cx:cx,cy:cy,r:7.5,fill:'#ffffff',stroke:'#CF0A2C','stroke-width':2},g); };
+  if(val('logoAplica')==='Sí' && logosTodos().some(function(l){ return l.ubic; })){
+    var u=logosTodos().map(function(l){ return l.ubic; }).join(' | '), parche=function(cx,cy){ el('circle',{cx:cx,cy:cy,r:7.5,fill:'#ffffff',stroke:'#CF0A2C','stroke-width':2},g); };
     var izqImg = frente ? /derecho|Ambos/.test(u) : /izquierdo|Ambos/.test(u);
     var derImg = frente ? /izquierdo|Ambos/.test(u) : /derecho|Ambos/.test(u);
     var p=manga(.25);
@@ -2518,7 +2655,7 @@ function conteoTallas(k){
   return Object.keys(m).sort(function(a,b){ return (parseFloat(a.replace(/\D+/g,''))||0)-(parseFloat(b.replace(/\D+/g,''))||0) || a.localeCompare(b); }).map(function(t){ return [t,m[t]]; });
 }
 function actualizarTotal(){
-  var n=personasValidas().length; $('persTotal').textContent=n+(n===1?' persona':' personas');
+  var n=personasValidas().length; $('persTotal').textContent=n+(n===1?' persona':' personas'); if($('persTotalM')) $('persTotalM').textContent=$('persTotal').textContent;
   var box=$('tallasRes'); if(!box) return; box.innerHTML='';
   [['tCha','Chaquetones'],['tPan','Pantalones']].forEach(function(g){
     var c=conteoTallas(g[0]); if(!c.length) return;
@@ -2626,7 +2763,7 @@ function datosRegistro(){
   return { folio:FOLIO, fecha:new Date().toISOString(), representante:val('repVentas'),
     cliente:{ nombre:val('clientName'), email:val('clientEmail'), telefono:val('clientPhone'), empresa:val('clientCompany') },
     traje:{ tipo:val('tipoTraje'), modelo:val('modelo'), configuracion:val('composicion') },
-    secciones:recopilarDatos(), personal:personasValidas(), adjuntos:adjuntosActivos().map(function(a){ return a.nombre; }), version:'V3' };
+    secciones:recopilarDatos(), personal:personasValidas(), adjuntos:adjuntosActivos().map(function(a){ return a.nombre; }), campos:capturarCampos(), version:'V4' };
 }
 /* Cada registro va a la subcarpeta de quien inició sesión y, dentro, a una carpeta por folio
    (ej. "Registro de configuraciones/Sebastian Lara/FEM-2610-AB12C/"). SharePoint crea las carpetas solas. */
@@ -2816,7 +2953,7 @@ function enviarCorreoGraph(o){
   if(total<=LIMITE_DIRECTO){
     return tokenGraph().then(function(t){
       return Promise.all(adj.map(function(a){ return blobABase64(a.blob); })).then(function(b64){
-        msg.attachments=adj.map(function(a,i){ return { '@odata.type':'#microsoft.graph.fileAttachment', name:a.name, contentType:a.type||'application/octet-stream', contentBytes:b64[i] }; });
+        msg.attachments=adj.map(function(a,i){ return { '@odata.type':'#microsoft.graph.fileAttachment', name:a.name, contentType:a.type||'application/octet-stream', contentBytes:b64[i], isInline:!!a.cid, contentId:a.cid||undefined }; });
         avisa('Enviando correo…');
         return graphFetch(t,'POST','/me/sendMail',{ message:msg, saveToSentItems:true });
       });
@@ -2831,7 +2968,7 @@ function enviarCorreoGraph(o){
       return p.then(function(){
         avisa('Adjuntando '+(i+1)+' de '+adj.length+': '+a.name+'…');
         if(a.blob.size<3*1048576){
-          return blobABase64(a.blob).then(function(b64){ return graphFetch(token,'POST','/me/messages/'+id+'/attachments',{ '@odata.type':'#microsoft.graph.fileAttachment', name:a.name, contentType:a.type||'application/octet-stream', contentBytes:b64 }); });
+          return blobABase64(a.blob).then(function(b64){ return graphFetch(token,'POST','/me/messages/'+id+'/attachments',{ '@odata.type':'#microsoft.graph.fileAttachment', name:a.name, contentType:a.type||'application/octet-stream', contentBytes:b64, isInline:!!a.cid, contentId:a.cid||undefined }); });
         }
         return graphFetch(token,'POST','/me/messages/'+id+'/attachments/createUploadSession',{ AttachmentItem:{ attachmentType:'file', name:a.name, size:a.blob.size, contentType:a.type||'application/octet-stream' } })
           .then(function(ses){ return subirPorPartes(ses.uploadUrl, a.blob); });
@@ -2883,7 +3020,264 @@ function pintarAdjuntosModal(){
   if(modo!=='graph'){ return; }
   LISTA_CORREO=adjuntosActivos().map(function(a){ return { name:a.nombre, size:a.size, ref:a, incluir:destinoCorreo!=='cliente' }; });
   pintarListaCorreo(cont, { name:nombreArchivo() }, LISTA_CORREO,
-    LISTA_CORREO.length ? (destinoCorreo==='cliente' ? 'Marca los logos si también quieres mandárselos al cliente.' : '') : '');
+    destinoCorreo==='cliente' ? (LISTA_CORREO.length ? 'Marca los logos si también quieres mandárselos al cliente.' : '') : 'La vista del traje (frente y espalda) va dentro del cuerpo del correo como referencia.');
+}
+
+/* =====================================================================
+   v5 · CINTAS (tipo y color), CAPAS, LOGOS, BOLSILLOS, PUÑOS Y POZO
+   ===================================================================== */
+var LIMA='#d4ef00', PLATA='#cfd4dc', NARANJA='#ff7a1a';
+var CINTAS_TIPO=[
+  { v:'Estándar: 3M™ 3" 9587 / Yeshili 3" 306 / Yeshili 3" 305 · Lima-Plata-Lima', nombre:'Lima-Plata-Lima', base:LIMA, centro:PLATA },
+  { v:'Opción 1: 3M™ 3" 5687 o Yeshili 3" 202 HFR/CUT (fusionada segmentada) · Lima-Plata-Lima', nombre:'Lima-Plata-Lima segmentada', base:LIMA, centro:PLATA, seg:true },
+  { v:'Opción 2: 3M™ 3" 9586 NPN · Naranja-Plata-Naranja', nombre:'Naranja-Plata-Naranja', base:NARANJA, centro:PLATA },
+  { v:'Opción 3: 3M™ 5686 NPN (fusionada segmentada) · Naranja-Plata-Naranja', nombre:'Naranja-Plata-Naranja segmentada', base:NARANJA, centro:PLATA, seg:true },
+  { v:'Opción 4: 3M™ 8935 (fusionada) · Plata (letras o letreros)', nombre:'Plata', base:PLATA },
+  { v:'Opción 5: 3M™ 8987 (cosida) · Lima (letras o letreros)', nombre:'Lima', base:LIMA },
+  { v:'Opción 6: Piping P302 (cordón reflectivo) · Plata (en costuras del traje)', nombre:'Piping plata', base:PLATA, fino:true }
+];
+function cintaColores(){ var v=val('cintaTipo'); return CINTAS_TIPO.filter(function(c){ return c.v===v; })[0] || CINTAS_TIPO[0]; }
+function pintarCintaMuestra(){
+  var b=$('cintaMuestra'); if(!b) return; var c=cintaColores(); b.innerHTML='';
+  var i=document.createElement('i');
+  var bg = c.fino ? 'linear-gradient(transparent 42%,'+c.base+' 42% 58%,transparent 58%)' :
+           (c.centro ? 'linear-gradient('+c.base+' 0 33%,'+c.centro+' 33% 67%,'+c.base+' 67%)' : c.base);
+  i.style.background=bg;
+  if(c.seg) i.style.backgroundImage=bg+',repeating-linear-gradient(90deg,transparent 0 10px,rgba(0,0,0,.35) 10px 12px)';
+  b.appendChild(i); b.appendChild(document.createTextNode(c.nombre));
+}
+document.addEventListener('change', function(e){ if(e.target && e.target.id==='cintaTipo') pintarCintaMuestra(); });
+
+/* Colores de barreras según Configurador.xlsm (hojas de materiales) */
+function colorCapa(nombre){
+  var n=String(nombre||'');
+  if(!n || /^N\/?A$/i.test(n)) return null;
+  if(/Stedair/i.test(n)) return { txt:'Amarillo (sustrato) / Blanco (membrana)', c:['#e8c440','#ffffff'] };
+  if(/Caldura|Titanium/i.test(n)) return { txt:'Oro (gold)', c:['#c9a14a'] };
+  if(/Defender/i.test(n)) return { txt:'Latón (brass) / Camuflado (camo)', c:['#b59b62','#6f7a52'] };
+  if(/Q-?8/i.test(n)) return { txt:'Azul (blue)', c:['#3f6db3'] };
+  return { txt:'Color por confirmar', c:['#c4c7cc'] };
+}
+var firmaCapas='';
+function pintarCapas(){
+  var box=$('capasViz'); if(!box) return;
+  var ext = $('wrapExterna').classList.contains('hidden') ? val('matExternaTxt') : val('matExterna');
+  var col = $('wrapColor').classList.contains('hidden') ? val('colorExternaTxt') : val('colorExterna');
+  var filas=[];
+  if(ext) filas.push({ t:'Capa externa', m:ext, txt:col||'Color por elegir', c:[COLOR_HEX[val('colorExterna')]||'#c4c7cc'] });
+  [['Barrera contra la humedad','matHumedad'],['Barrera térmica','matTermica']].forEach(function(r){
+    var v=val(r[1]), cc=colorCapa(v); if(cc) filas.push({ t:r[0], m:v, txt:cc.txt, c:cc.c });
+  });
+  var ul=$('ulInfo'), chipTxt='', chipCls='';
+  if(ul && (ul.classList.contains('ok')||ul.classList.contains('warn'))){
+    var comb=datosProducto.combinacionesUL.filter(function(r){ return r[0]===val('matExterna')&&r[1]===val('matHumedad')&&r[2]===val('matTermica'); })[0];
+    chipCls=ul.classList.contains('ok')?'ok':'warn'; chipTxt = comb ? 'UL · TPP '+comb[4].toFixed(1)+(comb[3]!==null?' · THL '+comb[3].toFixed(1):'') : 'Sujeta a validación';
+  }
+  var firma=JSON.stringify(filas)+chipTxt;
+  if(firma===firmaCapas) return; firmaCapas=firma;
+  box.classList.toggle('hidden', !filas.length); box.innerHTML='';
+  if(!filas.length) return;
+  var tit=document.createElement('div'); tit.className='tit'; var tt=document.createElement('span'); tt.textContent='Capas del traje · color'; tit.appendChild(tt);
+  if(chipTxt){ var ch=document.createElement('span'); ch.className='chip '+chipCls; ch.textContent=chipTxt; tit.appendChild(ch); }
+  box.appendChild(tit);
+  filas.forEach(function(f){
+    var d=document.createElement('div'); d.className='capa';
+    var sw=document.createElement('span'); sw.className='muestra';
+    sw.style.background = f.c.length>1 ? 'linear-gradient(135deg,'+f.c[0]+' 0 50%,'+f.c[1]+' 50% 100%)' : f.c[0];
+    var tx=document.createElement('span'); var b=document.createElement('b'); b.textContent=f.t; var sm=document.createElement('small'); sm.textContent=f.m+' · '+f.txt;
+    tx.appendChild(b); tx.appendChild(sm); d.appendChild(sw); d.appendChild(tx); box.appendChild(d);
+  });
+  box.classList.remove('anima'); void box.offsetWidth; box.classList.add('anima');
+}
+
+/* Logos: una ubicación visible y "Agregar otra ubicación" para más registros */
+function opcionesUbicacion(){ return (datosProducto.ubicacionLogo||[]).filter(function(u){ return !/ambos/i.test(u); }); }
+var LOGO_N=1, LOGO_MAX=8;
+function agregarLogo(n){
+  if(!n){ n=LOGO_N+1; }
+  LOGO_N=Math.max(LOGO_N,n);
+  if($('logoExtra'+n)) return;
+  if(document.querySelectorAll('.logo-extra').length>=LOGO_MAX-1){ mostrarMensaje('Máximo '+LOGO_MAX+' ubicaciones de logos','error'); return; }
+  var d=document.createElement('div'); d.className='logo-extra'; d.id='logoExtra'+n;
+  d.innerHTML='<div class="cab-l"><span class="nl"></span><button type="button" class="btn-link">Quitar</button></div><div class="grid-3">'+
+    '<div class="field"><label for="logoFijacion'+n+'"><span class="nl-l sr"></span>Mecanismo de fijación</label><select id="logoFijacion'+n+'"></select></div>'+
+    '<div class="field"><label for="logoTipo'+n+'"><span class="nl-l sr"></span>Tipo</label><select id="logoTipo'+n+'"></select></div>'+
+    '<div class="field"><label for="logoUbicacion'+n+'"><span class="nl-l sr"></span>Ubicación</label><select id="logoUbicacion'+n+'"></select></div></div>';
+  $('logosExtra').appendChild(d);
+  llenarSelect('logoFijacion'+n, datosProducto.fijacionLogos); llenarSelect('logoTipo'+n, datosProducto.tipoMarcado); llenarSelect('logoUbicacion'+n, opcionesUbicacion());
+  d.querySelector('.cab-l button').onclick=function(){ d.remove(); renumerarLogos(); actualizarVista(); };
+  renumerarLogos(); actualizarVista();
+}
+function renumerarLogos(){
+  [].forEach.call(document.querySelectorAll('.logo-extra'), function(r,i){
+    [].forEach.call(r.querySelectorAll('.nl'), function(s){ s.textContent='Ubicación '+(i+2); });
+    [].forEach.call(r.querySelectorAll('.nl-l'), function(s){ s.textContent='Ubicación '+(i+2)+' · '; });
+  });
+}
+function logosTodos(){
+  var arr=[{ fij:val('logoFijacion'), tipo:val('logoTipo'), ubic:val('logoUbicacion') }];
+  [].forEach.call(document.querySelectorAll('.logo-extra'), function(r){ var n=r.id.replace('logoExtra',''); arr.push({ fij:val('logoFijacion'+n), tipo:val('logoTipo'+n), ubic:val('logoUbicacion'+n) }); });
+  return arr.filter(function(l){ return l.fij||l.tipo||l.ubic; });
+}
+
+/* Bolsillos personalizados */
+var BOLSA_PERS='Otro (personalizado)';
+function mostrarBolsasPers(){
+  mostrar('wrapBRadioPers', val('bRadio')===BOLSA_PERS);
+  mostrar('wrapBFrontPers', val('bFrontTipo')===BOLSA_PERS);
+  mostrar('wrapPPers', val('pTipo')===BOLSA_PERS);
+  if($('bolsasPersTag')) mostrar('bolsasPersTag', [val('bRadio'),val('bFrontTipo'),val('pTipo')].indexOf(BOLSA_PERS)>-1);
+}
+function resumenBolsillos(){
+  var br=val('bRadio'), bt=val('bFrontTipo'), pt=val('pTipo'), p=[];
+  if(br && br!=='No') p.push(br===BOLSA_PERS ? 'Radio personalizado' : 'Radio');
+  if(bt) p.push(bt===BOLSA_PERS ? 'Frontales personalizados' : 'Frontales '+bt.replace(/^Bolsillo tipo /,'').toLowerCase());
+  if(pt) p.push(pt===BOLSA_PERS ? 'Pantalón personalizados' : 'Pantalón '+pt.replace(/^Bolsillo tipo /,'').toLowerCase());
+  return p.join(' · ');
+}
+document.addEventListener('change', function(e){ if(e.target && /^(bRadio|bFrontTipo|pTipo)$/.test(e.target.id)) mostrarBolsasPers(); if(e.target && /^(punos|pozo)$/.test(e.target.id)) mostrarOtrosS7(); });
+
+/* Puños y pozo del cuello: solo EPP estructural */
+var PUNOS=['Puño de punto Nomex®','Puño de punto con orificio para pulgar','Sin puño de punto','Otro (especificar)'];
+var POZO=['Pozo estándar con lengüeta (throat tab)','Pozo alto con lengüeta (throat tab)','Otro (especificar)'];
+function mostrarOtrosS7(){ mostrar('wrapPunosOtro', /^Otro/.test(val('punos'))); mostrar('wrapPozoOtro', /^Otro/.test(val('pozo'))); }
+
+/* Correo a producción: vista del traje dentro del cuerpo */
+function imagenesTrajeCorreo(){
+  var lados=['frente','espalda'];
+  return Promise.all(lados.map(function(l){ return vistaComoImagen(l); })).then(function(urls){
+    return Promise.all(urls.map(function(u,i){
+      if(!u) return null;
+      return fetch(u).then(function(r){ return r.blob(); }).then(function(b){ return { name:'vista-'+lados[i]+'.png', type:'image/png', blob:b, cid:'vista-'+lados[i]+'@fem', lado:lados[i] }; }).catch(function(){ return null; });
+    }));
+  }).then(function(l){ return l.filter(Boolean); }).catch(function(){ return []; });
+}
+function bloqueVistasCorreo(imgs){
+  if(!imgs || !imgs.length) return '';
+  return '<div style="margin:18px 0 6px;font-weight:700;color:#1f2545;font-size:14px">Vista de referencia del traje</div>'+
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>'+
+    imgs.map(function(im){ return '<td style="padding:0 12px 0 0;text-align:center;vertical-align:top"><img src="cid:'+im.cid+'" width="170" alt="Vista '+im.lado+' del traje" style="display:block;width:170px;height:auto;border:1px solid #e4e6ec;border-radius:6px"><div style="font-size:12px;color:#5b6070;margin-top:4px;text-transform:capitalize">'+im.lado+'</div></td>'; }).join('')+
+    '</tr></table><div style="font-size:11px;color:#777;margin-top:6px">Los colores son solo una representación de referencia; no corresponden al color exacto de la tela.</div>';
+}
+
+/* Tabla de fabricación en modal */
+function abrirFab(){ pintarPersonal(); $('fabModal').classList.add('active'); setTimeout(function(){ var b=document.querySelector('#fabModal .tabla-pers input:not([disabled])'); if(b) b.focus(); }, 50); }
+function cerrarFab(){ $('fabModal').classList.remove('active'); actualizarVista(); }
+document.addEventListener('keydown', function(e){
+  if(e.key!=='Escape') return;
+  if($('guiaModal') && $('guiaModal').classList.contains('active')) return;
+  if($('fabModal') && $('fabModal').classList.contains('active')) cerrarFab();
+});
+
+/* =====================================================================
+   v5 · MIS CONFIGURACIONES: filtros y "Copiar y editar"
+   ===================================================================== */
+function diaLocal(iso){ var d=new Date(iso); if(isNaN(d)) return ''; var p=function(n){ return (n<10?'0':'')+n; }; return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); }
+function pasaFiltrosMC(it){
+  var de=val('mcDesde'), ha=val('mcHasta'), tr=val('mcTraje'), mo=val('mcModelo'), t=(it.datos&&it.datos.traje)||{};
+  var dia=diaLocal(it.fecha);
+  if(de && (!dia || dia<de)) return false;
+  if(ha && (!dia || dia>ha)) return false;
+  if(tr && t.tipo!==tr) return false;
+  if(mo && t.modelo!==mo) return false;
+  return true;
+}
+function opcionesFiltrosMC(){
+  var tr=$('mcTraje'), mo=$('mcModelo'); if(!tr || !mo) return;
+  var tipos={}, modelos={}, selT=tr.value, selM=mo.value;
+  MC.items.forEach(function(it){ var t=(it.datos&&it.datos.traje)||{}; if(t.tipo) tipos[t.tipo]=1; if(t.modelo && (!selT || t.tipo===selT)) modelos[t.modelo]=1; });
+  var llenar=function(sel, obj, actual){
+    var claves=Object.keys(obj).sort(), html='<option value="">Todos</option>';
+    sel.innerHTML=html; claves.forEach(function(k){ var o=document.createElement('option'); o.value=k; o.textContent=etiqueta(k); sel.appendChild(o); });
+    sel.value = obj[actual] ? actual : '';
+  };
+  llenar(tr, tipos, selT); llenar(mo, modelos, selM);
+}
+function limpiarFiltrosMC(){ ['mcDesde','mcHasta','mcTraje','mcModelo'].forEach(function(id){ $(id).value=''; }); pintarMisConfig(); }
+
+function controlesForm(){
+  return [].slice.call(document.querySelectorAll('section.card input[id], section.card select[id], section.card textarea[id]'))
+    .filter(function(c){ return c.type!=='file' && c.type!=='checkbox' && c.type!=='hidden'; });
+}
+function capturarCampos(){ var m={}; controlesForm().forEach(function(c){ if(String(c.value||'')!=='') m[c.id]=c.value; }); return m; }
+function normTxt(t){ return String(t==null?'':t).normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim().toLowerCase(); }
+/* Registros anteriores (sin "campos"): se reconstruyen con las etiquetas y textos de cada sección */
+function mapaDesdeSecciones(secciones){
+  var mapa={};
+  (secciones||[]).forEach(function(s){
+    var num=String(s.titulo||'').split('.')[0];
+    var sec=[].filter.call(document.querySelectorAll('section.card'), function(x){ return String(x.getAttribute('data-sec')||'').split('.')[0]===num; })[0];
+    if(!sec) return;
+    var usados={};
+    (s.filas||[]).forEach(function(f){
+      var lab=normTxt(f[0]);
+      var fl=[].filter.call(sec.querySelectorAll('.field'), function(x){
+        var l=x.querySelector('label'), c=x.querySelector('input,select,textarea'); if(!l || !c || !c.id || usados[c.id]) return false;
+        var k=l.cloneNode(true); k.querySelectorAll('.req,.counter').forEach(function(z){ z.remove(); });
+        return normTxt(k.textContent)===lab;
+      })[0];
+      if(!fl) return;
+      var c=fl.querySelector('input,select,textarea'); usados[c.id]=1;
+      mapa[c.id] = c.tagName==='SELECT' ? { t:f[1] } : { v:f[1] };
+    });
+  });
+  return mapa;
+}
+function aplicarRegistro(d){
+  var mapa={};
+  if(d.campos){ Object.keys(d.campos).forEach(function(k){ mapa[k]={ v:d.campos[k] }; }); }
+  else mapa=mapaDesdeSecciones(d.secciones);
+  delete mapa.repVentas;   // la nueva configuración la hace quien tiene la sesión
+  // filas extra de logos
+  [].forEach.call(document.querySelectorAll('.logo-extra'), function(r){ r.remove(); });
+  Object.keys(mapa).filter(function(k){ return /^logoUbicacion\d+$/.test(k) || /^logoTipo\d+$/.test(k) || /^logoFijacion\d+$/.test(k); })
+    .map(function(k){ return +k.replace(/\D/g,''); }).filter(function(n,i,a){ return a.indexOf(n)===i; }).sort(function(a,b){ return a-b; })
+    .forEach(function(n){ agregarLogo(n); });
+  // limpiar y aplicar en cascada (los selects dependientes se llenan con cada cambio)
+  controlesForm().forEach(function(c){ if(c.id==='repVentas') return; if(c.tagName==='SELECT'){ if(c.value!==''){ c.value=''; c.dispatchEvent(new Event('change',{bubbles:true})); } } else c.value=''; });
+  for(var paso=0; paso<5; paso++){
+    controlesForm().forEach(function(c){
+      var e=mapa[c.id]; if(!e) return;
+      if(c.tagName==='SELECT'){
+        var op=[].filter.call(c.options, function(o){ return o.value!=='' && (e.v!=null ? o.value===e.v : normTxt(o.textContent)===normTxt(e.t)); })[0];
+        if(op && c.value!==op.value){ c.value=op.value; c.dispatchEvent(new Event('change',{bubbles:true})); }
+      } else {
+        var v = e.v!=null ? e.v : e.t;
+        if(c.value!==v){ c.value=v; c.dispatchEvent(new Event('input',{bubbles:true})); }
+      }
+    });
+  }
+  if(!val('cintaTipo')){ $('cintaTipo').value=CINTAS_TIPO[0].v; pintarCintaMuestra(); }
+  personal=(d.personal||[]).map(function(p){ return Object.assign(personaVacia(), p); });
+  pintarPersonal();
+  // es una configuración nueva: folio nuevo y sin registrar
+  registrado=false; reservando=null; registrando=null; pillRegistro('Sin registrar');
+  ADJ.forEach(function(a){ if(a.vista) URL.revokeObjectURL(a.vista); }); ADJ=[]; pintarAdjuntos();
+  FOLIO=''; actualizarVista();
+}
+var copiando=null;
+function copiarConfiguracion(it, btn){
+  if(!it.datos) return;
+  var hayDatos = val('clientName') || val('tipoTraje') || personasValidas().length;
+  if(hayDatos && copiando!==it.folio){
+    copiando=it.folio; btn.textContent='¿Reemplazar lo capturado? Pulsa de nuevo';
+    setTimeout(function(){ if(copiando===it.folio){ copiando=null; btn.textContent='📄 Copiar y editar'; } }, 4000);
+    return;
+  }
+  copiando=null; btn.disabled=true; btn.textContent='Copiando…';
+  var asegurar = it.pendiente ? contenidoCarpeta(it) : Promise.resolve();
+  asegurar.then(function(){
+    aplicarRegistro(it.datos);
+    cerrarMisConfig(); window.scrollTo({ top:0, behavior:'smooth' });
+    mostrarMensaje('✅ Se copió '+it.folio+' en una nueva configuración ('+FOLIO+'). Revisa y ajusta lo necesario.','ok');
+    // logos guardados con el folio original: se traen como adjuntos de la nueva configuración
+    var logos=(it.adjuntos||[]).filter(function(f){ return f.size<=ADJ_MAX_MB*1048576; });
+    if(logos.length && val('logoAplica')==='Sí'){
+      Promise.all(logos.map(function(f){ return bajarArchivo(f).then(function(b){ return new File([b], f.name, { type:(f.file&&f.file.mimeType)||b.type||'application/octet-stream' }); }).catch(function(){ return null; }); }))
+        .then(function(files){ agregarAdjuntos(files.filter(Boolean)); });
+    }
+  }).catch(function(){ mostrarMensaje('No se pudo copiar la configuración. Intenta de nuevo.','error'); })
+  .then(function(){ btn.disabled=false; btn.textContent='📄 Copiar y editar'; });
 }
 /* =====================================================================
    MIS CONFIGURACIONES (lee la carpeta de registro de quien inició sesión)
@@ -2978,9 +3372,10 @@ function fechaCorta(iso){
 function trajeDe(d){ var t=d && d.traje; if(!t) return ''; return [etiqueta(t.tipo||''), etiqueta(t.modelo||''), t.configuracion||''].filter(Boolean).join(' · '); }
 function empresaDePDF(it){ if(!it.pdf) return ''; return it.pdf.name.replace(/^FEM-[A-Z0-9-]+_/i,'').replace(/\.pdf$/i,'').replace(/_/g,' '); }
 function pintarMisConfig(msgCarga){
-  var tb=$('mcBody'); tb.innerHTML='';
+  var tb=$('mcBody'); tb.innerHTML=''; opcionesFiltrosMC();
   var q=val('mcBuscar').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
   var lista=MC.items.filter(function(it){
+    if(!pasaFiltrosMC(it)) return false;
     if(!q) return true;
     var d=it.datos||{}, c=d.cliente||{};
     return [it.folio, c.nombre, c.empresa, c.email, trajeDe(d), empresaDePDF(it)].join(' ').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').indexOf(q)>=0;
@@ -2988,7 +3383,7 @@ function pintarMisConfig(msgCarga){
   $('mcCuenta').textContent = MC.cargado ? (lista.length+(lista.length===MC.items.length ? '' : ' de '+MC.items.length)+(MC.items.length===1?' configuración':' configuraciones')) : '';
   if(msgCarga || !lista.length){
     var tr=document.createElement('tr'); tr.className='vacio'; var td=document.createElement('td'); td.colSpan=6;
-    td.textContent = msgCarga || (MC.items.length ? 'Ninguna configuración coincide con la búsqueda.' : 'Aún no tienes configuraciones registradas. Se guardan aquí al descargar el PDF o enviarlas por correo.');
+    td.textContent = msgCarga || (MC.items.length ? 'Ninguna configuración coincide con la búsqueda o los filtros.' : 'Aún no tienes configuraciones registradas. Se guardan aquí al descargar el PDF o enviarlas por correo.');
     tr.appendChild(td); tb.appendChild(tr); return;
   }
   lista.forEach(function(it){
@@ -3005,6 +3400,7 @@ function pintarMisConfig(msgCarga){
       if(it.adjuntos.length){ var ca=document.createElement('span'); ca.className='chip-adj'; ca.textContent='📎 '+it.adjuntos.length; ca.title=it.adjuntos.map(function(f){ return f.name; }).join('\n'); tp.appendChild(ca); } }
     var ta=td(); var acc=document.createElement('div'); acc.className='acc'; ta.appendChild(acc);
     if(it.pdf){ var bd=document.createElement('button'); bd.type='button'; bd.className='btn-ghost'; bd.textContent='📥 PDF'; bd.setAttribute('aria-label','Descargar PDF del folio '+it.folio); bd.onclick=function(){ descargarPDFRegistro(it, bd); }; acc.appendChild(bd); }
+    var bc=document.createElement('button'); bc.type='button'; bc.className='btn-ghost'; bc.textContent='📄 Copiar y editar'; bc.setAttribute('aria-label','Copiar el folio '+it.folio+' en una nueva configuración'); bc.disabled=!d; bc.onclick=function(){ copiarConfiguracion(it, bc); }; acc.appendChild(bc);
     var br=document.createElement('button'); br.type='button'; br.className='btn-secondary'; br.textContent='✉️ Reenviar'; br.setAttribute('aria-label','Reenviar el folio '+it.folio); br.onclick=function(){ abrirReenvio(it); }; acc.appendChild(br);
     tb.appendChild(tr);
   });
@@ -3189,7 +3585,7 @@ function mensajeEntra(err){
 function entrar(){
   if(!graphConfigurado()){ estadoGate('Falta configurar la app: pega los IDs de Entra en CONFIG_GRAPH.', true); return; }
   $('btnEntrar').disabled=true;
-  obtenerMsal().then(function(app){
+  (window.axoCelebrar ? window.axoCelebrar() : Promise.resolve()).then(function(){ return obtenerMsal(); }).then(function(app){
     var cuenta=app.getActiveAccount() || app.getAllAccounts()[0];
     if(cuenta) return abrirSesion(app, cuenta);
     estadoGate('Abriendo el inicio de sesión de Microsoft…');
@@ -3294,7 +3690,21 @@ function arrancar(){ arrancarSeguro(); iniciarAxo(); }
 function iniciarAxo(){
   var m=$('axo'), gate=$('gate'), cam=$('camion'), globo=$('axoGlobo'), btn=$('btnEntrar'); if(!m || !gate) return;
   var quieto = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var W=150, H=204, x=0, y=0, dir=1, est='', finEst=0, ult=null, fase='llega', faseT=0, modo='lean', sigGesto=0, gesto='', finGesto=0, globoHasta=0;
+  var W=150, H=204, x=0, y=0, dir=1, est='', finEst=0, ult=null, fase='llega', faseT=0, modo='lean', sigGesto=0, gesto='', finGesto=0, globoHasta=0, esc2=1, ultToque=0;
+  var suave=function(p){ return 1-Math.pow(1-p,3); };
+  var tocar=function(){
+    var gl=m.querySelector('.guante-d'); if(!gl) return;
+    var r=gl.getBoundingClientRect(), gr=gate.getBoundingClientRect(), t=document.createElement('span');
+    t.className='toque'; t.style.left=(r.left+r.width/2-gr.left)+'px'; t.style.top=(r.top+r.height/2-gr.top)+'px';
+    gate.appendChild(t); setTimeout(function(){ t.remove(); }, 700);
+  };
+  /* Al pulsar "Iniciar sesión": brinca y luego continúa el acceso */
+  window.axoCelebrar=function(){
+    if(quieto || m.style.opacity==='0' || m.style.display==='none' || fase==='llega' || fase==='abre') return Promise.resolve();
+    fase='fin'; gesto=''; esc2=1; est='jump'; m.className='axo st-jump'; pintar();
+    decir('¡A configurar!', 1200, performance.now());
+    return new Promise(function(res){ setTimeout(res, 850); });
+  };
   var caja=function(){ var b=document.querySelector('.gate-box'), g=gate.getBoundingClientRect(), r=b.getBoundingClientRect(); return { x:r.left-g.left, y:r.top-g.top, w:r.width, h:r.height }; };
   /* Lugar de espera: recargado a la derecha del recuadro o, si no hay espacio (celular), sentado en su esquina */
   var lugar=function(){
@@ -3304,11 +3714,11 @@ function iniciarAxo(){
   };
   var clase=function(){ return 'axo st-'+est+(gesto?' g-'+gesto:''); };
   var fijar=function(e,dur,t){ est=e; gesto=''; m.className=clase(); finEst=t+dur; };
-  var pintar=function(){ m.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) scaleX('+dir+')'; m.style.setProperty('--flip',dir); };
+  var pintar=function(){ m.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) scale('+(dir*esc2)+','+esc2+')'; m.style.setProperty('--flip',dir); };
   var decir=function(txt, ms, t){
     if(!globo) return;
     globo.textContent=txt;
-    var gx = modo==='lean' ? x+W*0.55 : x+W*0.62, gy = y-34;
+    var gx = modo==='lean' ? x+W*0.55 : x+W*0.62, gy = y-34-(esc2-1)*H*0.5;
     globo.style.left=Math.min(gx, gate.clientWidth-200)+'px'; globo.style.top=Math.max(gy,4)+'px';
     globo.classList.add('ver'); globoHasta=t+ms;
   };
@@ -3324,7 +3734,7 @@ function iniciarAxo(){
   window.addEventListener('resize', function(){ if(fase==='espera2'){ var p=lugar(); x=p.x; y=p.y; fijar(modo,0,performance.now()); pintar(); callar(); } });
   if(quieto){
     if(cam) cam.style.display='none';
-    m.style.opacity=1; fase='espera2'; esperar(0); m.className='axo st-'+modo; return;
+    m.style.opacity=1; fase='espera2'; esperar(0); m.className='axo st-'+modo; window.axoCelebrar=function(){ return Promise.resolve(); }; return;
   }
   if(cam){ cam.classList.add('rodando'); pintarCam(); } else { fase='camina'; m.style.opacity=1; }
   var objetivo=null;
@@ -3355,8 +3765,19 @@ function iniciarAxo(){
     if(fase==='camina'){
       if(!objetivo) objetivo=lugar();
       var dx=objetivo.x-x, dy=objetivo.y-y, d=Math.sqrt(dx*dx+dy*dy);
-      if(d<4){ fase='espera2'; esperar(t); decir(FRASES[0], 3200, t); }
+      if(d<4){ esperar(t); fase='acerca'; faseT=t; est='tap'; gesto=''; m.className='axo st-idle'; }
       else { var k=Math.min(75*dt,d); x+=dx/d*k; y+=dy/d*k; if(Math.abs(dx)>3) dir = dx<0 ? -1 : 1; pintar(); }
+      return requestAnimationFrame(paso);
+    }
+    /* 3b. se acerca, toca la pantalla, se aleja y señala el botón */
+    if(fase==='fin'){ pintar(); if(globoHasta && t>globoHasta) callar(); return requestAnimationFrame(paso); }
+    if(fase==='acerca' || fase==='toca' || fase==='aleja' || fase==='apunta'){
+      var e=t-faseT;
+      if(fase==='acerca'){ esc2=1+0.45*suave(Math.min(e/550,1)); if(e>=550){ fase='toca'; faseT=t; m.className='axo st-tap'; decir('¡Toc, toc! ¡Hola!', 2000, t); ultToque=t-300; } }
+      else if(fase==='toca'){ if(t-ultToque>440){ ultToque=t; tocar(); } if(e>2000){ fase='aleja'; faseT=t; m.className='axo st-idle'; callar(); } }
+      else if(fase==='aleja'){ esc2=1.45-0.45*suave(Math.min(e/550,1)); if(e>=550){ esc2=1; fase='apunta'; faseT=t; est=modo; gesto='apunta'; m.className=clase(); decir('Inicia sesión aquí', 2800, t); } }
+      else if(fase==='apunta'){ if(e>2800){ gesto=''; m.className=clase(); fase='espera2'; sigGesto=t+5000; } }
+      pintar(); if(globoHasta && t>globoHasta) callar();
       return requestAnimationFrame(paso);
     }
     /* 4. espera recargado: solo gestos pequeños */
