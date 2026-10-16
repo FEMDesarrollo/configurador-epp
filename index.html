@@ -379,6 +379,26 @@ body.bloqueado .gate{display:flex}
 @keyframes axoSusto{0%{transform:translateY(0)}35%{transform:translateY(-14px)}100%{transform:translateY(0)}}
 @keyframes axoMandA{from{transform:rotate(0)}to{transform:rotate(-16deg)}}
 @keyframes axoMandB{from{transform:rotate(0)}to{transform:rotate(16deg)}}
+/* Espera recargado en el recuadro de acceso */
+.axo.st-lean,.axo.st-sit{z-index:3}
+.axo.st-lean .gir{transform:rotate(-8deg);transform-origin:30% 96%;transition:transform .5s ease}
+.axo.st-lean .brazo-i{transform:rotate(128deg);transition:transform .5s ease}
+.axo.st-lean .pierna-d{transform:translateX(-9px) rotate(9deg);transition:transform .4s}
+.axo.st-lean .pierna-i{transform:rotate(-3deg)}
+.axo.st-lean .salto,.axo.st-sit .salto{animation:axoRespira 2.8s ease-in-out infinite}
+.axo.st-lean.g-pie .pierna-d{animation:axoPie .32s ease-in-out infinite alternate}
+.axo.st-sit .pierna-i{animation:axoColumpio 1.6s ease-in-out infinite alternate}
+.axo.st-sit .pierna-d{animation:axoColumpio 1.6s ease-in-out infinite alternate-reverse}
+.axo.st-sit .brazo-i{transform:rotate(18deg)}
+.axo.st-sit .brazo-d{transform:rotate(-18deg)}
+.axo.g-saluda .brazo-d{animation:axoSaludo .45s ease-in-out infinite alternate}
+.axo.g-apunta .brazo-d{transform:rotate(68deg);transition:transform .25s}
+.axo.st-sit.g-apunta .brazo-d{transform:rotate(28deg)}
+@keyframes axoPie{from{transform:translateX(-9px) rotate(9deg)}to{transform:translateX(-9px) rotate(1deg)}}
+@keyframes axoColumpio{from{transform:rotate(-10deg)}to{transform:rotate(12deg)}}
+.axo-globo{position:absolute;left:0;top:0;z-index:4;max-width:190px;padding:8px 12px;border-radius:12px;background:#fff;color:#1f2545;border:2px solid #1f2545;font:700 12.5px/1.3 var(--font-title);box-shadow:0 4px 12px rgba(31,37,69,.15);pointer-events:none;opacity:0;transform:translateY(6px) scale(.9);transform-origin:20% 100%;transition:opacity .25s,transform .25s}
+.axo-globo::after{content:"";position:absolute;left:18px;bottom:-9px;width:14px;height:14px;background:#fff;border-right:2px solid #1f2545;border-bottom:2px solid #1f2545;transform:rotate(45deg)}
+.axo-globo.ver{opacity:1;transform:none}
 /* camión de bomberos de la llegada */
 .camion{position:absolute;left:0;top:0;width:260px;z-index:1;pointer-events:none;will-change:transform}
 .camion svg{width:100%;height:auto;display:block;overflow:visible}
@@ -469,6 +489,7 @@ body.bloqueado .gate{display:flex}
   <g class="rueda" style="transform-origin:140px 102px"><circle cx="140" cy="102" r="15" fill="#1c1e24"/><circle cx="140" cy="102" r="7" fill="#c9ced8"/><path d="M140 95V109M133 102H147" stroke="#7d8597" stroke-width="2"/></g>
   <g class="rueda" style="transform-origin:216px 102px"><circle cx="216" cy="102" r="15" fill="#1c1e24"/><circle cx="216" cy="102" r="7" fill="#c9ced8"/><path d="M216 95V109M209 102H223" stroke="#7d8597" stroke-width="2"/></g>
 </svg></div>
+  <div class="axo-globo" id="axoGlobo" aria-hidden="true"></div>
   <div class="axo st-idle" id="axo" aria-hidden="true" style="opacity:0"><div class="gir"><div class="salto">
     <svg viewBox="0 0 140 190">
   <defs>
@@ -3271,97 +3292,85 @@ function construirCatalogo(wb){
 function arrancar(){ arrancarSeguro(); iniciarAxo(); }
 /* Axo, el ajolote bombero: camina, brinca, saluda, da vueltas y echa agua mientras no hay sesión */
 function iniciarAxo(){
-  var m=$('axo'), gate=$('gate'), cam=$('camion'); if(!m || !gate) return;
+  var m=$('axo'), gate=$('gate'), cam=$('camion'), globo=$('axoGlobo'), btn=$('btnEntrar'); if(!m || !gate) return;
   var quieto = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var W=150, H=204, x=0, y=0, tx=0, ty=0, dir=1, vel=60, est='', finEst=0, ult=null, ultGota=0, ultVapor=0, inicioEst=0;
-  var fuego=null, fX=0, fY=0, fase='llega', faseT=0;
-  var limites=function(){ return { w:Math.max(gate.clientWidth-W,0), h:Math.max(gate.clientHeight-H-10,0) }; };
-  var caja=function(){ var b=document.querySelector('.gate-box'); if(!b) return null; var g=gate.getBoundingClientRect(), r=b.getBoundingClientRect(); return { x:r.left-g.left-W*0.6, y:r.top-g.top-H*0.6, w:r.width+W*0.2, h:r.height+H*0.2 }; };
-  var tapado=function(px,py){ var c=caja(); return c && px>c.x && px<c.x+c.w && py>c.y && py<c.y+c.h; };
-  var nuevoDestino=function(){ var l=limites(); for(var i=0;i<20;i++){ tx=Math.random()*l.w; ty=Math.random()*l.h; if(!tapado(tx,ty)) break; } vel=45+Math.random()*30; };
-  var fijar=function(e,dur,t,clase){ est=e; m.className='axo st-'+(clase||e); inicioEst=t; finEst=t+dur; };
+  var W=150, H=204, x=0, y=0, dir=1, est='', finEst=0, ult=null, fase='llega', faseT=0, modo='lean', sigGesto=0, gesto='', finGesto=0, globoHasta=0;
+  var caja=function(){ var b=document.querySelector('.gate-box'), g=gate.getBoundingClientRect(), r=b.getBoundingClientRect(); return { x:r.left-g.left, y:r.top-g.top, w:r.width, h:r.height }; };
+  /* Lugar de espera: recargado a la derecha del recuadro o, si no hay espacio (celular), sentado en su esquina */
+  var lugar=function(){
+    var c=caja(), gw=gate.clientWidth;
+    if(gw-(c.x+c.w) >= W*0.78){ modo='lean'; return { x:c.x+c.w+2-W*0.3, y:c.y+c.h-H*0.93 }; }
+    modo='sit'; return { x:Math.min(c.x+c.w-W*0.86, gw-W), y:Math.max(c.y-H*0.74, 0) };
+  };
+  var clase=function(){ return 'axo st-'+est+(gesto?' g-'+gesto:''); };
+  var fijar=function(e,dur,t){ est=e; gesto=''; m.className=clase(); finEst=t+dur; };
   var pintar=function(){ m.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) scaleX('+dir+')'; m.style.setProperty('--flip',dir); };
+  var decir=function(txt, ms, t){
+    if(!globo) return;
+    globo.textContent=txt;
+    var gx = modo==='lean' ? x+W*0.55 : x+W*0.62, gy = y-34;
+    globo.style.left=Math.min(gx, gate.clientWidth-200)+'px'; globo.style.top=Math.max(gy,4)+'px';
+    globo.classList.add('ver'); globoHasta=t+ms;
+  };
+  var callar=function(){ if(globo) globo.classList.remove('ver'); globoHasta=0; };
+  var FRASES=['¡Te espero aquí! Inicia sesión','Inicia sesión y armamos el traje','¡Listo para la próxima configuración!','Aquí sigo, esperándote'];
+  var esperar=function(t){ var p=lugar(); x=p.x; y=p.y; dir=1; fijar(modo,0,t); pintar(); sigGesto=t+3500; };
   // Camión
   var esc = gate.clientWidth<640 ? 1 : 1.45, CW=260*esc, CH=130*esc;
-  var cx=-CW-30, cy=Math.max(gate.clientHeight-CH-18,0), paradaX=Math.max(Math.min(gate.clientWidth*0.1, gate.clientWidth-CW-10), 6);
+  var cx=-CW-30, cy=Math.max(gate.clientHeight-CH-18,0), paradaX=Math.max(Math.min(gate.clientWidth*0.6, gate.clientWidth-CW-10), 6);
   var pintarCam=function(){ cam.style.transform='translate('+cx.toFixed(1)+'px,'+cy.toFixed(1)+'px)'; };
-  if(cam){ cam.style.width=CW+'px'; }
+  if(cam) cam.style.width=CW+'px';
+  if(btn) btn.addEventListener('mouseenter', function(){ if(fase==='espera2'){ gesto='apunta'; m.className=clase(); decir('¡Ese botón!', 1800, performance.now()); finGesto=performance.now()+1800; } });
+  window.addEventListener('resize', function(){ if(fase==='espera2'){ var p=lugar(); x=p.x; y=p.y; fijar(modo,0,performance.now()); pintar(); callar(); } });
   if(quieto){
     if(cam) cam.style.display='none';
-    var l0=limites(); m.className='axo'; m.style.opacity=1; x=Math.max(l0.w/2-260,8); y=Math.max(l0.h/2+20,8); pintar(); return;
+    m.style.opacity=1; fase='espera2'; esperar(0); m.className='axo st-'+modo; return;
   }
-  if(cam){ cam.classList.add('rodando'); pintarCam(); } else { fase='libre'; m.style.opacity=1; }
-  var acciones=[['idle',3200],['idle',3800],['wave',1800],['spray',1800],['jump',900],['fuego',0],['tool',3400],['fuego',0],['tool',3400]];
-  var apagarFuego=function(){ if(fuego){ var f=fuego; fuego=null; f.style.transform='scale(0)'; setTimeout(function(){ f.remove(); },400); } };
-  var prenderFuego=function(t){
-    var gw=gate.clientWidth, lado=dir;
-    fX = lado>0 ? x+W+10 : x-92;
-    if(fX<4 || fX>gw-86){ lado=-lado; fX = lado>0 ? x+W+10 : x-92; }
-    dir=lado; fY=y+H-98;
-    fuego=document.createElement('div'); fuego.className='fuego'; fuego.innerHTML=FUEGO_SVG;
-    fuego.style.left=fX+'px'; fuego.style.top=fY+'px'; fuego.style.transform='scale(0)';
-    gate.appendChild(fuego); void fuego.offsetWidth; fuego.style.transform='scale(1)';
-    fijar('fuego1',900,t,'alert');
-  };
+  if(cam){ cam.classList.add('rodando'); pintarCam(); } else { fase='camina'; m.style.opacity=1; }
+  var objetivo=null;
   var paso=function(t){
-    if(!document.body.classList.contains('bloqueado')){ m.style.display='none'; if(cam) cam.style.display='none'; apagarFuego(); return; }
+    if(!document.body.classList.contains('bloqueado')){ m.style.display='none'; if(cam) cam.style.display='none'; callar(); return; }
     if(document.hidden){ ult=null; return requestAnimationFrame(paso); }
     var dt = ult==null ? 0 : Math.min((t-ult)/1000, .05); ult=t;
-
-    /* ---- llegada en el camión ---- */
+    /* 1. llega el camión */
     if(fase==='llega'){
       var v=Math.max(50, Math.min(340, (paradaX-cx)*2.4)); cx=Math.min(cx+v*dt, paradaX); pintarCam();
-      if(cx>=paradaX-0.5){ fase='espera'; faseT=t; cam.classList.remove('rodando'); }
+      if(cx>=paradaX-0.5){ fase='abre'; faseT=t; cam.classList.remove('rodando'); }
       return requestAnimationFrame(paso);
     }
-    if(fase==='espera'){
-      if(t-faseT>600){
-        x=Math.max(cx+CW*0.78-W/2, 0); y=Math.max(cy+CH-H+4, 0); dir=1; pintar();
-        m.style.opacity=1; fijar('jump',900,t); fase='baja'; faseT=t;
-      }
+    /* 2. Axo baja de un brinco */
+    if(fase==='abre'){
+      if(t-faseT>600){ x=Math.max(Math.min(cx+CW*0.78-W/2, gate.clientWidth-W),0); y=Math.max(cy+CH-H+4,0); dir=1; pintar(); m.style.opacity=1; fijar('jump',900,t); fase='baja'; }
       return requestAnimationFrame(paso);
     }
     if(fase==='baja'){
-      if(t>finEst){ x=Math.min(x+6, limites().w); fijar('wave',1300,t); fase='saluda'; }
+      if(t>finEst){ fase='camina'; faseT=t; if(cam) cam.classList.add('rodando'); objetivo=lugar(); fijar('walk',0,t); }
       pintar(); return requestAnimationFrame(paso);
     }
-    if(fase==='saluda'){
-      if(t>finEst){ fase='sevaa'; faseT=t; cam.classList.add('rodando'); fijar('walk',0,t); nuevoDestino(); }
-      pintar(); return requestAnimationFrame(paso);
-    }
-    if(fase==='sevaa'){
+    /* 3. el camión se va mientras Axo camina al recuadro */
+    if(cam && cam.style.display!=='none' && (fase==='camina' || fase==='espera2')){
       var v2=Math.min(360, 40+(t-faseT)*0.35); cx+=v2*dt; pintarCam();
-      if(cx>gate.clientWidth+40){ cam.style.display='none'; fase='libre'; }
+      if(cx>gate.clientWidth+40) cam.style.display='none';
     }
-
-    /* ---- juego libre ---- */
-    if(est==='walk'){
-      var dx=tx-x, dy=ty-y, d=Math.sqrt(dx*dx+dy*dy);
-      if(d<6){
-        if(!tapado(x,y) && Math.random()<.9){
-          var a=acciones[Math.floor(Math.random()*acciones.length)];
-          if(a[0]==='fuego') prenderFuego(t); else fijar(a[0],a[1],t);
-        } else nuevoDestino();
-      } else {
-        var k=Math.min(vel*dt,d); x+=dx/d*k; y+=dy/d*k;
-        if(Math.abs(dx)>4) dir = dx<0 ? -1 : 1;
-      }
-    } else {
-      if(est==='spray' && t-ultGota>85){ ultGota=t; soltarGota(gate, x, y, W, H, dir); }
-      if(est==='fuego2'){
-        var p=Math.min((t-inicioEst)/(finEst-inicioEst),1);
-        if(t-ultGota>60){ ultGota=t; soltarGota(gate, x, y, W, H, dir, { x:fX+41, y:fY+58 }); }
-        if(fuego) fuego.style.transform='scale('+Math.max(1-p*1.05,0).toFixed(3)+')';
-        if(t-ultVapor>150 && p>.15){ ultVapor=t; soltarVapor(gate, fX+41, fY+52); }
-      }
-      if(t>finEst){
-        if(est==='fuego1'){ fijar('fuego2',3200,t,'spray'); }
-        else if(est==='fuego2'){ apagarFuego(); for(var i=0;i<4;i++) setTimeout(function(){ soltarVapor(gate, fX+41, fY+64); }, i*120); fijar('fuego3',1500,t,'wave'); }
-        else { fijar('walk',0,t); nuevoDestino(); }
+    if(fase==='camina'){
+      if(!objetivo) objetivo=lugar();
+      var dx=objetivo.x-x, dy=objetivo.y-y, d=Math.sqrt(dx*dx+dy*dy);
+      if(d<4){ fase='espera2'; esperar(t); decir(FRASES[0], 3200, t); }
+      else { var k=Math.min(75*dt,d); x+=dx/d*k; y+=dy/d*k; if(Math.abs(dx)>3) dir = dx<0 ? -1 : 1; pintar(); }
+      return requestAnimationFrame(paso);
+    }
+    /* 4. espera recargado: solo gestos pequeños */
+    if(fase==='espera2'){
+      if(globoHasta && t>globoHasta) callar();
+      if(gesto && t>finGesto){ gesto=''; m.className=clase(); }
+      if(!gesto && t>sigGesto){
+        var r=Math.random();
+        if(r<.4 && modo==='lean'){ gesto='pie'; finGesto=t+1600; }
+        else if(r<.7){ gesto='saluda'; finGesto=t+1500; }
+        else { decir(FRASES[1+Math.floor(Math.random()*(FRASES.length-1))], 3000, t); }
+        m.className=clase(); sigGesto=t+6000+Math.random()*5000;
       }
     }
-    var l=limites(); x=Math.min(Math.max(x,0),l.w); y=Math.min(Math.max(y,0),l.h);
-    pintar();
     requestAnimationFrame(paso);
   };
   requestAnimationFrame(paso);
