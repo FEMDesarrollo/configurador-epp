@@ -665,6 +665,12 @@ body.bloqueado .gate{display:flex}
 .axo.exp-sueno .cabeza{animation:axo7Cabeceo 2.8s ease-in-out infinite}
 @keyframes axo7Cabeceo{0%{transform:rotate(0) translateY(0)}45%{transform:rotate(5deg) translateY(3px)}60%{transform:rotate(7deg) translateY(4.5px)}66%{transform:rotate(-1deg) translateY(-1px)}78%,100%{transform:rotate(0) translateY(0)}}
 .axo-z{position:absolute;left:0;top:0;z-index:4;pointer-events:none;font:800 16px var(--font-title);color:#5b6fa8;text-shadow:0 1px 0 #fff}
+
+/* ---- v19 · fabricación opcional ---- */
+.fab-chk{margin:0 0 6px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);width:100%;font-weight:600}
+.fab-chk .hint-txt{font-weight:400;margin:0}
+.fab-bloque{margin-top:12px}
+.fab-bloque[hidden]{display:none}
 </style>
 </head>
 <body class="bloqueado">
@@ -702,13 +708,13 @@ body.bloqueado .gate{display:flex}
   <div class="axo st-idle" id="axo" aria-hidden="true" style="opacity:0"><div class="gir"><div class="salto">
     <svg viewBox="0 0 160 200">
   <defs>
-    <linearGradient id="a4Piel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7b3c4"/><stop offset="1" stop-color="#f19db2"/></linearGradient>
+    <linearGradient id="a4Piel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6f8"/><stop offset="1" stop-color="#fbe2e8"/></linearGradient>
     <linearGradient id="a4Traje" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d2ab72"/><stop offset="1" stop-color="#c49a5f"/></linearGradient>
     <linearGradient id="a4Casco" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2302b"/><stop offset="1" stop-color="#c41f1d"/></linearGradient>
     <linearGradient id="a4Bota" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a2b31"/><stop offset=".5" stop-color="#1c1d22"/><stop offset="1" stop-color="#2a2b31"/></linearGradient>
   </defs>
   <!-- cola -->
-  <g class="cola"><path d="M58 150C46 160 30 172 8 186C22 186 44 178 62 162Z" fill="#ee93ab"/><path d="M56 156C44 166 30 176 14 184C30 182 46 172 60 160Z" fill="#f7b6c7" opacity=".7"/></g>
+  <g class="cola"><path d="M58 150C46 160 30 172 8 186C22 186 44 178 62 162Z" fill="#f7d3dc"/><path d="M56 156C44 166 30 176 14 184C30 182 46 172 60 160Z" fill="#fff1f4" opacity=".7"/></g>
   <!-- manguera que viene del piso -->
   <g class="manguera"><path d="M42 146C40 162 34 178 2 194" fill="none" stroke="#b8322b" stroke-width="7" stroke-linecap="round"/></g>
   <!-- piernas y botas -->
@@ -728,11 +734,11 @@ body.bloqueado .gate{display:flex}
     <path d="M80 100V151" stroke="#9a7442" stroke-width="1.4"/>
     <g fill="#2a2b31"><rect x="77" y="111" width="6" height="2.6" rx="1"/><rect x="77" y="142" width="6" height="2.6" rx="1"/></g>
     <path d="M60 101L80 116L100 101L94 98L80 108L66 98Z" fill="#a9834c"/>
-    <path d="M70 99L80 108L90 99Z" fill="#f6c2cf"/>
+    <path d="M70 99L80 108L90 99Z" fill="#fde9ee"/>
     <rect x="47" y="117" width="66" height="6" fill="#d3ea3a"/><rect x="47" y="119" width="66" height="2" fill="#e6e9ee"/>
     <rect x="46.5" y="139" width="67" height="6" fill="#d3ea3a"/><rect x="46.5" y="141" width="67" height="2" fill="#e6e9ee"/>
     <rect x="46.5" y="128" width="67" height="6" fill="#26272c"/><rect x="76" y="127" width="8" height="8" rx="1.5" fill="none" stroke="#f2c230" stroke-width="2"/>
-    <rect x="88" y="120.5" width="18" height="6" rx="1.5" fill="#1d1e23"/><text x="97" y="125.4" text-anchor="middle" font-family="Arial,sans-serif" font-weight="800" font-size="4.6" fill="#fff" class="txt-fem">AXO</text>
+    <rect x="82.5" y="120.5" width="29" height="6" rx="1.5" fill="#1d1e23"/><text x="97" y="125.2" text-anchor="middle" font-family="Arial,sans-serif" font-weight="800" font-size="4.2" fill="#fff" textLength="25.5" lengthAdjust="spacingAndGlyphs" class="txt-fem">AXO-EFREN</text>
   </g>
   <g class="radio-pecho"><rect x="55" y="106" width="9" height="13" rx="1.8" fill="#1d1e23"/><rect x="56.3" y="99" width="2" height="8" rx="1" fill="#1d1e23"/><rect x="56.5" y="108.5" width="6" height="3.4" rx=".7" fill="#7fd3a0"/></g>
   <!-- manguera cruzando el cuerpo -->
@@ -750,24 +756,24 @@ body.bloqueado .gate{display:flex}
   <!-- cabeza -->
   <g class="cabeza">
     <g class="branq-i">
-      <g class="b1"><path d="M46 62C36 56 26 52 14 50" stroke="#e25f80" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#ec7f99"><circle cx="18" cy="48" r="3.4"/><circle cx="25" cy="49.5" r="3.2"/><circle cx="32" cy="52" r="3"/><circle cx="38.5" cy="55.5" r="2.8"/></g></g>
-      <g class="b2"><path d="M44 74C32 72 22 72 10 74" stroke="#e25f80" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#ec7f99"><circle cx="13" cy="71" r="3.4"/><circle cx="20" cy="70" r="3.2"/><circle cx="27" cy="70" r="3"/><circle cx="34" cy="70.5" r="2.8"/></g></g>
-      <g class="b3"><path d="M46 85C36 90 26 94 16 100" stroke="#e25f80" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#ec7f99"><circle cx="19" cy="96" r="3.4"/><circle cx="25.5" cy="92.5" r="3.2"/><circle cx="32" cy="89.5" r="3"/><circle cx="38.5" cy="86.5" r="2.8"/></g></g>
+      <g class="b1"><path d="M46 62C36 56 26 52 14 50" stroke="#ea5f82" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f2879f"><circle cx="18" cy="48" r="3.4"/><circle cx="25" cy="49.5" r="3.2"/><circle cx="32" cy="52" r="3"/><circle cx="38.5" cy="55.5" r="2.8"/></g></g>
+      <g class="b2"><path d="M44 74C32 72 22 72 10 74" stroke="#ea5f82" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f2879f"><circle cx="13" cy="71" r="3.4"/><circle cx="20" cy="70" r="3.2"/><circle cx="27" cy="70" r="3"/><circle cx="34" cy="70.5" r="2.8"/></g></g>
+      <g class="b3"><path d="M46 85C36 90 26 94 16 100" stroke="#ea5f82" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f2879f"><circle cx="19" cy="96" r="3.4"/><circle cx="25.5" cy="92.5" r="3.2"/><circle cx="32" cy="89.5" r="3"/><circle cx="38.5" cy="86.5" r="2.8"/></g></g>
     </g>
     <g class="branq-d">
-      <g class="b1"><path d="M114 62C124 56 134 52 146 50" stroke="#e25f80" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#ec7f99"><circle cx="142" cy="48" r="3.4"/><circle cx="135" cy="49.5" r="3.2"/><circle cx="128" cy="52" r="3"/><circle cx="121.5" cy="55.5" r="2.8"/></g></g>
-      <g class="b2"><path d="M116 74C128 72 138 72 150 74" stroke="#e25f80" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#ec7f99"><circle cx="147" cy="71" r="3.4"/><circle cx="140" cy="70" r="3.2"/><circle cx="133" cy="70" r="3"/><circle cx="126" cy="70.5" r="2.8"/></g></g>
-      <g class="b3"><path d="M114 85C124 90 134 94 144 100" stroke="#e25f80" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#ec7f99"><circle cx="141" cy="96" r="3.4"/><circle cx="134.5" cy="92.5" r="3.2"/><circle cx="128" cy="89.5" r="3"/><circle cx="121.5" cy="86.5" r="2.8"/></g></g>
+      <g class="b1"><path d="M114 62C124 56 134 52 146 50" stroke="#ea5f82" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f2879f"><circle cx="142" cy="48" r="3.4"/><circle cx="135" cy="49.5" r="3.2"/><circle cx="128" cy="52" r="3"/><circle cx="121.5" cy="55.5" r="2.8"/></g></g>
+      <g class="b2"><path d="M116 74C128 72 138 72 150 74" stroke="#ea5f82" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f2879f"><circle cx="147" cy="71" r="3.4"/><circle cx="140" cy="70" r="3.2"/><circle cx="133" cy="70" r="3"/><circle cx="126" cy="70.5" r="2.8"/></g></g>
+      <g class="b3"><path d="M114 85C124 90 134 94 144 100" stroke="#ea5f82" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f2879f"><circle cx="141" cy="96" r="3.4"/><circle cx="134.5" cy="92.5" r="3.2"/><circle cx="128" cy="89.5" r="3"/><circle cx="121.5" cy="86.5" r="2.8"/></g></g>
     </g>
     <path d="M80 38C104 38 120 52 120 72C120 92 102 104 80 104C58 104 40 92 40 72C40 52 56 38 80 38Z" fill="url(#a4Piel)"/>
     <ellipse cx="80" cy="94" rx="22" ry="8" fill="#fbd2dc" opacity=".8"/>
-    <circle cx="57" cy="82" r="6" fill="#ec8ea4"/><circle cx="103" cy="82" r="6" fill="#ec8ea4"/>
+    <circle cx="57" cy="82" r="6" fill="#f7b4c3"/><circle cx="103" cy="82" r="6" fill="#f7b4c3"/>
     <g class="mirada"><g class="ojo"><circle cx="63" cy="70" r="8.5" fill="#1d1a24"/><circle cx="66" cy="66.5" r="3.2" fill="#fff"/><circle cx="60.5" cy="73" r="1.3" fill="#fff" opacity=".85"/></g>
     <g class="ojo"><circle cx="97" cy="70" r="8.5" fill="#1d1a24"/><circle cx="100" cy="66.5" r="3.2" fill="#fff"/><circle cx="94.5" cy="73" r="1.3" fill="#fff" opacity=".85"/></g></g>
-    <g class="cansado"><path d="M53.6 71A9.4 9.4 0 0 1 72.4 71Q63 75.5 53.6 71Z" fill="#f5aabd"/><path d="M87.6 71A9.4 9.4 0 0 1 106.4 71Q97 75.5 87.6 71Z" fill="#f5aabd"/>
+    <g class="cansado"><path d="M53.6 71A9.4 9.4 0 0 1 72.4 71Q63 75.5 53.6 71Z" fill="#fbe2e8"/><path d="M87.6 71A9.4 9.4 0 0 1 106.4 71Q97 75.5 87.6 71Z" fill="#fbe2e8"/>
       <path d="M54.2 71Q63 75.3 71.8 71M88.2 71Q97 75.3 105.8 71" fill="none" stroke="#1d1a24" stroke-width="1.9" stroke-linecap="round"/>
-      <path d="M57 81Q63 83.5 69 81M91 81Q97 83.5 103 81" fill="none" stroke="#d47f97" stroke-width="1.5" stroke-linecap="round"/></g>
-    <g class="cerrados"><circle cx="63" cy="70" r="9.4" fill="#f5aabd"/><circle cx="97" cy="70" r="9.4" fill="#f5aabd"/>
+      <path d="M57 81Q63 83.5 69 81M91 81Q97 83.5 103 81" fill="none" stroke="#e7aab9" stroke-width="1.5" stroke-linecap="round"/></g>
+    <g class="cerrados"><circle cx="63" cy="70" r="9.4" fill="#fbe2e8"/><circle cx="97" cy="70" r="9.4" fill="#fbe2e8"/>
       <path d="M56 70Q63 76 70 70M90 70Q97 76 104 70" fill="none" stroke="#1d1a24" stroke-width="2.4" stroke-linecap="round"/></g>
     <g class="sudor"><path d="M110 48C110 48 105 55 105 58A5 5 0 0 0 115 58C115 55 110 48 110 48Z" fill="#8fd0ff" stroke="#4aa6ef" stroke-width="1"/></g>
     <g class="boca boca-feliz"><path d="M64 81Q80 79 96 81Q93 97 80 97Q67 97 64 81Z" fill="#6b2236"/><path d="M70 91Q80 86 90 91Q86 97 80 97Q74 97 70 91Z" fill="#f2849b"/></g>
@@ -1055,6 +1061,8 @@ body.bloqueado .gate{display:flex}
 <!-- ===================== SECCIÓN 8 ===================== -->
 <section class="card" id="s8" data-sec="8. Fabricación">
   <h2><span class="num">08</span>Fabricación<small id="cnt8"></small></h2>
+  <label class="chk fab-chk"><input type="checkbox" id="fabActiva" onchange="cambiarFab()"> Activar fabricación <span class="hint-txt">(tabla de medidas por bombero)</span></label>
+  <div class="fab-bloque" id="fabBloque" hidden>
   <div class="fab-intro">
     <p class="hint-txt">Una fila por bombero con sus medidas, tallas y marcado personal. Puedes capturarla aquí o importar el formato de toma de medidas en Excel o CSV. Las medidas van en <b>centímetros</b> y la tabla calcula las pulgadas.</p>
     <button type="button" class="btn-secondary btn-sm" onclick="abrirGuia()">📏 Cómo tomar medidas</button>
@@ -1062,6 +1070,7 @@ body.bloqueado .gate{display:flex}
   <div class="fab-resumen">
     <div><div class="t">Tabla de medidas<span id="persTotal">0 personas</span></div><div class="tallas-res" id="tallasRes"></div></div>
     <button type="button" class="btn-secondary" onclick="abrirFab()">📋 Abrir tabla de medidas</button>
+  </div>
   </div>
   <div class="grid-2" style="margin-top:18px">
     <div class="field full"><label for="observaciones">Requerimientos no detallados previamente</label>
@@ -1389,22 +1398,24 @@ function mostrarMensaje(msg, tipo){
   toastTimer=setTimeout(function(){ t.className=tipo||'info'; }, 4200);
 }
 
-/* Folio FEM: FEM-AAMMDD-REP-TIPO-MODELO  (ej. FEM-261016-SL-EST-FUS)
-   AAMMDD = fecha · REP = iniciales del representante · TIPO y MODELO = claves cortas.
-   Si ese folio ya existe en SharePoint se agrega un consecutivo: -02, -03…
-   Las claves de tipo y modelo se pueden fijar en el catálogo (columnas "Clave tipo" y "Clave modelo"
-   de la hoja Tipos_Modelos); si no existen se calculan solas. */
-var B32='0123456789ABCDEFGHJKMNPQRSTVWXYZ';
-function generarFolio(consecutivo){
-  var d=new Date(), p=function(n){return (n<10?'0':'')+n;};
-  var partes=['FEM', String(d.getFullYear()).slice(2)+p(d.getMonth()+1)+p(d.getDate()),
-              inicialesRep(val('repVentas'))||'XX', claveTipo(val('tipoTraje'))||'XXX', claveModelo(val('modelo'))||'XXX'];
-  if(consecutivo && consecutivo>1) partes.push(p(consecutivo));
-  return partes.join('-');
+/* Folio FEM: FEM-AAMM-XXXX  (ej. FEM-2610-3FA9)
+   AAMM = año y mes · XXXX = 4 dígitos hexadecimales al azar (65,536 combinaciones por mes).
+   Se asigna una vez por configuración y no cambia al capturar datos. Si ya existe en tus
+   configuraciones o en SharePoint, se sortea otro. "Usar como base" y "Nueva configuración" sortean uno nuevo. */
+function prefijoFolio(){ var d=new Date(), p=function(n){return (n<10?'0':'')+n;}; return 'FEM-'+String(d.getFullYear()).slice(2)+p(d.getMonth()+1)+'-'; }
+function hex4(){
+  var n;
+  if(window.crypto && crypto.getRandomValues){ var u=new Uint16Array(1); crypto.getRandomValues(u); n=u[0]; }
+  else n=Math.floor(Math.random()*65536);
+  return ('000'+n.toString(16).toUpperCase()).slice(-4);
 }
-/* Primer consecutivo libre según los folios que ya tiene la persona (Mis configuraciones) */
-function folioUsado(f){ return (MC.items||[]).some(function(it){ return it.folio===f; }); }
-function siguienteConsecutivo(){ var n=1; while(n<99 && folioUsado(generarFolio(n))) n++; return n; }
+function folioUsado(f){ return (MC.items||[]).some(function(it){ return String(it.folio).toUpperCase()===f; }) || (FOLIOS_DESCARTADOS.indexOf(f)>=0); }
+var FOLIOS_DESCARTADOS=[];
+function generarFolio(){
+  var f, i=0;
+  do { f=prefijoFolio()+hex4(); i++; } while(folioUsado(f) && i<500);
+  return f;
+}
 function limpiaClave(t){ return String(t||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().replace(/[^A-Z0-9 ]+/g,' ').replace(/\s+/g,' ').trim(); }
 var PARTICULAS=['DE','DEL','LA','LAS','LOS','Y','E','DA','DI','VAN','VON'];
 function inicialesRep(nombre){
@@ -1429,9 +1440,8 @@ function claveModelo(mod){
 /* Mientras no se registra, el folio se arma en vivo con los datos capturados */
 function actualizarFolio(){
   if(registrado || reservando) return;
-  var f=generarFolio(siguienteConsecutivo());
-  if(f===FOLIO) return;
-  FOLIO=f;
+  if(FOLIO && FOLIO.indexOf(prefijoFolio())===0) return;   // ya tiene folio de este mes
+  FOLIO=generarFolio();
   if($('folioTxt')) $('folioTxt').textContent=FOLIO;
   if($('fvFolio')) $('fvFolio').textContent=FOLIO;
   var ab=$('avisoBase'); if(ab && ab.querySelector('b')) ab.querySelector('b').textContent=FOLIO;
@@ -1978,7 +1988,7 @@ function construirEmail(conAdjunto){
         'Traje: '+etiqueta(val('tipoTraje'))+' · '+etiqueta(val('modelo'))+' · '+val('composicion')+'\n'+
         (col ? 'Color: '+col+'\n' : '')+
         'Representante de ventas: '+val('repVentas')+'\n'+
-        (personasValidas().length ? 'Personas en el pedido: '+personasValidas().length+'\n' : '');
+        (personasPedido().length ? 'Personas en el pedido: '+personasPedido().length+'\n' : '');
   if(conAdjunto) t+='\nSe adjunta el PDF con el detalle completo de la configuración y la ficha visual del traje.\n';
   else t+='\nDetalle de la configuración:\n'+detalleTexto()+personalTexto();
   if(val('logoAplica')==='Sí'){
@@ -2228,7 +2238,7 @@ function limpiarConfiguracion(){
     else if(c.value!==''){ c.value=''; c.dispatchEvent(new Event('input',{bubbles:true})); }
     c.classList.remove('invalid');
   });
-  personal=[]; pintarPersonal();
+  personal=[]; ponerFab(false); pintarPersonal();
   ADJ.forEach(function(a){ if(a.vista) URL.revokeObjectURL(a.vista); }); ADJ=[]; pintarAdjuntos();
   registrado=false; reservando=null; registrando=null; pillRegistro('Sin registrar');
   borradorDest={}; destinoCorreo='produccion';
@@ -2864,7 +2874,12 @@ function pintarPersonal(){
   });
   actualizarTotal();
 }
+function fabActiva(){ var c=$('fabActiva'); return !!(c && c.checked); }
+function cambiarFab(){ var on=fabActiva(); $('fabBloque').hidden=!on; pintarPersonal(); actualizarVista(); }
+function ponerFab(on){ var c=$('fabActiva'); if(c) c.checked=!!on; if($('fabBloque')) $('fabBloque').hidden=!on; }
 function personasValidas(){ return personal.filter(tieneDatos); }
+/* Solo entran al PDF, correo y registro si la fabricación está activada */
+function personasPedido(){ return fabActiva() ? personasValidas() : []; }
 function conteoTallas(k){
   var m={}; personasValidas().forEach(function(p){ var t=String(p[k]||'').trim().toUpperCase(); if(t) m[t]=(m[t]||0)+1; });
   return Object.keys(m).sort(function(a,b){ return (parseFloat(a.replace(/\D+/g,''))||0)-(parseFloat(b.replace(/\D+/g,''))||0) || a.localeCompare(b); }).map(function(t){ return [t,m[t]]; });
@@ -2889,7 +2904,7 @@ function importarPegado(){
   agregarImportadas(nuevas, 'lo pegado');
 }
 function tablaPersonalPDF(){
-  var ps=personasValidas(); if(!ps.length) return '';
+  var ps=personasPedido(); if(!ps.length) return '';
   var fron=val('frAplica')==='Sí';
   var th=function(t){ return '<th style="background:#f1f2f6;color:#1f2545;text-align:left;padding:4px 5px;border:1px solid #ddd;font-size:8px;line-height:1.2;vertical-align:bottom;">'+t+'</th>'; };
   var td=function(t,der){ return '<td style="padding:3px 5px;border:1px solid #ddd;font-size:8.5px;'+(der?'text-align:right;white-space:nowrap;':'')+'">'+esc(t||'—')+'</td>'; };
@@ -2926,7 +2941,7 @@ function lineaPersona(p, i, fron){
   return (i+1)+'. '+(p.nombre||'—')+(partes.length?' · '+partes.join(' · '):'')+'\n';
 }
 function personalTexto(){
-  var ps=personasValidas(); if(!ps.length) return '';
+  var ps=personasPedido(); if(!ps.length) return '';
   var fron=val('frAplica')==='Sí';
   var t='\n== FABRICACIÓN · TABLA DE MEDIDAS ('+ps.length+') ==\n';
   ps.forEach(function(p,i){ t+=lineaPersona(p,i,fron); });
@@ -2978,10 +2993,10 @@ function datosRegistro(){
   return { folio:FOLIO, fecha:new Date().toISOString(), representante:val('repVentas'),
     cliente:{ nombre:val('clientName'), email:val('clientEmail'), telefono:val('clientPhone'), empresa:val('clientCompany') },
     traje:{ tipo:val('tipoTraje'), modelo:val('modelo'), configuracion:val('composicion') },
-    secciones:recopilarDatos(), personal:personasValidas(), adjuntos:adjuntosActivos().map(function(a){ return a.nombre; }), campos:capturarCampos(), version:'V4' };
+    secciones:recopilarDatos(), fabricacion:fabActiva(), personal:personasPedido(), adjuntos:adjuntosActivos().map(function(a){ return a.nombre; }), campos:capturarCampos(), version:'V4' };
 }
 /* Cada registro va a la subcarpeta de quien inició sesión y, dentro, a una carpeta por folio
-   (ej. "Registro de configuraciones/Sebastian Lara/FEM-2610-AB12C/"). SharePoint crea las carpetas solas. */
+   (ej. "Registro de configuraciones/Sebastian Lara/FEM-2610-3FA9/"). SharePoint crea las carpetas solas. */
 function carpetaPersona(){
   var n=(SESION && (SESION.name || (SESION.username||'').split('@')[0])) || 'Sin nombre';
   n=n.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/["*:<>?\/\\|#%&{}~]/g,'').replace(/\s+/g,' ').trim();
@@ -3006,11 +3021,11 @@ function reservarFolio(){
   if(!(CAP.mcp||SESION) || registrado) return Promise.resolve();
   if(reservando) return reservando;
   pillRegistro('Reservando folio…');
-  var fijar=function(n){ FOLIO=generarFolio(n); $('folioTxt').textContent=FOLIO; $('fvFolio').textContent=FOLIO; };
-  var n0=siguienteConsecutivo(); fijar(n0);
+  var fijar=function(){ if(FOLIO) FOLIOS_DESCARTADOS.push(FOLIO); FOLIO=generarFolio(); $('folioTxt').textContent=FOLIO; $('fvFolio').textContent=FOLIO; var ab=$('avisoBase'); if(ab && ab.querySelector('b')) ab.querySelector('b').textContent=FOLIO; };
+  var n0=1; if(!FOLIO || FOLIO.indexOf(prefijoFolio())!==0 || folioUsado(FOLIO)) fijar();
   var intento=function(n){
     return subirArchivoSP(FOLIO+'.json', JSON.stringify(datosRegistro(),null,1), false, 'fail').catch(function(err){
-      if(esConflicto(err) && n<99){ fijar(n+1); return intento(n+1); }
+      if(esConflicto(err) && n<20){ fijar(); return intento(n+1); }
       throw err;
     });
   };
@@ -3464,6 +3479,7 @@ function aplicarRegistro(d){
   }
   pintarCintaMuestra();
   personal=(d.personal||[]).map(function(p){ return Object.assign(personaVacia(), p); });
+  ponerFab(d.fabricacion!=null ? d.fabricacion : personal.length>0);
   pintarPersonal();
   // es una configuración nueva: folio nuevo y sin registrar
   registrado=false; reservando=null; registrando=null; pillRegistro('Sin registrar');
@@ -3538,7 +3554,7 @@ function cargarMisConfig(forzar){
   if(MC.cargando) return MC.cargando;
   if(!SESION){ MC.items=[]; pintarMisConfig(); mcEstado('Inicia sesión con Microsoft para ver tus configuraciones.','warn'); return Promise.resolve(); }
   MC.items=[]; MC.cargado=false; pintarMisConfig('Cargando tus configuraciones…'); mcEstado('');
-  /* Folio = FEM- seguido de letras, números y guiones (formato nuevo FEM-AAMMDD-REP-TIPO-MOD y anterior FEM-AAMM-XXXXX) */
+  /* Folio = FEM- seguido de letras, números y guiones (actual FEM-AAMM-XXXX y anteriores) */
   var RX_CARPETA=/^(FEM-[A-Z0-9-]+)$/i, RX_JSON=/^(FEM-[A-Z0-9-]+)\.json$/i, RX_PDF=/^(FEM-[A-Z0-9-]+)_.*\.pdf$/i;
   MC.cargando=listarRegistro().then(function(archivos){
     var porFolio={};
@@ -4134,7 +4150,7 @@ function soltarGota(cont, x, y, W, H, dir, obj){
   } else setTimeout(function(){ g.remove(); }, 700);
 }
 /* Chorro con física: cada gota sale de la punta de la boquilla en su dirección y cae con gravedad */
-var AXO_AZUL_SVG="<svg viewBox=\"0 0 160 200\">\n  <defs>\n    <linearGradient id=\"a4PielA\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#acd5f8\"/><stop offset=\"1\" stop-color=\"#86bdf0\"/></linearGradient>\n    <linearGradient id=\"a4TrajeA\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#d2ab72\"/><stop offset=\"1\" stop-color=\"#c49a5f\"/></linearGradient>\n    <linearGradient id=\"a4CascoA\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#f5c838\"/><stop offset=\"1\" stop-color=\"#dba918\"/></linearGradient>\n    <linearGradient id=\"a4BotaA\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\"><stop offset=\"0\" stop-color=\"#2a2b31\"/><stop offset=\".5\" stop-color=\"#1c1d22\"/><stop offset=\"1\" stop-color=\"#2a2b31\"/></linearGradient>\n  </defs>\n  <!-- cola -->\n  <g class=\"cola\"><path d=\"M58 150C46 160 30 172 8 186C22 186 44 178 62 162Z\" fill=\"#86bbef\"/><path d=\"M56 156C44 166 30 176 14 184C30 182 46 172 60 160Z\" fill=\"#b6d9f8\" opacity=\".7\"/></g>\n  <!-- manguera que viene del piso -->\n  <g class=\"manguera\"><path d=\"M42 146C40 162 34 178 2 194\" fill=\"none\" stroke=\"#b8322b\" stroke-width=\"7\" stroke-linecap=\"round\"/></g>\n  <!-- piernas y botas -->\n  <g class=\"pierna-i\"><rect x=\"55\" y=\"146\" width=\"18\" height=\"16\" fill=\"#bf955a\"/>\n    <path d=\"M53 158H75V186H53Z\" fill=\"url(#a4BotaA)\"/><rect x=\"51.5\" y=\"156\" width=\"25\" height=\"6\" rx=\"2\" fill=\"#3b3c43\"/>\n    <rect x=\"55\" y=\"152\" width=\"3\" height=\"6\" rx=\"1\" fill=\"#3b3c43\"/><rect x=\"70\" y=\"152\" width=\"3\" height=\"6\" rx=\"1\" fill=\"#3b3c43\"/>\n    <rect x=\"53\" y=\"171\" width=\"22\" height=\"4\" fill=\"#d3ea3a\"/><rect x=\"53\" y=\"172.4\" width=\"22\" height=\"1.3\" fill=\"#e6e9ee\"/>\n    <path d=\"M49 186Q49 180 55 180H74Q79 180 79 186V188H49Z\" fill=\"#1c1d22\"/><rect x=\"49\" y=\"188\" width=\"30\" height=\"4\" rx=\"2\" fill=\"#4b4d56\"/></g>\n  <g class=\"pierna-d\"><rect x=\"87\" y=\"146\" width=\"18\" height=\"16\" fill=\"#bf955a\"/>\n    <path d=\"M85 158H107V186H85Z\" fill=\"url(#a4BotaA)\"/><rect x=\"83.5\" y=\"156\" width=\"25\" height=\"6\" rx=\"2\" fill=\"#3b3c43\"/>\n    <rect x=\"87\" y=\"152\" width=\"3\" height=\"6\" rx=\"1\" fill=\"#3b3c43\"/><rect x=\"102\" y=\"152\" width=\"3\" height=\"6\" rx=\"1\" fill=\"#3b3c43\"/>\n    <rect x=\"85\" y=\"171\" width=\"22\" height=\"4\" fill=\"#d3ea3a\"/><rect x=\"85\" y=\"172.4\" width=\"22\" height=\"1.3\" fill=\"#e6e9ee\"/>\n    <path d=\"M81 186Q81 180 87 180H106Q111 180 111 186V188H81Z\" fill=\"#1c1d22\"/><rect x=\"81\" y=\"188\" width=\"30\" height=\"4\" rx=\"2\" fill=\"#4b4d56\"/></g>\n  <g class=\"torso\">\n    <!-- chaquet\u00f3n -->\n    <path d=\"M52 102Q80 96 108 102L114 146Q114 152 108 152H52Q46 152 46 146Z\" fill=\"url(#a4TrajeA)\" stroke=\"#a9834c\" stroke-width=\"1.2\"/>\n    <path d=\"M80 100V151\" stroke=\"#9a7442\" stroke-width=\"1.4\"/>\n    <g fill=\"#2a2b31\"><rect x=\"77\" y=\"111\" width=\"6\" height=\"2.6\" rx=\"1\"/><rect x=\"77\" y=\"142\" width=\"6\" height=\"2.6\" rx=\"1\"/></g>\n    <path d=\"M60 101L80 116L100 101L94 98L80 108L66 98Z\" fill=\"#a9834c\"/>\n    <path d=\"M70 99L80 108L90 99Z\" fill=\"#c6e3fb\"/>\n    <rect x=\"47\" y=\"117\" width=\"66\" height=\"6\" fill=\"#d3ea3a\"/><rect x=\"47\" y=\"119\" width=\"66\" height=\"2\" fill=\"#e6e9ee\"/>\n    <rect x=\"46.5\" y=\"139\" width=\"67\" height=\"6\" fill=\"#d3ea3a\"/><rect x=\"46.5\" y=\"141\" width=\"67\" height=\"2\" fill=\"#e6e9ee\"/>\n    <rect x=\"46.5\" y=\"128\" width=\"67\" height=\"6\" fill=\"#26272c\"/><rect x=\"76\" y=\"127\" width=\"8\" height=\"8\" rx=\"1.5\" fill=\"none\" stroke=\"#f2c230\" stroke-width=\"2\"/>\n    <rect x=\"88\" y=\"120.5\" width=\"18\" height=\"6\" rx=\"1.5\" fill=\"#1d1e23\"/><text x=\"97\" y=\"125.4\" text-anchor=\"middle\" font-family=\"Arial,sans-serif\" font-weight=\"800\" font-size=\"4.6\" fill=\"#fff\" class=\"txt-fem\">AXO</text>\n  </g>\n  <g class=\"radio-pecho\"><rect x=\"55\" y=\"106\" width=\"9\" height=\"13\" rx=\"1.8\" fill=\"#1d1e23\"/><rect x=\"56.3\" y=\"99\" width=\"2\" height=\"8\" rx=\"1\" fill=\"#1d1e23\"/><rect x=\"56.5\" y=\"108.5\" width=\"6\" height=\"3.4\" rx=\".7\" fill=\"#7fd3a0\"/></g>\n  <!-- manguera cruzando el cuerpo -->\n  <g class=\"manguera\"><path d=\"M42 140C56 140 74 136 88 126C98 118 106 110 110 106\" fill=\"none\" stroke=\"#b8322b\" stroke-width=\"6.5\" stroke-linecap=\"round\"/></g>\n  <!-- herramienta de extracci\u00f3n vehicular -->\n  <g class=\"herramienta\"><path d=\"M76 132Q60 150 40 158\" fill=\"none\" stroke=\"#e8771e\" stroke-width=\"3.4\" stroke-linecap=\"round\"/>\n    <rect x=\"74\" y=\"122\" width=\"56\" height=\"16\" rx=\"5\" fill=\"#f2c230\" stroke=\"#1c1e24\" stroke-width=\"1.5\"/>\n    <rect x=\"86\" y=\"115\" width=\"18\" height=\"7\" rx=\"2\" fill=\"#1c1e24\"/><rect x=\"82\" y=\"127\" width=\"30\" height=\"3\" rx=\"1.5\" fill=\"#1c1e24\" opacity=\".6\"/>\n    <g class=\"mand-a\"><path d=\"M128 125L156 119L158 125L130 130Z\" fill=\"#30343c\" stroke=\"#15171c\" stroke-width=\"1\"/></g>\n    <g class=\"mand-b\"><path d=\"M128 135L156 141L158 135L130 130Z\" fill=\"#30343c\" stroke=\"#15171c\" stroke-width=\"1\"/></g></g>\n  <!-- brazo izquierdo (sostiene la manguera, tambi\u00e9n toca y se\u00f1ala) -->\n  <g class=\"brazo-i\"><path d=\"M49 104Q42 108 41 120L40 134\" stroke=\"url(#a4TrajeA)\" stroke-width=\"12\" fill=\"none\" stroke-linecap=\"round\"/>\n    <path d=\"M40.6 124L41 128\" stroke=\"#d3ea3a\" stroke-width=\"12\"/>\n    <rect class=\"guante-toca\" x=\"33\" y=\"134\" width=\"15\" height=\"13\" rx=\"6.5\" fill=\"#25262b\"/><rect x=\"34\" y=\"131\" width=\"13\" height=\"4.5\" rx=\"2\" fill=\"#e8b93a\"/></g>\n  <!-- cabeza -->\n  <g class=\"cabeza\">\n    <g class=\"branq-i\">\n      <g class=\"b1\"><path d=\"M46 62C36 56 26 52 14 50\" stroke=\"#3b7dd4\" stroke-width=\"7\" fill=\"none\" stroke-linecap=\"round\"/><g fill=\"#68a3ea\"><circle cx=\"18\" cy=\"48\" r=\"3.4\"/><circle cx=\"25\" cy=\"49.5\" r=\"3.2\"/><circle cx=\"32\" cy=\"52\" r=\"3\"/><circle cx=\"38.5\" cy=\"55.5\" r=\"2.8\"/></g></g>\n      <g class=\"b2\"><path d=\"M44 74C32 72 22 72 10 74\" stroke=\"#3b7dd4\" stroke-width=\"7\" fill=\"none\" stroke-linecap=\"round\"/><g fill=\"#68a3ea\"><circle cx=\"13\" cy=\"71\" r=\"3.4\"/><circle cx=\"20\" cy=\"70\" r=\"3.2\"/><circle cx=\"27\" cy=\"70\" r=\"3\"/><circle cx=\"34\" cy=\"70.5\" r=\"2.8\"/></g></g>\n      <g class=\"b3\"><path d=\"M46 85C36 90 26 94 16 100\" stroke=\"#3b7dd4\" stroke-width=\"7\" fill=\"none\" stroke-linecap=\"round\"/><g fill=\"#68a3ea\"><circle cx=\"19\" cy=\"96\" r=\"3.4\"/><circle cx=\"25.5\" cy=\"92.5\" r=\"3.2\"/><circle cx=\"32\" cy=\"89.5\" r=\"3\"/><circle cx=\"38.5\" cy=\"86.5\" r=\"2.8\"/></g></g>\n    </g>\n    <g class=\"branq-d\">\n      <g class=\"b1\"><path d=\"M114 62C124 56 134 52 146 50\" stroke=\"#3b7dd4\" stroke-width=\"7\" fill=\"none\" stroke-linecap=\"round\"/><g fill=\"#68a3ea\"><circle cx=\"142\" cy=\"48\" r=\"3.4\"/><circle cx=\"135\" cy=\"49.5\" r=\"3.2\"/><circle cx=\"128\" cy=\"52\" r=\"3\"/><circle cx=\"121.5\" cy=\"55.5\" r=\"2.8\"/></g></g>\n      <g class=\"b2\"><path d=\"M116 74C128 72 138 72 150 74\" stroke=\"#3b7dd4\" stroke-width=\"7\" fill=\"none\" stroke-linecap=\"round\"/><g fill=\"#68a3ea\"><circle cx=\"147\" cy=\"71\" r=\"3.4\"/><circle cx=\"140\" cy=\"70\" r=\"3.2\"/><circle cx=\"133\" cy=\"70\" r=\"3\"/><circle cx=\"126\" cy=\"70.5\" r=\"2.8\"/></g></g>\n      <g class=\"b3\"><path d=\"M114 85C124 90 134 94 144 100\" stroke=\"#3b7dd4\" stroke-width=\"7\" fill=\"none\" stroke-linecap=\"round\"/><g fill=\"#68a3ea\"><circle cx=\"141\" cy=\"96\" r=\"3.4\"/><circle cx=\"134.5\" cy=\"92.5\" r=\"3.2\"/><circle cx=\"128\" cy=\"89.5\" r=\"3\"/><circle cx=\"121.5\" cy=\"86.5\" r=\"2.8\"/></g></g>\n    </g>\n    <path d=\"M80 38C104 38 120 52 120 72C120 92 102 104 80 104C58 104 40 92 40 72C40 52 56 38 80 38Z\" fill=\"url(#a4PielA)\"/>\n    <ellipse cx=\"80\" cy=\"94\" rx=\"22\" ry=\"8\" fill=\"#d6ecfd\" opacity=\".8\"/>\n    <circle cx=\"57\" cy=\"82\" r=\"6\" fill=\"#79acea\"/><circle cx=\"103\" cy=\"82\" r=\"6\" fill=\"#79acea\"/>\n    <g class=\"mirada\"><g class=\"ojo\"><circle cx=\"63\" cy=\"70\" r=\"8.5\" fill=\"#1d1a24\"/><circle cx=\"66\" cy=\"66.5\" r=\"3.2\" fill=\"#fff\"/><circle cx=\"60.5\" cy=\"73\" r=\"1.3\" fill=\"#fff\" opacity=\".85\"/></g>\n    <g class=\"ojo\"><circle cx=\"97\" cy=\"70\" r=\"8.5\" fill=\"#1d1a24\"/><circle cx=\"100\" cy=\"66.5\" r=\"3.2\" fill=\"#fff\"/><circle cx=\"94.5\" cy=\"73\" r=\"1.3\" fill=\"#fff\" opacity=\".85\"/></g></g>\n    <g class=\"boca boca-feliz\"><path d=\"M64 81Q80 79 96 81Q93 97 80 97Q67 97 64 81Z\" fill=\"#6b2236\"/><path d=\"M70 91Q80 86 90 91Q86 97 80 97Q74 97 70 91Z\" fill=\"#f2849b\"/></g>\n    <g class=\"boca boca-chica\"><path d=\"M72 85Q80 91 88 85\" fill=\"none\" stroke=\"#6b2236\" stroke-width=\"2.8\" stroke-linecap=\"round\"/></g>\n    <g class=\"boca boca-o\"><ellipse cx=\"80\" cy=\"88\" rx=\"5.5\" ry=\"7\" fill=\"#6b2236\"/><ellipse cx=\"80\" cy=\"91.5\" rx=\"3.4\" ry=\"2.6\" fill=\"#f2849b\"/></g>\n    <g class=\"boca boca-firme\"><path d=\"M68 83Q80 95 92 83Q80 88 68 83Z\" fill=\"#6b2236\"/></g>\n    <!-- casco -->\n    <path d=\"M30 51Q80 38 130 51Q132 58 122 58Q80 50 38 58Q28 58 30 51Z\" fill=\"#b8890f\"/>\n    <path d=\"M42 52C40 20 120 20 118 52Q80 44 42 52Z\" fill=\"url(#a4CascoA)\"/>\n    <path d=\"M58 30Q62 26 70 24M90 24Q98 26 102 30\" stroke=\"#b8890f\" stroke-width=\"1.6\" fill=\"none\" opacity=\".6\"/>\n    <path d=\"M50 40C52 32 58 27 65 25\" stroke=\"#fff\" stroke-width=\"3\" fill=\"none\" stroke-linecap=\"round\" opacity=\".3\"/>\n    <path d=\"M70 26L80 22L90 26V38Q90 44 80 47Q70 44 70 38Z\" fill=\"#ffffff\" stroke=\"#b8890f\" stroke-width=\"1.3\"/>\n    <path d=\"M80 30C83 34 85 36 84 39.5C83.5 42 82 43 80 43C77.5 43 76 41.5 76 39.5C76 37.5 77.5 36.5 78 35C79 37 80 37 80 30Z\" fill=\"#d62828\"/>\n  </g>\n  <!-- celular -->\n  <g class=\"celular\"><rect x=\"90.5\" y=\"108\" width=\"14\" height=\"22\" rx=\"2.6\" fill=\"#1d1e23\"/><rect class=\"pantalla\" x=\"92\" y=\"110.5\" width=\"11\" height=\"16\" rx=\"1.2\" fill=\"#8fd0ff\"/>\n    <rect x=\"94\" y=\"113\" width=\"7\" height=\"1.6\" rx=\".8\" fill=\"#fff\" opacity=\".8\"/><rect x=\"94\" y=\"116.5\" width=\"5\" height=\"1.6\" rx=\".8\" fill=\"#fff\" opacity=\".6\"/><rect x=\"94\" y=\"120\" width=\"6\" height=\"1.6\" rx=\".8\" fill=\"#fff\" opacity=\".6\"/>\n    <g class=\"notif\"><circle cx=\"104\" cy=\"107\" r=\"5\" fill=\"#e53935\" stroke=\"#fff\" stroke-width=\"1.4\"/><path d=\"M104 104.2V107.6\" stroke=\"#fff\" stroke-width=\"1.8\" stroke-linecap=\"round\"/><circle cx=\"104\" cy=\"109.6\" r=\".9\" fill=\"#fff\"/></g></g>\n  <!-- brazo derecho con la boquilla (dibujado hacia abajo; se levanta con CSS) -->\n  <g class=\"brazo-d\"><path d=\"M110 104Q117 108 118 120L118 132\" stroke=\"url(#a4TrajeA)\" stroke-width=\"12\" fill=\"none\" stroke-linecap=\"round\"/>\n    <path d=\"M118 122L118 126\" stroke=\"#d3ea3a\" stroke-width=\"12\"/>\n    <g class=\"boquilla\"><rect class=\"boquilla-base\" x=\"114\" y=\"139\" width=\"8\" height=\"14\" rx=\"2\" fill=\"#c8952f\"/><rect x=\"113\" y=\"148\" width=\"10\" height=\"4\" rx=\"1\" fill=\"#a87a22\"/>\n    <rect class=\"boquilla-tip\" x=\"115\" y=\"152\" width=\"6\" height=\"8\" rx=\"1.5\" fill=\"#8a6418\"/></g>\n    <g class=\"radio-mano\"><rect x=\"114\" y=\"122\" width=\"10\" height=\"16\" rx=\"2\" fill=\"#1d1e23\"/><rect x=\"115.5\" y=\"113\" width=\"2.2\" height=\"10\" rx=\"1\" fill=\"#1d1e23\"/><rect x=\"116\" y=\"125\" width=\"6\" height=\"4\" rx=\".8\" fill=\"#7fd3a0\"/><circle cx=\"119\" cy=\"133\" r=\"1.6\" fill=\"#e53935\"/></g>\n    <rect x=\"111\" y=\"130\" width=\"15\" height=\"13\" rx=\"6.5\" fill=\"#25262b\"/><rect x=\"112\" y=\"128\" width=\"13\" height=\"4.5\" rx=\"2\" fill=\"#e8b93a\"/>\n    <path d=\"M114 134V140M118 134V140M122 134V140\" stroke=\"#3b3c43\" stroke-width=\"1.2\"/></g>\n  <!-- letrero -->\n  <g class=\"letrero\"><rect x=\"24\" y=\"98\" width=\"112\" height=\"40\" rx=\"5\" fill=\"#fffaf0\" stroke=\"#CF0A2C\" stroke-width=\"3\"/>\n    <rect x=\"24\" y=\"98\" width=\"112\" height=\"6\" rx=\"3\" fill=\"#CF0A2C\"/>\n    <g class=\"txt-flip\"><text x=\"80\" y=\"116\" text-anchor=\"middle\" font-family=\"Montserrat,Arial,sans-serif\" font-weight=\"800\" font-size=\"8.6\" fill=\"#1f2545\" textLength=\"84\" lengthAdjust=\"spacingAndGlyphs\">\u00a1YA PONTE A</text>\n    <text x=\"80\" y=\"128\" text-anchor=\"middle\" font-family=\"Montserrat,Arial,sans-serif\" font-weight=\"800\" font-size=\"8.6\" fill=\"#CF0A2C\" textLength=\"90\" lengthAdjust=\"spacingAndGlyphs\">CONFIGURAR!</text></g>\n    <rect x=\"26\" y=\"128\" width=\"15\" height=\"13\" rx=\"6.5\" fill=\"#25262b\"/><rect x=\"27\" y=\"125.5\" width=\"13\" height=\"4.5\" rx=\"2\" fill=\"#e8b93a\"/>\n    <rect x=\"119\" y=\"128\" width=\"15\" height=\"13\" rx=\"6.5\" fill=\"#25262b\"/><rect x=\"120\" y=\"125.5\" width=\"13\" height=\"4.5\" rx=\"2\" fill=\"#e8b93a\"/></g>\n</svg>";
+var AXO_AZUL_SVG="<svg viewBox=\"0 0 160 200\">\n  <defs>\n    <linearGradient id=\"a4PielA\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#acd5f8\"/><stop offset=\"1\" stop-color=\"#86bdf0\"/></linearGradient>\n    <linearGradient id=\"a4TrajeA\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#d2ab72\"/><stop offset=\"1\" stop-color=\"#c49a5f\"/></linearGradient>\n    <linearGradient id=\"a4CascoA\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#f5c838\"/><stop offset=\"1\" stop-color=\"#dba918\"/></linearGradient>\n    <linearGradient id=\"a4BotaA\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\"><stop offset=\"0\" stop-color=\"#2a2b31\"/><stop offset=\".5\" stop-color=\"#1c1d22\"/><stop offset=\"1\" stop-color=\"#2a2b31\"/></linearGradient>\n  </defs>\n  <!-- cola -->\n  <g class=\"cola\"><path d=\"M58 150C46 160 30 172 8 186C22 186 44 178 62 162Z\" fill=\"#86bbef\"/><path d=\"M56 156C44 166 30 176 14 184C30 182 46 172 60 160Z\" fill=\"#b6d9f8\" opacity=\".7\"/></g>\n  <!-- manguera que viene del piso -->\n  <g class=\"manguera\"><path d=\"M42 146C40 162 34 178 2 194\" fill=\"none\" stroke=\"#b8322b\" stroke-width=\"7\" stroke-linecap=\"round\"/></g>\n  <!-- piernas y botas -->\n  <g class=\"pierna-i\"><rect x=\"55\" y=\"146\" width=\"18\" height=\"16\" fill=\"#bf955a\"/>\n    <path d=\"M53 158H75V186H53Z\" fill=\"url(#a4BotaA)\"/><rect x=\"51.5\" y=\"156\" width=\"25\" height=\"6\" rx=\"2\" fill=\"#3b3c43\"/>\n    <rect x=\"55\" y=\"152\" width=\"3\" height=\"6\" rx=\"1\" fill=\"#3b3c43\"/><rect x=\"70\" y=\"152\" width=\"3\" height=\"6\" rx=\"1\" fill=\"#3b3c43\"/>\n    <rect x=\"53\" y=\"171\" width=\"22\" height=\"4\" fill=\"#d3ea3a\"/><rect x=\"53\" y=\"172.4\" width=\"22\" height=\"1.3\" fill=\"#e6e9ee\"/>\n    <path d=\"M49 186Q49 180 55 180H74Q79 180 79 186V188H49Z\" fill=\"#1c1d22\"/><rect x=\"49\" y=\"188\" width=\"30\" height=\"4\" rx=\"2\" fill=\"#4b4d56\"/></g>\n  <g class=\"pierna-d\"><rect x=\"87\" y=\"146\" width=\"18\" height=\"16\" fill=\"#bf955a\"/>\n    <path d=\"M85 158H107V186H85Z\" fill=\"url(#a4BotaA)\"/><rect x=\"83.5\" y=\"156\" width=\"25\" height=\"6\" rx=\"2\" fill=\"#3b3c43\"/>\n    <rect x=\"87\" y=\"152\" width=\"3\" height=\"6\" rx=\"1\" fill=\"#3b3c43\"/><rect x=\"102\" y=\"152\" width=\"3\" height=\"6\" rx=\"1\" fill=\"#3b3c43\"/>\n    <rect x=\"85\" y=\"171\" width=\"22\" height=\"4\" fill=\"#d3ea3a\"/><rect x=\"85\" y=\"172.4\" width=\"22\" height=\"1.3\" fill=\"#e6e9ee\"/>\n    <path d=\"M81 186Q81 180 87 180H106Q111 180 111 186V188H81Z\" fill=\"#1c1d22\"/><rect x=\"81\" y=\"188\" width=\"30\" height=\"4\" rx=\"2\" fill=\"#4b4d56\"/></g>\n  <g class=\"torso\">\n    <!-- chaquet\u00f3n -->\n    <path d=\"M52 102Q80 96 108 102L114 146Q114 152 108 152H52Q46 152 46 146Z\" fill=\"url(#a4TrajeA)\" stroke=\"#a9834c\" stroke-width=\"1.2\"/>\n    <path d=\"M80 100V151\" stroke=\"#9a7442\" stroke-width=\"1.4\"/>\n    <g fill=\"#2a2b31\"><rect x=\"77\" y=\"111\" width=\"6\" height=\"2.6\" rx=\"1\"/><rect x=\"77\" y=\"142\" width=\"6\" height=\"2.6\" rx=\"1\"/></g>\n    <path d=\"M60 101L80 116L100 101L94 98L80 108L66 98Z\" fill=\"#a9834c\"/>\n    <path d=\"M70 99L80 108L90 99Z\" fill=\"#c6e3fb\"/>\n    <rect x=\"47\" y=\"117\" width=\"66\" height=\"6\" fill=\"#d3ea3a\"/><rect x=\"47\" y=\"119\" width=\"66\" height=\"2\" fill=\"#e6e9ee\"/>\n    <rect x=\"46.5\" y=\"139\" width=\"67\" height=\"6\" fill=\"#d3ea3a\"/><rect x=\"46.5\" y=\"141\" width=\"67\" height=\"2\" fill=\"#e6e9ee\"/>\n    <rect x=\"46.5\" y=\"128\" width=\"67\" height=\"6\" fill=\"#26272c\"/><rect x=\"76\" y=\"127\" width=\"8\" height=\"8\" rx=\"1.5\" fill=\"none\" stroke=\"#f2c230\" stroke-width=\"2\"/>\n    <rect x=\"82.5\" y=\"120.5\" width=\"29\" height=\"6\" rx=\"1.5\" fill=\"#1d1e23\"/><text x=\"97\" y=\"125.2\" text-anchor=\"middle\" font-family=\"Arial,sans-serif\" font-weight=\"800\" font-size=\"4.2\" fill=\"#fff\" textLength=\"25.5\" lengthAdjust=\"spacingAndGlyphs\" class=\"txt-fem\">AXO-SEBAS</text>\n  </g>\n  <g class=\"radio-pecho\"><rect x=\"55\" y=\"106\" width=\"9\" height=\"13\" rx=\"1.8\" fill=\"#1d1e23\"/><rect x=\"56.3\" y=\"99\" width=\"2\" height=\"8\" rx=\"1\" fill=\"#1d1e23\"/><rect x=\"56.5\" y=\"108.5\" width=\"6\" height=\"3.4\" rx=\".7\" fill=\"#7fd3a0\"/></g>\n  <!-- manguera cruzando el cuerpo -->\n  <g class=\"manguera\"><path d=\"M42 140C56 140 74 136 88 126C98 118 106 110 110 106\" fill=\"none\" stroke=\"#b8322b\" stroke-width=\"6.5\" stroke-linecap=\"round\"/></g>\n  <!-- herramienta de extracci\u00f3n vehicular -->\n  <g class=\"herramienta\"><path d=\"M76 132Q60 150 40 158\" fill=\"none\" stroke=\"#e8771e\" stroke-width=\"3.4\" stroke-linecap=\"round\"/>\n    <rect x=\"74\" y=\"122\" width=\"56\" height=\"16\" rx=\"5\" fill=\"#f2c230\" stroke=\"#1c1e24\" stroke-width=\"1.5\"/>\n    <rect x=\"86\" y=\"115\" width=\"18\" height=\"7\" rx=\"2\" fill=\"#1c1e24\"/><rect x=\"82\" y=\"127\" width=\"30\" height=\"3\" rx=\"1.5\" fill=\"#1c1e24\" opacity=\".6\"/>\n    <g class=\"mand-a\"><path d=\"M128 125L156 119L158 125L130 130Z\" fill=\"#30343c\" stroke=\"#15171c\" stroke-width=\"1\"/></g>\n    <g class=\"mand-b\"><path d=\"M128 135L156 141L158 135L130 130Z\" fill=\"#30343c\" stroke=\"#15171c\" stroke-width=\"1\"/></g></g>\n  <!-- brazo izquierdo (sostiene la manguera, tambi\u00e9n toca y se\u00f1ala) -->\n  <g class=\"brazo-i\"><path d=\"M49 104Q42 108 41 120L40 134\" stroke=\"url(#a4TrajeA)\" stroke-width=\"12\" fill=\"none\" stroke-linecap=\"round\"/>\n    <path d=\"M40.6 124L41 128\" stroke=\"#d3ea3a\" stroke-width=\"12\"/>\n    <rect class=\"guante-toca\" x=\"33\" y=\"134\" width=\"15\" height=\"13\" rx=\"6.5\" fill=\"#25262b\"/><rect x=\"34\" y=\"131\" width=\"13\" height=\"4.5\" rx=\"2\" fill=\"#e8b93a\"/></g>\n  <!-- cabeza -->\n  <g class=\"cabeza\">\n    <g class=\"branq-i\">\n      <g class=\"b1\"><path d=\"M46 62C36 56 26 52 14 50\" stroke=\"#3b7dd4\" stroke-width=\"7\" fill=\"none\" stroke-linecap=\"round\"/><g fill=\"#68a3ea\"><circle cx=\"18\" cy=\"48\" r=\"3.4\"/><circle cx=\"25\" cy=\"49.5\" r=\"3.2\"/><circle cx=\"32\" cy=\"52\" r=\"3\"/><circle cx=\"38.5\" cy=\"55.5\" r=\"2.8\"/></g></g>\n      <g class=\"b2\"><path d=\"M44 74C32 72 22 72 10 74\" stroke=\"#3b7dd4\" stroke-width=\"7\" fill=\"none\" stroke-linecap=\"round\"/><g fill=\"#68a3ea\"><circle cx=\"13\" cy=\"71\" r=\"3.4\"/><circle cx=\"20\" cy=\"70\" r=\"3.2\"/><circle cx=\"27\" cy=\"70\" r=\"3\"/><circle cx=\"34\" cy=\"70.5\" r=\"2.8\"/></g></g>\n      <g class=\"b3\"><path d=\"M46 85C36 90 26 94 16 100\" stroke=\"#3b7dd4\" stroke-width=\"7\" fill=\"none\" stroke-linecap=\"round\"/><g fill=\"#68a3ea\"><circle cx=\"19\" cy=\"96\" r=\"3.4\"/><circle cx=\"25.5\" cy=\"92.5\" r=\"3.2\"/><circle cx=\"32\" cy=\"89.5\" r=\"3\"/><circle cx=\"38.5\" cy=\"86.5\" r=\"2.8\"/></g></g>\n    </g>\n    <g class=\"branq-d\">\n      <g class=\"b1\"><path d=\"M114 62C124 56 134 52 146 50\" stroke=\"#3b7dd4\" stroke-width=\"7\" fill=\"none\" stroke-linecap=\"round\"/><g fill=\"#68a3ea\"><circle cx=\"142\" cy=\"48\" r=\"3.4\"/><circle cx=\"135\" cy=\"49.5\" r=\"3.2\"/><circle cx=\"128\" cy=\"52\" r=\"3\"/><circle cx=\"121.5\" cy=\"55.5\" r=\"2.8\"/></g></g>\n      <g class=\"b2\"><path d=\"M116 74C128 72 138 72 150 74\" stroke=\"#3b7dd4\" stroke-width=\"7\" fill=\"none\" stroke-linecap=\"round\"/><g fill=\"#68a3ea\"><circle cx=\"147\" cy=\"71\" r=\"3.4\"/><circle cx=\"140\" cy=\"70\" r=\"3.2\"/><circle cx=\"133\" cy=\"70\" r=\"3\"/><circle cx=\"126\" cy=\"70.5\" r=\"2.8\"/></g></g>\n      <g class=\"b3\"><path d=\"M114 85C124 90 134 94 144 100\" stroke=\"#3b7dd4\" stroke-width=\"7\" fill=\"none\" stroke-linecap=\"round\"/><g fill=\"#68a3ea\"><circle cx=\"141\" cy=\"96\" r=\"3.4\"/><circle cx=\"134.5\" cy=\"92.5\" r=\"3.2\"/><circle cx=\"128\" cy=\"89.5\" r=\"3\"/><circle cx=\"121.5\" cy=\"86.5\" r=\"2.8\"/></g></g>\n    </g>\n    <path d=\"M80 38C104 38 120 52 120 72C120 92 102 104 80 104C58 104 40 92 40 72C40 52 56 38 80 38Z\" fill=\"url(#a4PielA)\"/>\n    <ellipse cx=\"80\" cy=\"94\" rx=\"22\" ry=\"8\" fill=\"#d6ecfd\" opacity=\".8\"/>\n    <circle cx=\"57\" cy=\"82\" r=\"6\" fill=\"#79acea\"/><circle cx=\"103\" cy=\"82\" r=\"6\" fill=\"#79acea\"/>\n    <g class=\"mirada\"><g class=\"ojo\"><circle cx=\"63\" cy=\"70\" r=\"8.5\" fill=\"#1d1a24\"/><circle cx=\"66\" cy=\"66.5\" r=\"3.2\" fill=\"#fff\"/><circle cx=\"60.5\" cy=\"73\" r=\"1.3\" fill=\"#fff\" opacity=\".85\"/></g>\n    <g class=\"ojo\"><circle cx=\"97\" cy=\"70\" r=\"8.5\" fill=\"#1d1a24\"/><circle cx=\"100\" cy=\"66.5\" r=\"3.2\" fill=\"#fff\"/><circle cx=\"94.5\" cy=\"73\" r=\"1.3\" fill=\"#fff\" opacity=\".85\"/></g></g>\n    <g class=\"boca boca-feliz\"><path d=\"M64 81Q80 79 96 81Q93 97 80 97Q67 97 64 81Z\" fill=\"#6b2236\"/><path d=\"M70 91Q80 86 90 91Q86 97 80 97Q74 97 70 91Z\" fill=\"#f2849b\"/></g>\n    <g class=\"boca boca-chica\"><path d=\"M72 85Q80 91 88 85\" fill=\"none\" stroke=\"#6b2236\" stroke-width=\"2.8\" stroke-linecap=\"round\"/></g>\n    <g class=\"boca boca-o\"><ellipse cx=\"80\" cy=\"88\" rx=\"5.5\" ry=\"7\" fill=\"#6b2236\"/><ellipse cx=\"80\" cy=\"91.5\" rx=\"3.4\" ry=\"2.6\" fill=\"#f2849b\"/></g>\n    <g class=\"boca boca-firme\"><path d=\"M68 83Q80 95 92 83Q80 88 68 83Z\" fill=\"#6b2236\"/></g>\n    <!-- casco -->\n    <path d=\"M30 51Q80 38 130 51Q132 58 122 58Q80 50 38 58Q28 58 30 51Z\" fill=\"#b8890f\"/>\n    <path d=\"M42 52C40 20 120 20 118 52Q80 44 42 52Z\" fill=\"url(#a4CascoA)\"/>\n    <path d=\"M58 30Q62 26 70 24M90 24Q98 26 102 30\" stroke=\"#b8890f\" stroke-width=\"1.6\" fill=\"none\" opacity=\".6\"/>\n    <path d=\"M50 40C52 32 58 27 65 25\" stroke=\"#fff\" stroke-width=\"3\" fill=\"none\" stroke-linecap=\"round\" opacity=\".3\"/>\n    <path d=\"M70 26L80 22L90 26V38Q90 44 80 47Q70 44 70 38Z\" fill=\"#ffffff\" stroke=\"#b8890f\" stroke-width=\"1.3\"/>\n    <path d=\"M80 30C83 34 85 36 84 39.5C83.5 42 82 43 80 43C77.5 43 76 41.5 76 39.5C76 37.5 77.5 36.5 78 35C79 37 80 37 80 30Z\" fill=\"#d62828\"/>\n  </g>\n  <!-- celular -->\n  <g class=\"celular\"><rect x=\"90.5\" y=\"108\" width=\"14\" height=\"22\" rx=\"2.6\" fill=\"#1d1e23\"/><rect class=\"pantalla\" x=\"92\" y=\"110.5\" width=\"11\" height=\"16\" rx=\"1.2\" fill=\"#8fd0ff\"/>\n    <rect x=\"94\" y=\"113\" width=\"7\" height=\"1.6\" rx=\".8\" fill=\"#fff\" opacity=\".8\"/><rect x=\"94\" y=\"116.5\" width=\"5\" height=\"1.6\" rx=\".8\" fill=\"#fff\" opacity=\".6\"/><rect x=\"94\" y=\"120\" width=\"6\" height=\"1.6\" rx=\".8\" fill=\"#fff\" opacity=\".6\"/>\n    <g class=\"notif\"><circle cx=\"104\" cy=\"107\" r=\"5\" fill=\"#e53935\" stroke=\"#fff\" stroke-width=\"1.4\"/><path d=\"M104 104.2V107.6\" stroke=\"#fff\" stroke-width=\"1.8\" stroke-linecap=\"round\"/><circle cx=\"104\" cy=\"109.6\" r=\".9\" fill=\"#fff\"/></g></g>\n  <!-- brazo derecho con la boquilla (dibujado hacia abajo; se levanta con CSS) -->\n  <g class=\"brazo-d\"><path d=\"M110 104Q117 108 118 120L118 132\" stroke=\"url(#a4TrajeA)\" stroke-width=\"12\" fill=\"none\" stroke-linecap=\"round\"/>\n    <path d=\"M118 122L118 126\" stroke=\"#d3ea3a\" stroke-width=\"12\"/>\n    <g class=\"boquilla\"><rect class=\"boquilla-base\" x=\"114\" y=\"139\" width=\"8\" height=\"14\" rx=\"2\" fill=\"#c8952f\"/><rect x=\"113\" y=\"148\" width=\"10\" height=\"4\" rx=\"1\" fill=\"#a87a22\"/>\n    <rect class=\"boquilla-tip\" x=\"115\" y=\"152\" width=\"6\" height=\"8\" rx=\"1.5\" fill=\"#8a6418\"/></g>\n    <g class=\"radio-mano\"><rect x=\"114\" y=\"122\" width=\"10\" height=\"16\" rx=\"2\" fill=\"#1d1e23\"/><rect x=\"115.5\" y=\"113\" width=\"2.2\" height=\"10\" rx=\"1\" fill=\"#1d1e23\"/><rect x=\"116\" y=\"125\" width=\"6\" height=\"4\" rx=\".8\" fill=\"#7fd3a0\"/><circle cx=\"119\" cy=\"133\" r=\"1.6\" fill=\"#e53935\"/></g>\n    <rect x=\"111\" y=\"130\" width=\"15\" height=\"13\" rx=\"6.5\" fill=\"#25262b\"/><rect x=\"112\" y=\"128\" width=\"13\" height=\"4.5\" rx=\"2\" fill=\"#e8b93a\"/>\n    <path d=\"M114 134V140M118 134V140M122 134V140\" stroke=\"#3b3c43\" stroke-width=\"1.2\"/></g>\n  <!-- letrero -->\n  <g class=\"letrero\"><rect x=\"24\" y=\"98\" width=\"112\" height=\"40\" rx=\"5\" fill=\"#fffaf0\" stroke=\"#CF0A2C\" stroke-width=\"3\"/>\n    <rect x=\"24\" y=\"98\" width=\"112\" height=\"6\" rx=\"3\" fill=\"#CF0A2C\"/>\n    <g class=\"txt-flip\"><text x=\"80\" y=\"116\" text-anchor=\"middle\" font-family=\"Montserrat,Arial,sans-serif\" font-weight=\"800\" font-size=\"8.6\" fill=\"#1f2545\" textLength=\"84\" lengthAdjust=\"spacingAndGlyphs\">\u00a1YA PONTE A</text>\n    <text x=\"80\" y=\"128\" text-anchor=\"middle\" font-family=\"Montserrat,Arial,sans-serif\" font-weight=\"800\" font-size=\"8.6\" fill=\"#CF0A2C\" textLength=\"90\" lengthAdjust=\"spacingAndGlyphs\">CONFIGURAR!</text></g>\n    <rect x=\"26\" y=\"128\" width=\"15\" height=\"13\" rx=\"6.5\" fill=\"#25262b\"/><rect x=\"27\" y=\"125.5\" width=\"13\" height=\"4.5\" rx=\"2\" fill=\"#e8b93a\"/>\n    <rect x=\"119\" y=\"128\" width=\"15\" height=\"13\" rx=\"6.5\" fill=\"#25262b\"/><rect x=\"120\" y=\"125.5\" width=\"13\" height=\"4.5\" rx=\"2\" fill=\"#e8b93a\"/></g>\n</svg>";
 function soltarAgua(cont, m, obj){
   var tip=m.querySelector('.boquilla-tip'), base=m.querySelector('.boquilla-base'); if(!tip || !base) return;
   var g=cont.getBoundingClientRect(), a=tip.getBoundingClientRect(), b=base.getBoundingClientRect();
