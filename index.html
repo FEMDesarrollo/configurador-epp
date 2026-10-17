@@ -1411,6 +1411,18 @@ function hex4(){
 }
 function folioUsado(f){ return (MC.items||[]).some(function(it){ return String(it.folio).toUpperCase()===f; }) || (FOLIOS_DESCARTADOS.indexOf(f)>=0); }
 var FOLIOS_DESCARTADOS=[];
+var RX_FOLIO=/^FEM-\d{4}-[0-9A-F]{4}$/;
+function folioValido(f){ return RX_FOLIO.test(String(f||'')); }
+function pintarFolio(){ if($('folioTxt')) $('folioTxt').textContent=FOLIO; if($('fvFolio')) $('fvFolio').textContent=FOLIO; var ab=$('avisoBase'); if(ab && ab.querySelector('b')) ab.querySelector('b').textContent=FOLIO; }
+/* Garantiza que la configuración en curso tenga un folio FEM-AAMM-XXXX */
+function asegurarFolio(){ if(!registrado && !folioValido(FOLIO)){ FOLIO=generarFolio(); pintarFolio(); } return FOLIO; }
+/* Pone el folio definitivo en el asunto y el cuerpo (por si cambió al reservarlo o venía de un formato anterior) */
+function folioEnTexto(t, anterior){
+  t=String(t||'');
+  if(anterior && anterior!==FOLIO) t=t.split(anterior).join(FOLIO);
+  return t.replace(/FEM-\d{6}(?:-[A-Z0-9]{1,8}){1,4}/g, FOLIO);
+}
+var folioBorrador='';
 function generarFolio(){
   var f, i=0;
   do { f=prefijoFolio()+hex4(); i++; } while(folioUsado(f) && i<500);
@@ -1785,6 +1797,7 @@ function recopilarDatos(){
   return secciones;
 }
 function nombreArchivo(){
+  asegurarFolio();
   var base=(val('clientCompany')||val('clientName')||'cliente').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_|_$/g,'');
   return FOLIO+'_'+base+'.pdf';
 }
@@ -2011,6 +2024,7 @@ function abrirModalEmail(){
   reservarFolio().then(abrirModalEmail2);
 }
 function abrirModalEmail2(){
+  asegurarFolio(); folioBorrador=FOLIO;
   var modo=modoCorreo();
   contenidoEmail=construirEmail(modo!=='mcp');
   borradorDest={}; destinoCorreo='produccion'; pintarDestino();
@@ -2047,7 +2061,7 @@ function copiarEmail(){
 }
 function abrirOutlookWeb(){
   var para=listaCorreos(val('emailDest')).join(','), cc=listaCorreos(val('emailCc')).join(',');
-  var asunto=val('emailSubject')||asuntoEmail, cuerpo=$('emailContent').value;
+  var asunto=folioEnTexto(val('emailSubject')||asuntoEmail, folioBorrador), cuerpo=folioEnTexto($('emailContent').value, folioBorrador);
   // Abrir la ventana dentro del clic (los navegadores bloquean ventanas abiertas después)
   var url='https://outlook.office.com/mail/deeplink/compose?to='+encodeURIComponent(para)+(cc?'&cc='+encodeURIComponent(cc):'')+
           '&subject='+encodeURIComponent(asunto)+'&body='+encodeURIComponent(cuerpo);
@@ -2123,6 +2137,8 @@ function enviarGraph(){
     return obtenerPDF();
   }).then(function(pdf){
     ultimoPDF=pdf;
+    asunto=folioEnTexto(asunto, folioBorrador).slice(0,255); texto=folioEnTexto(texto, folioBorrador);
+    $('emailSubject').value=asunto; $('emailContent').value=texto; folioBorrador=FOLIO;
     var adj=[{ name:pdf.filename, type:'application/pdf', blob:pdf.blob }].concat(extras.map(function(x){ return { name:x.ref.nombre, type:x.ref.type, blob:x.ref.file }; }));
     return (destinoCorreo==='produccion' ? imagenesTrajeCorreo() : Promise.resolve([])).then(function(imgs){
       return enviarCorreoGraph({ para:para, cc:cc, asunto:asunto, html:cuerpoHTML(texto, tituloCorreo(destinoCorreo), imgs), adjuntos:adj.concat(imgs), progreso:function(m){ estadoOutlook(m,'na'); } });
@@ -2159,7 +2175,7 @@ function datosCorreo(){
   if(!paraL.length || paraL.some(function(x){ return !re.test(x); })){ $('emailDest').classList.add('invalid'); estadoOutlook('Revisa el correo del destinatario.','warn'); return null; }
   for(var i=0;i<cc.length;i++) if(!re.test(cc[i])){ $('emailCc').classList.add('invalid'); estadoOutlook('Revisa los correos en CC: '+cc[i],'warn'); return null; }
   $('emailDest').classList.remove('invalid'); $('emailCc').classList.remove('invalid');
-  var asunto=val('emailSubject')||asuntoEmail, cuerpo=$('emailContent').value.trim();
+  var asunto=folioEnTexto(val('emailSubject')||asuntoEmail, folioBorrador), cuerpo=folioEnTexto($('emailContent').value.trim(), folioBorrador);
   if(!cuerpo){ estadoOutlook('El contenido del correo está vacío.','warn'); return null; }
   var d={ to:paraL, subject:asunto.slice(0,255), body:cuerpo, bodyType:'text' };
   if(cc.length) d.cc=cc;
@@ -3018,6 +3034,7 @@ function esConflicto(err){ return err && /exist|conflict|nameAlreadyExists|alrea
    Se hace ANTES de armar el PDF o el correo, para que el folio impreso sea el registrado. */
 var reservando=null;
 function reservarFolio(){
+  asegurarFolio();
   if(!(CAP.mcp||SESION) || registrado) return Promise.resolve();
   if(reservando) return reservando;
   pillRegistro('Reservando folio…');
