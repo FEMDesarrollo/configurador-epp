@@ -862,6 +862,9 @@ body.bloqueado .pie-legal{display:none}
 .btn-aceptar[hidden]{display:none}
 .btn-aceptar:disabled{opacity:1;background:var(--ok);cursor:default}
 .gate-demo{margin:-6px 0 0!important;font-size:12px!important;font-weight:700;color:var(--secondary)!important}
+
+.adj-lista .adj-ubic{flex:0 1 210px;min-width:120px;min-height:36px;padding:5px 8px;font-size:12.5px}
+@media (max-width:640px){ .adj-lista li{flex-wrap:wrap} .adj-lista .adj-ubic{flex:1 1 100%;order:5} }
 </style>
 </head>
 <body class="bloqueado">
@@ -1984,7 +1987,7 @@ function recopilarDatos(){
       filas.push([lab.textContent.replace(/\s+/g,' ').trim(), v]);
     });
     // Datos calculados
-    if(sec.querySelector('#adjLista') && adjuntosActivos().length) filas.push(['Archivos de logos adjuntos', adjuntosActivos().map(function(a){ return a.nombre; }).join(', ')]);
+    if(sec.querySelector('#adjLista') && adjuntosActivos().length) filas.push(['Archivos de logos adjuntos', adjuntosActivos().map(function(a){ return a.nombre+(a.ubic?' ('+a.ubic+')':''); }).join(', ')]);
     if(sec.querySelector('#ulInfo') && !$('ulInfo').classList.contains('na')) filas.push(['Verificación UL', $('ulInfo').textContent.replace(/^[✔⚠]\s*/,'')]);
     secciones.push({ titulo: sec.getAttribute('data-sec'), filas: filas });
   });
@@ -1992,8 +1995,7 @@ function recopilarDatos(){
 }
 function nombreArchivo(){
   asegurarFolio();
-  var base=(val('clientCompany')||val('clientName')||'cliente').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_|_$/g,'');
-  return FOLIO+'_'+base+'.pdf';
+  return FOLIO+'.pdf';
 }
 function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
 
@@ -2069,7 +2071,7 @@ function svgACanvas(nodo, ctx){
   });
 }
 function bloqueFichaPDF(imgF, imgE){
-  var fila=function(k,v){ if(Array.isArray(v)) v=v.filter(Boolean); if(!v || !v.length) return ''; var html=Array.isArray(v) ? v.map(esc).join('<br>') : esc(v); return '<tr><td style="padding:4px 0;color:#5b6070;font-size:9px;text-transform:uppercase;letter-spacing:.5px;vertical-align:top;width:70px;">'+esc(k)+'</td><td style="padding:4px 0;font-weight:bold;color:#1f2545;font-size:10.5px;line-height:1.4;">'+html+'</td></tr>'; };
+  var fila=function(k,v){ if(Array.isArray(v)) v=v.filter(Boolean); if(!v || !v.length) return ''; var html=Array.isArray(v) ? v.map(esc).join('<br>') : esc(v); return '<tr><td style="padding:4px 0;color:#5b6070;font-size:9px;vertical-align:top;width:70px;">'+esc(k)+'</td><td style="padding:4px 0;font-weight:bold;color:#1f2545;font-size:10.5px;line-height:1.4;">'+html+'</td></tr>'; };
   var col = $('wrapColor').classList.contains('hidden') ? val('colorExternaTxt') : val('colorExterna');
   var ext = $('wrapExterna').classList.contains('hidden') ? val('matExternaTxt') : val('matExterna');
   var comb=datosProducto.combinacionesUL.filter(function(r){ return r[0]===val('matExterna')&&r[1]===val('matHumedad')&&r[2]===val('matTermica'); })[0];
@@ -2078,16 +2080,41 @@ function bloqueFichaPDF(imgF, imgE){
   if(val('z2Aplica')==='Sí') marc.push('Zona 2: '+val('z2L1'));
   if(val('frAplica')==='Sí') marc.push('Frontal: '+[val('frL1'),val('frL2')].filter(Boolean).join(' / '));
   if(val('logoAplica')==='Sí') logosTodos().forEach(function(l){ marc.push((l.tipo||'Logo')+': '+(l.ubic||'ubicación por definir')); });
-  var fig=function(src,cap){ return '<td style="width:24%;text-align:center;vertical-align:top;padding:0 4px;">'+(src?'<img src="'+src+'" width="150" height="262" style="width:150px;height:262px;border:1px solid #e4e6ec;border-radius:6px;">':'')+'<div style="font-size:9.5px;font-weight:bold;color:#1f2545;margin-top:4px;text-transform:uppercase;letter-spacing:.6px;">'+cap+'</div></td>'; };
+  var fig=function(src,cap,marca){ return '<td style="width:150px;text-align:center;vertical-align:top;padding:0 4px;">'+(src?'<div style="position:relative;width:150px;height:262px;margin:0 auto;"><img src="'+src+'" width="150" height="262" style="width:150px;height:262px;border:1px solid #e4e6ec;border-radius:6px;display:block;">'+(marca?'<div style="position:absolute;left:84px;top:62px;width:34px;height:34px;border:2px solid #CF0A2C;border-radius:50%;background:rgba(255,255,255,.25);"></div><div style="position:absolute;left:118px;top:78px;width:56px;height:0;border-top:2px dashed #CF0A2C;"></div>':'')+'</div>':'')+'<div style="font-size:9.5px;font-weight:bold;color:#1f2545;margin-top:4px;">'+cap+'</div></td>'; };
+  var capasPDF=function(){
+    var ce=COLOR_HEX[val('colorExterna')]||'#c4c7cc';
+    var capas=[
+      { n:'1', t:'Capa externa', s:'Exterior · contacto con el fuego', m:ext||'Por definir', d:col||'', c:[ce] },
+      { n:'2', t:'Barrera contra la humedad', s:'Intermedia', m:val('matHumedad'), cc:colorCapa(val('matHumedad')) },
+      { n:'3', t:'Barrera térmica', s:'Interior · contacto con el cuerpo', m:val('matTermica'), cc:colorCapa(val('matTermica')) }
+    ];
+    var filas=capas.map(function(k,i){
+      var na=!k.m, colores = k.c || (k.cc ? k.cc.c : ['#e4e6ec']), desc = k.d || (k.cc ? k.cc.txt : '');
+      var bg = colores.length>1 ? 'linear-gradient(135deg,'+colores[0]+' 0 50%,'+colores[1]+' 50% 100%)' : colores[0];
+      return '<tr><td style="width:52px;padding:5px 0;vertical-align:middle;"><div style="position:relative;width:46px;height:34px;">'+
+          '<div style="position:absolute;left:'+(i*4)+'px;top:'+(i*3)+'px;width:40px;height:26px;border-radius:3px;border:1px solid rgba(0,0,0,.25);background:'+(na?'repeating-linear-gradient(45deg,#f1f2f5 0 4px,#e1e3e8 4px 8px)':bg)+';"></div></div></td>'+
+        '<td style="padding:5px 0 5px 6px;vertical-align:middle;line-height:1.3;">'+
+          '<div style="font-size:8.5px;color:#5b6070;"><b style="color:#CF0A2C;">'+k.n+'</b> · '+esc(k.s)+'</div>'+
+          '<div style="font-size:10px;font-weight:bold;color:#1f2545;">'+esc(k.t)+'</div>'+
+          '<div style="font-size:9.5px;color:#212121;">'+(na?'No aplica para este traje':esc(k.m)+(desc?' · '+esc(desc):''))+'</div></td></tr>';
+    }).join('');
+    return '<td style="vertical-align:top;padding:8px 10px 8px 12px;border-left:1px solid #e4e6ec;">'+
+      '<div style="border-left:3px solid #CF0A2C;padding-left:10px;">'+
+        '<div style="font-size:10.5px;font-weight:bold;color:#1f2545;">Capas del traje</div>'+
+        '<div style="font-size:8.5px;color:#5b6070;margin:1px 0 4px;">Corte de la tela de afuera hacia adentro</div>'+
+        '<table style="width:100%;border-collapse:collapse;">'+filas+'</table>'+
+        (comb ? '<div style="margin-top:6px;font-size:9px;color:#1e6e40;font-weight:bold;">Combinación UL · TPP '+comb[4].toFixed(1)+' cal/cm²'+(comb[3]!==null?' · THL '+comb[3].toFixed(1)+' W/m²':'')+'</div>' : (val('matHumedad')&&val('matTermica') ? '<div style="margin-top:6px;font-size:9px;color:#8a4f00;font-weight:bold;">Combinación sujeta a validación técnica</div>' : ''))+
+      '</div></td>';
+  };
   return '<div style="page-break-inside:avoid;margin-top:10px;">'+
     '<div style="background:#1f2545;color:#fff;font-weight:bold;font-size:11px;padding:6px 10px;border-left:4px solid #CF0A2C;text-transform:uppercase;">Ficha visual del EPP configurado</div>'+
     '<table style="width:100%;border-collapse:collapse;border:1px solid #ddd;"><tr>'+
-      (imgF||imgE ? fig(imgF,'Frente')+fig(imgE,'Espalda') : '')+
-      '<td style="vertical-align:top;padding:10px 12px;border-left:1px solid #e4e6ec;"><table style="width:100%;border-collapse:collapse;">'+
+      (imgF||imgE ? fig(imgF,'Frente')+fig(imgE,'Espalda',true) : '')+capasPDF()+'</tr></table>'+
+      '<table style="width:100%;border-collapse:collapse;border:1px solid #ddd;border-top:0;"><tr>'+
+      '<td style="vertical-align:top;padding:8px 12px;"><table style="width:100%;border-collapse:collapse;">'+
         fila('Traje', etiqueta(val('tipoTraje'))+' · '+etiqueta(val('modelo'))+' · '+val('composicion'))+
         fila('Color', col)+
-        fila('Capas', [ext, val('matHumedad') ? val('matHumedad')+(colorCapa(val('matHumedad')) ? ' ('+colorCapa(val('matHumedad')).txt+')' : '') : '', val('matTermica') ? val('matTermica')+(colorCapa(val('matTermica')) ? ' ('+colorCapa(val('matTermica')).txt+')' : '') : ''].filter(Boolean))+
-        fila('UL', comb ? 'TPP '+comb[4].toFixed(1)+' cal/cm²'+(comb[3]!==null?' · THL '+comb[3].toFixed(1)+' W/m²':'') : '')+
+
         fila('Cintas', [val('cintaChaqueta') ? 'Chaqueta: '+textoCinta('cintaChaqueta','cintaChaqPers') : '', val('cintaPantalon') ? 'Pantalón: '+textoCinta('cintaPantalon','cintaPanPers') : ''])+
         fila('Marcado', marc)+
       '</table></td></tr></table>'+
@@ -2107,9 +2134,73 @@ function descargarPDF(){
 }
 /* Genera el PDF completo (con la ficha visual) y lo devuelve como archivo en memoria */
 function obtenerPDF(){
-  return reservarFolio().then(function(){ return Promise.all([vistaComoImagen('frente'), vistaComoImagen('espalda')]); }).then(function(imgs){ return crearPDF(imgs[0], imgs[1]); });
+  return reservarFolio().then(function(){ return Promise.all([vistaComoImagen('frente'), vistaComoImagen('espalda'), prepararLogosPDF()]); }).then(function(imgs){ return crearPDF(imgs[0], imgs[1], imgs[2]); });
 }
-function crearPDF(imgF, imgE){
+/* Marca de agua: logo de FEM, tenue y centrado en cada página del PDF */
+var MARCA_AGUA_SRC='';   // si se define, se usa este logo en lugar del de FEM
+function marcaAgua(pdf){
+  var src=MARCA_AGUA_SRC||LOGO_SRC; if(!src) return;
+  var n=pdf.internal.getNumberOfPages(), W=pdf.internal.pageSize.getWidth(), H=pdf.internal.pageSize.getHeight();
+  var w=150, h=w*44/169, fmt=/^data:image\/jpe?g/i.test(src)?'JPEG':'PNG';
+  var gs = pdf.GState ? new pdf.GState({ opacity:0.07 }) : null;
+  for(var i=1;i<=n;i++){
+    pdf.setPage(i);
+    if(gs){ pdf.saveGraphicsState(); pdf.setGState(gs); }
+    pdf.addImage(src, fmt, (W-w)/2, (H-h)/2, w, h, 'marcaFEM', 'FAST');
+    if(gs) pdf.restoreGraphicsState();
+  }
+}
+/* Zonas elegidas en los registros de logos (para asignar cada archivo adjunto a su zona) */
+function zonasLogo(){ var v=[]; logosTodos().forEach(function(l){ if(l.ubic && v.indexOf(l.ubic)<0) v.push(l.ubic); }); return v; }
+document.addEventListener('change', function(e){ if(e.target && /^logoUbicacion\d*$/.test(e.target.id)) pintarAdjuntos(); });
+/* Punto de la zona sobre la vista del traje (coordenadas del dibujo 240 x 420) */
+function puntoZona(z){
+  z=String(z||'');
+  if(/espalda|posterior/i.test(z)) return { lado:'espalda', x:120, y:86 };
+  if(/derech/i.test(z)) return { lado:'frente', x:50.5, y:83.5 };      // brazo derecho de quien lo viste: a la izquierda en la vista de frente
+  if(/izquierd/i.test(z)) return { lado:'frente', x:189.5, y:83.5 };
+  if(/frontal|pecho/i.test(z)) return { lado:'frente', x:157, y:42 };
+  return null;
+}
+/* Miniatura cuadrada con fondo blanco (para que el PDF muestre el logo sin deformarlo) */
+function miniaturaAdjunto(a){
+  return new Promise(function(res){
+    if(!a.vista){ res(null); return; }
+    var im=new Image(); im.onload=function(){
+      try{ var S=240, c=document.createElement('canvas'); c.width=S; c.height=S; var x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,S,S);
+        var w=im.naturalWidth||S, h=im.naturalHeight||S, k=Math.min((S-20)/w,(S-20)/h); x.drawImage(im,(S-w*k)/2,(S-h*k)/2,w*k,h*k); res(c.toDataURL('image/png')); }
+      catch(e){ res(null); }
+    }; im.onerror=function(){ res(null); }; im.src=a.vista;
+  });
+}
+function prepararLogosPDF(){ return Promise.all(adjuntosActivos().map(function(a){ return miniaturaAdjunto(a).then(function(m){ return { a:a, mini:m }; }); })); }
+function bloqueLogosPDF(logos, imgF, imgE){
+  if(!logos || !logos.length) return '';
+  var regs=logosTodos();
+  var celda=function(L){
+    var a=L.a, z=a.ubic||'', p=puntoZona(z), img = p ? (p.lado==='espalda' ? imgE : imgF) : imgF, k=78/240;
+    var reg=regs.filter(function(r){ return r.ubic===z; })[0]||{};
+    var ext=(a.nombre.split('.').pop()||'').toUpperCase().slice(0,4);
+    var logo = L.mini ? '<img src="'+L.mini+'" width="84" height="84" style="width:84px;height:84px;border:1px solid #e4e6ec;border-radius:4px;display:block;">'
+      : '<div style="width:84px;height:84px;border:1px solid #e4e6ec;border-radius:4px;background:#f5f6f9;text-align:center;line-height:84px;font-weight:bold;color:#5b6070;font-size:13px;">'+esc(ext)+'</div>';
+    var traje = img ? '<div style="position:relative;width:78px;height:137px;"><img src="'+img+'" width="78" height="137" style="width:78px;height:137px;border:1px solid #e4e6ec;border-radius:4px;display:block;">'+
+        (p ? '<div style="position:absolute;left:'+(p.x*k-11).toFixed(1)+'px;top:'+(p.y*k-11).toFixed(1)+'px;width:18px;height:18px;border:2.5px solid #CF0A2C;border-radius:50%;background:rgba(207,10,44,.18);"></div>' : '')+'</div>' : '';
+    return '<td style="width:50%;vertical-align:top;padding:8px 10px;border:1px solid #ddd;"><table style="border-collapse:collapse;"><tr>'+
+      '<td style="vertical-align:middle;padding-right:6px;">'+logo+'</td>'+
+      '<td style="vertical-align:middle;padding:0 6px;color:#CF0A2C;font-size:16px;font-weight:bold;">&#8594;</td>'+
+      '<td style="vertical-align:middle;padding-right:10px;">'+traje+'</td>'+
+      '<td style="vertical-align:middle;font-size:9.5px;line-height:1.45;color:#212121;">'+
+        '<div style="font-size:8.5px;color:#5b6070;">Zona</div><div style="font-weight:bold;color:#1f2545;font-size:10.5px;margin-bottom:4px;">'+esc(z||'Sin zona asignada')+(p?'':'' )+'</div>'+
+        (reg.tipo?'<div>'+esc(reg.tipo)+'</div>':'')+(reg.fij?'<div>'+esc(reg.fij)+'</div>':'')+
+        '<div style="color:#5b6070;word-break:break-all;margin-top:3px;">'+esc(a.nombre)+'</div>'+
+        (p ? '' : '<div style="color:#8a4f00;margin-top:3px;">'+(z?'Ubicar según la descripción':'Falta indicar la zona')+'</div>')+
+      '</td></tr></table></td>';
+  };
+  var h='<div style="margin-top:8px;page-break-inside:avoid;"><div style="font-weight:bold;font-size:10px;color:#1f2545;margin:2px 0 5px;">Logos adjuntos y zona donde van</div><table style="width:100%;border-collapse:collapse;">';
+  for(var i=0;i<logos.length;i+=2){ h+='<tr>'+celda(logos[i])+(logos[i+1]?celda(logos[i+1]):'<td style="border:0;"></td>')+'</tr>'; }
+  return h+'</table><div style="font-size:8.5px;color:#777;margin-top:3px;">El círculo rojo marca la zona; tamaño y posición exactos los confirma Producción.</div></div>';
+}
+function crearPDF(imgF, imgE, logos){
   var datos=recopilarDatos();
   var resumen='EPP '+etiqueta(val('tipoTraje'))+' · Modelo '+etiqueta(val('modelo'))+' · '+val('composicion');
   var h='<div style="font-family:Helvetica,Arial,sans-serif;color:#212121;font-size:10.5px;width:718px;">'+
@@ -2132,13 +2223,14 @@ function crearPDF(imgF, imgE){
          '<td style="width:38%;padding:5px 10px;border:1px solid #ddd;font-weight:bold;color:#222944;vertical-align:top;">'+esc(f[0])+'</td>'+
          '<td style="padding:5px 10px;border:1px solid #ddd;vertical-align:top;white-space:pre-wrap;">'+esc(f[1])+'</td></tr>';
     });
-    h+='</table></div>';
+    h+='</table>'+(/Personalizaci/i.test(s.titulo) ? bloqueLogosPDF(logos, imgF, imgE) : '')+'</div>';
   });
   h+=tablaPersonalPDF();
   h+='<table style="width:100%;margin-top:34px;border-collapse:collapse;page-break-inside:avoid;"><tr>'+
      '<td style="width:45%;border-top:1px solid #222944;text-align:center;padding-top:4px;">Representante de ventas<br><b>'+esc(val('repVentas'))+'</b></td><td></td>'+
      '<td style="width:45%;border-top:1px solid #222944;text-align:center;padding-top:4px;">Aprobación del cliente<br><b>'+esc(val('clientName'))+'</b></td></tr></table>'+
      '<div style="margin-top:14px;font-size:9px;color:#666;">Las opciones marcadas como “sujeto a validación” y las combinaciones de materiales no dadas de alta UL requieren confirmación técnica de Producción antes de fabricarse.</div>'+
+     '<div style="margin-top:10px;padding-top:6px;border-top:1px solid #e4e6ec;font-size:8.5px;color:#777;line-height:1.45;page-break-inside:avoid;"><b>Aviso de privacidad.</b> Fire Equipment de México, S.A. de C.V. (FEM S.A.) trata los datos personales contenidos en este documento únicamente para la cotización, fabricación y seguimiento del pedido, conforme a su Aviso de Privacidad, disponible en la plataforma de configuración y en las oficinas de FEM S.A. Documento confidencial de uso exclusivo entre FEM S.A. y el cliente.</div>'+
      '</div>';
 
   var options={
@@ -2149,7 +2241,10 @@ function crearPDF(imgF, imgE){
     jsPDF:{ orientation:'portrait', unit:'mm', format:'a4' },
     pagebreak:{ mode:['css','legacy'] }
   };
-  return html2pdf().set(options).from(h).outputPdf('blob').then(function(blob){ return { blob:blob, filename:options.filename }; });
+  return html2pdf().set(options).from(h).toPdf().get('pdf').then(function(pdf){
+    try{ marcaAgua(pdf); }catch(e){ console.warn('Marca de agua no aplicada', e); }
+    return pdf.output('blob');
+  }).then(function(blob){ return { blob:blob, filename:options.filename }; });
 }
 
 /* Descarga: dentro de Claude usa la capacidad "downloads"; como archivo suelto, descarga directa */
@@ -3342,8 +3437,13 @@ function pintarAdjuntos(){
     var nom=document.createElement('span'); nom.className='nom'; nom.textContent=a.nombre; nom.title=a.nombre;
     var tam=document.createElement('span'); tam.className='tam'; tam.textContent=tamTxt(a.size);
     var est=document.createElement('span'); est.className='est'+(a.subido?' ok':''); est.textContent=a.subido?'✔ En SharePoint':(a.subiendo?'Subiendo…':'');
+    var zs=zonasLogo(); if(zs.length===1 && !a.ubic) a.ubic=zs[0];
+    var sel=document.createElement('select'); sel.className='adj-ubic'; sel.setAttribute('aria-label','Zona donde va '+a.nombre);
+    [''].concat(zs.length ? zs : opcionesUbicacion()).forEach(function(z){ var o=document.createElement('option'); o.value=z; o.textContent=z||'¿En qué zona va?'; sel.appendChild(o); });
+    if(a.ubic && [].some.call(sel.options,function(o){ return o.value===a.ubic; })) sel.value=a.ubic; else if(a.ubic){ var o2=document.createElement('option'); o2.value=a.ubic; o2.textContent=a.ubic; sel.appendChild(o2); sel.value=a.ubic; }
+    sel.onchange=function(){ a.ubic=sel.value; actualizarVista(); };
     var q=document.createElement('button'); q.type='button'; q.className='quitar'; q.textContent='×'; q.setAttribute('aria-label','Quitar '+a.nombre); q.onclick=function(){ quitarAdjunto(a.id); };
-    li.appendChild(mini); li.appendChild(nom); li.appendChild(tam); li.appendChild(est); li.appendChild(q); ul.appendChild(li);
+    li.appendChild(mini); li.appendChild(nom); li.appendChild(sel); li.appendChild(tam); li.appendChild(est); li.appendChild(q); ul.appendChild(li);
   });
 }
 function adjuntosActivos(){ return val('logoAplica')==='Sí' ? ADJ : []; }
@@ -3766,7 +3866,7 @@ function cargarMisConfig(forzar){
   if(!SESION){ MC.items=[]; pintarMisConfig(); mcEstado('Inicia sesión con Microsoft para ver tus configuraciones.','warn'); return Promise.resolve(); }
   MC.items=[]; MC.cargado=false; pintarMisConfig('Cargando tus configuraciones…'); mcEstado('');
   /* Folio = FEM- seguido de letras, números y guiones (actual FEM-AAMM-XXXX y anteriores) */
-  var RX_CARPETA=/^(FEM-[A-Z0-9-]+)$/i, RX_JSON=/^(FEM-[A-Z0-9-]+)\.json$/i, RX_PDF=/^(FEM-[A-Z0-9-]+)_.*\.pdf$/i;
+  var RX_CARPETA=/^(FEM-[A-Z0-9-]+)$/i, RX_JSON=/^(FEM-[A-Z0-9-]+)\.json$/i, RX_PDF=/^(FEM-[A-Z0-9-]+?)(?:_.*)?\.pdf$/i;
   MC.cargando=listarRegistro().then(function(archivos){
     var porFolio={};
     var item=function(f){ f=f.toUpperCase(); return porFolio[f]=porFolio[f]||{ folio:f, adjuntos:[] }; };
@@ -3797,7 +3897,7 @@ function contenidoCarpeta(it){
     (r.value||[]).forEach(function(f){
       if(!f.file) return;
       if(f.name.toUpperCase()===it.folio+'.JSON') it.json=f;
-      else if(/\.pdf$/i.test(f.name) && f.name.toUpperCase().indexOf(it.folio+'_')===0) it.pdf=f;
+      else if(/\.pdf$/i.test(f.name) && (f.name.toUpperCase()===it.folio+'.PDF' || f.name.toUpperCase().indexOf(it.folio+'_')===0)) it.pdf=f;
       else it.adjuntos.push(f);
     });
     it.pendiente=false;
@@ -3823,7 +3923,7 @@ function fechaCorta(iso){
   return d.toLocaleDateString('es-MX',{ day:'2-digit', month:'short', year:'numeric' })+' · '+d.toLocaleTimeString('es-MX',{ hour:'2-digit', minute:'2-digit' });
 }
 function trajeDe(d){ var t=d && d.traje; if(!t) return ''; return [etiqueta(t.tipo||''), etiqueta(t.modelo||''), t.configuracion||''].filter(Boolean).join(' · '); }
-function empresaDePDF(it){ if(!it.pdf) return ''; return it.pdf.name.replace(/^FEM-[A-Z0-9-]+_/i,'').replace(/\.pdf$/i,'').replace(/_/g,' '); }
+function empresaDePDF(it){ if(!it.pdf || it.pdf.name.indexOf('_')<0) return ''; return it.pdf.name.replace(/^FEM-[A-Z0-9-]+_/i,'').replace(/\.pdf$/i,'').replace(/_/g,' '); }
 function pintarMisConfig(msgCarga){
   var tb=$('mcBody'); tb.innerHTML=''; opcionesFiltrosMC();
   var q=val('mcBuscar').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
