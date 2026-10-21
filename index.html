@@ -2152,6 +2152,7 @@ function marcaAgua(pdf){
 }
 /* Zonas elegidas en los registros de logos (para asignar cada archivo adjunto a su zona) */
 function zonasLogo(){ var v=[]; logosTodos().forEach(function(l){ if(l.ubic && v.indexOf(l.ubic)<0) v.push(l.ubic); }); return v; }
+function asignarPorOrden(){ var zs=zonasLogo(); if(zs.length<2) return; var libres=zs.filter(function(z){ return !ADJ.some(function(a){ return a.ubic===z; }); }); ADJ.forEach(function(a){ if(!a.ubic && libres.length) a.ubic=libres.shift(); }); }
 document.addEventListener('change', function(e){ if(e.target && /^logoUbicacion\d*$/.test(e.target.id)) pintarAdjuntos(); });
 /* Punto de la zona sobre la vista del traje (coordenadas del dibujo 240 x 420) */
 function puntoZona(z){
@@ -2190,15 +2191,15 @@ function bloqueLogosPDF(logos, imgF, imgE){
       '<td style="vertical-align:middle;padding:0 6px;color:#CF0A2C;font-size:16px;font-weight:bold;">&#8594;</td>'+
       '<td style="vertical-align:middle;padding-right:10px;">'+traje+'</td>'+
       '<td style="vertical-align:middle;font-size:9.5px;line-height:1.45;color:#212121;">'+
-        '<div style="font-size:8.5px;color:#5b6070;">Zona</div><div style="font-weight:bold;color:#1f2545;font-size:10.5px;margin-bottom:4px;">'+esc(z||'Sin zona asignada')+(p?'':'' )+'</div>'+
+        '<div style="font-size:8.5px;color:#5b6070;">Ubicación</div><div style="font-weight:bold;color:#1f2545;font-size:10.5px;margin-bottom:4px;">'+esc(z||'Sin ubicación')+'</div>'+
         (reg.tipo?'<div>'+esc(reg.tipo)+'</div>':'')+(reg.fij?'<div>'+esc(reg.fij)+'</div>':'')+
         '<div style="color:#5b6070;word-break:break-all;margin-top:3px;">'+esc(a.nombre)+'</div>'+
-        (p ? '' : '<div style="color:#8a4f00;margin-top:3px;">'+(z?'Ubicar según la descripción':'Falta indicar la zona')+'</div>')+
+        (p ? '' : '<div style="color:#8a4f00;margin-top:3px;">'+(z?'Ubicar según la descripción':'Falta indicar la ubicación')+'</div>')+
       '</td></tr></table></td>';
   };
-  var h='<div style="margin-top:8px;page-break-inside:avoid;"><div style="font-weight:bold;font-size:10px;color:#1f2545;margin:2px 0 5px;">Logos adjuntos y zona donde van</div><table style="width:100%;border-collapse:collapse;">';
+  var h='<div class="pdf-logos" style="margin-top:8px;"><div style="font-weight:bold;font-size:10px;color:#1f2545;margin:2px 0 5px;">Logos adjuntos y su ubicación</div><table style="width:100%;border-collapse:collapse;">';
   for(var i=0;i<logos.length;i+=2){ h+='<tr>'+celda(logos[i])+(logos[i+1]?celda(logos[i+1]):'<td style="border:0;"></td>')+'</tr>'; }
-  return h+'</table><div style="font-size:8.5px;color:#777;margin-top:3px;">El círculo rojo marca la zona; tamaño y posición exactos los confirma Producción.</div></div>';
+  return h+'</table><div style="font-size:8.5px;color:#777;margin-top:3px;">El círculo rojo marca la ubicación; tamaño y posición exactos los confirma Producción.</div></div>';
 }
 function crearPDF(imgF, imgE, logos){
   var datos=recopilarDatos();
@@ -2214,16 +2215,16 @@ function crearPDF(imgF, imgE, logos){
     '<div style="background:#f1f2f6;border-left:4px solid #CF0A2C;padding:8px 12px;font-size:12px;font-weight:bold;color:#222944;margin-bottom:6px;">'+esc(resumen)+'</div>';
   h+=bloqueFichaPDF(imgF, imgE);
   datos.forEach(function(s){
-    h+='<div style="page-break-inside:avoid;margin-top:10px;">'+
-       '<div style="background:#1f2545;color:#fff;font-weight:bold;font-size:11px;padding:6px 10px;border-left:4px solid #CF0A2C;text-transform:uppercase;">'+esc(s.titulo)+'</div>'+
-       '<table style="width:100%;border-collapse:collapse;">';
-    if(!s.filas.length) h+='<tr><td style="padding:6px 10px;border:1px solid #ddd;color:#777;">Sin especificaciones</td></tr>';
-    s.filas.forEach(function(f,i){
-      h+='<tr style="background:'+(i%2?'#fafafa':'#fff')+';">'+
+    var cab='<div style="background:#1f2545;color:#fff;font-weight:bold;font-size:11px;padding:6px 10px;border-left:4px solid #CF0A2C;text-transform:uppercase;">'+esc(s.titulo)+'</div>';
+    var tr=function(f,i){ return '<tr class="pdf-fila" style="background:'+(i%2?'#fafafa':'#fff')+';">'+
          '<td style="width:38%;padding:5px 10px;border:1px solid #ddd;font-weight:bold;color:#222944;vertical-align:top;">'+esc(f[0])+'</td>'+
-         '<td style="padding:5px 10px;border:1px solid #ddd;vertical-align:top;white-space:pre-wrap;">'+esc(f[1])+'</td></tr>';
-    });
-    h+='</table>'+(/Personalizaci/i.test(s.titulo) ? bloqueLogosPDF(logos, imgF, imgE) : '')+'</div>';
+         '<td style="padding:5px 10px;border:1px solid #ddd;vertical-align:top;white-space:pre-wrap;">'+esc(f[1])+'</td></tr>'; };
+    var T='<table style="width:100%;border-collapse:collapse;">';
+    h+='<div style="margin-top:10px;">';
+    // el encabezado nunca queda solo al final de una hoja: viaja junto con el primer renglón
+    h+='<div class="pdf-junto">'+cab+T+(s.filas.length ? tr(s.filas[0],0) : '<tr><td style="padding:6px 10px;border:1px solid #ddd;color:#777;">Sin especificaciones</td></tr>')+'</table></div>';
+    if(s.filas.length>1) h+=T+s.filas.slice(1).map(function(f,i){ return tr(f,i+1); }).join('')+'</table>';
+    h+=(/Personalizaci/i.test(s.titulo) ? bloqueLogosPDF(logos, imgF, imgE) : '')+'</div>';
   });
   h+=tablaPersonalPDF();
   h+='<table style="width:100%;margin-top:34px;border-collapse:collapse;page-break-inside:avoid;"><tr>'+
@@ -2239,7 +2240,7 @@ function crearPDF(imgF, imgE, logos){
     image:{ type:'jpeg', quality:0.96 },
     html2canvas:{ scale:2, useCORS:true, scrollX:0, scrollY:0 },
     jsPDF:{ orientation:'portrait', unit:'mm', format:'a4' },
-    pagebreak:{ mode:['css','legacy'] }
+    pagebreak:{ mode:['css','legacy'], avoid:['.pdf-junto','.pdf-fila','.pdf-logos tr'] }
   };
   return html2pdf().set(options).from(h).toPdf().get('pdf').then(function(pdf){
     try{ marcaAgua(pdf); }catch(e){ console.warn('Marca de agua no aplicada', e); }
@@ -3429,7 +3430,7 @@ function quitarAdjunto(id){
   pintarAdjuntos(); actualizarVista();
 }
 function pintarAdjuntos(){
-  var ul=$('adjLista'); if(!ul) return; ul.innerHTML='';
+  var ul=$('adjLista'); if(!ul) return; ul.innerHTML=''; asignarPorOrden();
   ADJ.forEach(function(a){
     var li=document.createElement('li');
     var mini=document.createElement('span'); mini.className='mini';
@@ -3437,10 +3438,12 @@ function pintarAdjuntos(){
     var nom=document.createElement('span'); nom.className='nom'; nom.textContent=a.nombre; nom.title=a.nombre;
     var tam=document.createElement('span'); tam.className='tam'; tam.textContent=tamTxt(a.size);
     var est=document.createElement('span'); est.className='est'+(a.subido?' ok':''); est.textContent=a.subido?'✔ En SharePoint':(a.subiendo?'Subiendo…':'');
-    var zs=zonasLogo(); if(zs.length===1 && !a.ubic) a.ubic=zs[0];
-    var sel=document.createElement('select'); sel.className='adj-ubic'; sel.setAttribute('aria-label','Zona donde va '+a.nombre);
-    [''].concat(zs.length ? zs : opcionesUbicacion()).forEach(function(z){ var o=document.createElement('option'); o.value=z; o.textContent=z||'¿En qué zona va?'; sel.appendChild(o); });
-    if(a.ubic && [].some.call(sel.options,function(o){ return o.value===a.ubic; })) sel.value=a.ubic; else if(a.ubic){ var o2=document.createElement('option'); o2.value=a.ubic; o2.textContent=a.ubic; sel.appendChild(o2); sel.value=a.ubic; }
+    var zs=zonasLogo();
+    if(a.ubic && zs.indexOf(a.ubic)<0) a.ubic='';                       // la ubicación cambió o se quitó
+    if(!a.ubic && zs.length===1) a.ubic=zs[0];
+    var sel=document.createElement('select'); sel.className='adj-ubic'; sel.setAttribute('aria-label','Ubicación de '+a.nombre);
+    [''].concat(zs).forEach(function(z){ var o=document.createElement('option'); o.value=z; o.textContent=z||(zs.length?'Ubicación…':'Primero elige la ubicación'); sel.appendChild(o); });
+    sel.disabled=!zs.length; sel.value=a.ubic||'';
     sel.onchange=function(){ a.ubic=sel.value; actualizarVista(); };
     var q=document.createElement('button'); q.type='button'; q.className='quitar'; q.textContent='×'; q.setAttribute('aria-label','Quitar '+a.nombre); q.onclick=function(){ quitarAdjunto(a.id); };
     li.appendChild(mini); li.appendChild(nom); li.appendChild(sel); li.appendChild(tam); li.appendChild(est); li.appendChild(q); ul.appendChild(li);
