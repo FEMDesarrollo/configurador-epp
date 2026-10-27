@@ -5179,7 +5179,7 @@ function abrirSesion(app, cuenta){
     revisarBorrador(); iniciarNotificaciones();
   });
 }
-function salir(){ obtenerMsal().then(function(app){ app.logoutRedirect({ account: SESION }); }); }
+function salir(){ try{ sessionStorage.setItem('fem-despedida', (SESION&&SESION.name)||'1'); }catch(e){} obtenerMsal().then(function(app){ app.logoutRedirect({ account: SESION, postLogoutRedirectUri: location.origin+location.pathname }); }); }
 function arrancarSeguro(){
   iniciarTema(); pintarAceptacion();
   if(!graphConfigurado()){ estadoGate('Falta configurar la app: pega los IDs de Entra en CONFIG_GRAPH.', true); $('btnEntrar').disabled=true; return; }
@@ -5300,9 +5300,15 @@ function iniciarAxo(){
   window.addEventListener('resize', function(){ if(fase==='espera'){ esperar(performance.now()); callar(); } });
   if(quieto){
     if(cam) cam.style.display='none';
-    m.style.opacity=1; esperar(0); window.axoCelebrar=function(){ return Promise.resolve(); }; return;
+    m.style.opacity=1; esperar(0); try{ var ad=sessionStorage.getItem('fem-despedida'); if(ad){ sessionStorage.removeItem('fem-despedida'); decir('¡Nos vemos'+(ad==='1'?'':', '+ad.split(' ')[0])+'! Buen turno, compa', 4000, 0); } }catch(e){} window.axoCelebrar=function(){ return Promise.resolve(); }; return;
   }
-  if(cam){ cam.classList.add('rodando'); pintarCam(); } else { fase='camina'; m.style.opacity=1; }
+  var adios=''; try{ adios=sessionStorage.getItem('fem-despedida')||''; sessionStorage.removeItem('fem-despedida'); }catch(e){}
+  if(adios){
+    if(cam) cam.style.display='none';
+    var nom=adios==='1' ? '' : ', '+String(adios).split(' ')[0];
+    var l0=lugar(); x=l0.x; y=l0.y; dir=1; pintar(); m.style.opacity=1; poner(modo,{}); gesto='saluda'; m.className=clase();
+    fase='despide'; faseT=0; setTimeout(function(){ decir('¡Nos vemos'+nom+'! Buen turno, compa', 3800, performance.now()); }, 250);
+  } else if(cam){ cam.classList.add('rodando'); pintarCam(); } else { fase='camina'; m.style.opacity=1; }
 
   /* Lugar del incendio: lejos del recuadro de acceso, cerca del piso */
   var lugarFuego=function(){
@@ -5396,6 +5402,10 @@ function iniciarAxo(){
         break;
       case 'letrero':          // saca el letrero "¡Ya ponte a configurar!"
         if(e>3600){ var l=lugar(); x=l.x; y=l.y; poner(modo,{}); gesto='apunta'; m.className=clase(); decir('Inicia sesión aquí', 2400, t); fase='apunta'; faseT=t; }
+        break;
+      case 'despide':          // viene de cerrar sesión: se despide con la mano
+        if(!faseT) faseT=t;
+        else if(e>4200){ gesto=''; m.className=clase(); esperar(t); if(!sigEvento) sigEvento=t+14000+Math.random()*6000; }
         break;
       case 'apunta':
         if(e>2400){ esperar(t); if(!sigEvento) sigEvento=t+14000+Math.random()*6000; }
