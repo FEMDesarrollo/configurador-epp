@@ -5182,7 +5182,7 @@ function entrar(){
     var cuenta=app.getActiveAccount() || app.getAllAccounts()[0];
     if(cuenta) return abrirSesion(app, cuenta);
     estadoGate('Abriendo el inicio de sesión de Microsoft…');
-    return app.loginRedirect({ scopes:ALCANCES });
+    return app.loginRedirect({ scopes:ALCANCES, prompt:'select_account' });
   }).catch(errorEntrada);
 }
 function errorEntrada(err){
@@ -5214,7 +5214,15 @@ function pintarSesion(cuenta){
   $('usrIni').textContent=ini||'?'; $('usrNombre').textContent=nom||cor.split('@')[0]; $('usrCorreo').textContent=cor;
   $('sesionTxt').title=(nom?nom+' · ':'')+cor; $('cuentaBox').hidden=false; $('btnMis').hidden=false;
 }
-function salir(){ try{ sessionStorage.setItem('fem-despedida', (SESION&&SESION.name)||'1'); }catch(e){} obtenerMsal().then(function(app){ app.logoutRedirect({ account: SESION, postLogoutRedirectUri: location.origin+location.pathname }); }); }
+function salir(){
+  // Cierra la sesión del configurador y regresa directo al login, donde Axo se despide.
+  try{ sessionStorage.setItem('fem-despedida', (SESION&&SESION.name)||'1'); }catch(e){}
+  var b=$('btnSalir'); if(b) b.disabled=true;
+  var volver=function(){ location.replace(location.origin+location.pathname); };
+  obtenerMsal().then(function(app){
+    return app.logoutRedirect({ account: SESION, onRedirectNavigate: function(){ return false; } });   // limpia la sesión aquí, sin pasar por la página de Microsoft
+  }).then(volver, volver);
+}
 function arrancarSeguro(){
   iniciarTema(); pintarAceptacion();
   if(!graphConfigurado()){ estadoGate('Falta configurar la app: pega los IDs de Entra en CONFIG_GRAPH.', true); $('btnEntrar').disabled=true; return; }
