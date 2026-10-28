@@ -1029,6 +1029,52 @@ tr.fila-rech td{opacity:.75}
 .vistas-nav{max-width:100%;overflow-x:auto}
 @media (max-width:860px){ .hdr-barra>.vistas-nav{flex:1 1 100%;min-width:0;width:auto} .hdr-acciones{margin-left:0;justify-content:flex-start;width:100%;min-width:0} .hdr-cuenta{margin-left:auto;border-left:0;padding-left:0} }
 @media (max-width:600px){ .usr-txt,.btn-salir span,#temaTxt,.perfil-demo>span{display:none} .btn-salir,.tema-btn.btn-barra{width:40px;padding:0;justify-content:center} .hdr-cuenta{padding-left:8px} .perfil-demo{flex:1 1 100%} .perfil-demo select{flex:1} .btn-mis{flex:1;justify-content:center} }
+
+/* ---- v42 · Mis configuraciones ordenada ---- */
+.mc-v42 table{min-width:0;table-layout:auto}
+.mc-v42 th,.mc-v42 td{padding:10px 12px}
+.mc-v42 td{vertical-align:middle}
+.mc-v42 tr.con-nuevos td:first-child{box-shadow:inset 3px 0 0 var(--secondary)}
+.mc-v42 td.folio-c{white-space:nowrap}
+.mc-v42 .mc-folio{display:block;font-weight:700;color:var(--heading);font-size:13.5px}
+.mc-v42 .mc-emp{display:block;font-weight:600;color:var(--text)}
+.mc-v42 .mc-sub{display:block;color:var(--muted);font-size:12px;font-weight:400;margin-top:1px}
+.mc-v42 .mc-arch.falta{color:var(--warn)}
+.mc-v42 td.cli-c{min-width:180px}
+.mc-v42 td.traje-c{color:var(--text)}
+.mc-v42 td.estado-c{white-space:nowrap}
+.mc-v42 td.acc-c{width:1%;white-space:nowrap}
+.mc-v42 .acc{display:flex;gap:6px;justify-content:flex-end;align-items:center}
+.mc-v42 .acc button{min-height:36px;height:36px;padding:0 12px;font-size:12.5px;display:inline-flex;align-items:center;gap:6px}
+.mc-v42 .acc .mc-pri{width:196px;justify-content:center}
+.mc-v42 .acc .mc-mas{width:36px;padding:0;justify-content:center;font-size:18px;line-height:1;letter-spacing:1px}
+.mc-v42 .acc button:disabled{opacity:.45;cursor:not-allowed}
+.mc-badge{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#fff;color:var(--secondary);font:700 11px/18px var(--font-body);text-align:center}
+.btn-ghost .mc-badge{background:var(--secondary);color:#fff}
+.chip-estado.cot{background:var(--surface-2);color:var(--muted);border:1px solid var(--divider)}
+.mc-menu{position:fixed;z-index:60;min-width:200px;padding:4px;background:var(--surface);border:1px solid var(--divider);border-radius:6px;box-shadow:0 10px 30px rgba(20,24,40,.2)}
+.mc-menu button{display:block;width:100%;text-align:left;min-height:38px;padding:8px 12px;border:0;border-radius:4px;background:transparent;color:var(--text);font:500 13px var(--font-body);cursor:pointer;white-space:nowrap}
+.mc-menu button:hover,.mc-menu button:focus-visible{background:var(--surface-2)}
+.mc-menu button:disabled{opacity:.45;cursor:not-allowed}
+@media (max-width:980px){
+  .mc-v42{border:0;overflow:visible}
+  .mc-v42 table,.mc-v42 tbody,.mc-v42 tr,.mc-v42 td{display:block;width:auto}
+  .mc-v42 thead{display:none}
+  .mc-v42 tr{border:1px solid var(--divider);border-radius:6px;margin-bottom:10px;padding:10px 12px;display:grid;grid-template-columns:1fr auto;gap:6px 10px;background:var(--surface)}
+  .mc-v42 .acc .mc-pri{width:auto}
+  .mc-v42 tr.vacio{display:block}
+  .mc-v42 tr.con-nuevos{border-left:3px solid var(--secondary)}
+  .mc-v42 tr.con-nuevos td:first-child{box-shadow:none}
+  .mc-v42 td{padding:0;border:0}
+  .mc-v42 td.folio-c{grid-column:1}
+  .mc-v42 td.estado-c{grid-column:2;grid-row:1;text-align:right}
+  .mc-v42 td.cli-c,.mc-v42 td.traje-c,.mc-v42 td.acc-c{grid-column:1 / -1;min-width:0}
+  .mc-v42 td.traje-c{font-size:12.5px;color:var(--muted)}
+  .mc-v42 td.traje-c:empty,.mc-v42 td.vacio-c{display:none}
+  .mc-v42 td.acc-c{width:auto;padding-top:6px;border-top:1px solid var(--divider)}
+  .mc-v42 .acc{justify-content:stretch}
+  .mc-v42 .acc .mc-pri{flex:1;min-width:0}
+}
 </style>
 </head>
 <body class="bloqueado">
@@ -1622,8 +1668,8 @@ tr.fila-rech td{opacity:.75}
         <label>Modelo<select id="mcModelo" onchange="pintarMisConfig()"><option value="">Todos</option></select></label>
         <button type="button" class="btn-link" onclick="limpiarFiltrosMC()">Limpiar filtros</button>
       </div>
-      <div class="mc-tabla"><table>
-        <thead><tr><th scope="col">Folio</th><th scope="col">Fecha</th><th scope="col">Cliente</th><th scope="col">Traje</th><th scope="col">Archivos</th><th scope="col"><span class="sr">Acciones</span></th></tr></thead>
+      <div class="mc-tabla mc-v42"><table>
+        <thead><tr><th scope="col">Folio</th><th scope="col">Cliente</th><th scope="col">Traje</th><th scope="col">Estado</th><th scope="col"><span class="sr">Acciones</span></th></tr></thead>
         <tbody id="mcBody"></tbody>
       </table></div>
       <div class="ul na hidden" id="mcEstado"></div>
@@ -4385,7 +4431,7 @@ function abrirMisConfig(){
   if(!MC.cargado) cargarMisConfig(); else pintarMisConfig();
   setTimeout(function(){ $('mcBuscar').focus(); }, 50);
 }
-function cerrarMisConfig(){ $('mcModal').classList.remove('active'); }
+function cerrarMisConfig(){ cerrarMenuMC(); $('mcModal').classList.remove('active'); }
 function mcEstado(msg, tipo){ var b=$('mcEstado'); if(!msg){ b.classList.add('hidden'); return; } b.className='ul '+(tipo||'na'); b.textContent=msg; }
 function graphJSON(url){
   return tokenGraph().then(function(t){ return fetch(url,{ headers:{ 'Authorization':'Bearer '+t } }); })
@@ -4487,36 +4533,73 @@ function pintarMisConfig(msgCarga){
   });
   $('mcCuenta').textContent = MC.cargado ? (lista.length+(lista.length===MC.items.length ? '' : ' de '+MC.items.length)+(MC.items.length===1?' configuración':' configuraciones')) : '';
   if(msgCarga || !lista.length){
-    var tr=document.createElement('tr'); tr.className='vacio'; var td=document.createElement('td'); td.colSpan=6;
+    var tr=document.createElement('tr'); tr.className='vacio'; var td=document.createElement('td'); td.colSpan=5;
     td.textContent = msgCarga || (MC.items.length ? 'Ninguna configuración coincide con la búsqueda o los filtros.' : 'Aún no tienes configuraciones registradas. Se guardan aquí al descargar el PDF o enviarlas por correo.');
     tr.appendChild(td); tb.appendChild(tr); return;
   }
   lista.forEach(function(it){
-    var d=it.datos, c=(d&&d.cliente)||{};
-    var tr=document.createElement('tr');
-    var td=function(cls){ var x=document.createElement('td'); if(cls) x.className=cls; tr.appendChild(x); return x; };
-    td('folio-c').textContent=it.folio;
-    td('fecha-c').textContent=fechaCorta(it.fecha);
-    var tc=td(); var n=document.createElement('span'); n.textContent = d ? (c.empresa||c.nombre||empresaDePDF(it)||'—') : (empresaDePDF(it)||'Cargando…'); tc.appendChild(n);
-    if(d && (c.nombre||c.email)){ var s=document.createElement('span'); s.className='mc-sub'; s.textContent=[c.empresa?c.nombre:'', c.email].filter(Boolean).join(' · '); tc.appendChild(s); }
-    td().textContent = d ? (trajeDe(d)||'—') : '';
-    var tp=td();
-    if(d){ var ch=document.createElement('span'); ch.className='chip-pdf'+(it.pdf?'':' no'); ch.textContent=it.pdf?'PDF':'Sin PDF'; tp.appendChild(ch);
-      if(it.adjuntos.length){ var ca=document.createElement('span'); ca.className='chip-adj'; ca.textContent='📎 '+it.adjuntos.length; ca.title=it.adjuntos.map(function(f){ return f.name; }).join('\n'); tp.appendChild(ca); } }
-    var ta=td(); var acc=document.createElement('div'); acc.className='acc'; ta.appendChild(acc);
-    if(it.pdf){ var bd=document.createElement('button'); bd.type='button'; bd.className='btn-ghost'; bd.textContent='📥 PDF'; bd.setAttribute('aria-label','Descargar PDF del folio '+it.folio); bd.onclick=function(){ descargarPDFRegistro(it, bd); }; acc.appendChild(bd); }
-    var bc=document.createElement('button'); bc.type='button'; bc.className='btn-ghost'; bc.textContent='📄 Usar como base'; bc.title='Crea una configuración nueva con estos datos; la original no se modifica'; bc.setAttribute('aria-label','Usar el folio '+it.folio+' como base de una nueva configuración'); bc.disabled=!d; bc.onclick=function(){ copiarConfiguracion(it, bc); }; acc.appendChild(bc);
-    var br=document.createElement('button'); br.type='button'; br.className='btn-secondary'; br.textContent='✉️ Reenviar'; br.setAttribute('aria-label','Reenviar el folio '+it.folio); br.onclick=function(){ abrirReenvio(it); }; acc.appendChild(br);
-    if(d && d.produccion){
-      var ce=document.createElement('span'); ce.className='chip-estado '+(it.dec ? (it.dec.estado==='rechazada'?'rech':'prod') : 'pend'); ce.textContent= it.dec ? (it.dec.estado==='rechazada'?'Rechazada':'Autorizada') : 'En producción · por revisar'; ce.title='Mandado el '+fechaCorta(d.produccion.enviado)+(d.produccion.pedido?' · pedido '+d.produccion.pedido:''); tp.appendChild(ce);
-      if(it.nuevos){ var cn=document.createElement('span'); cn.className='chip-estado nuevo'; cn.textContent=it.nuevos+(it.nuevos===1?' nuevo':' nuevos'); cn.title='Aclaraciones nuevas de Producción'; tp.appendChild(cn); }
-      var bv=document.createElement('button'); bv.type='button'; bv.className='btn-ghost'; bv.textContent='Comentarios'; bv.setAttribute('aria-label','Ver comentarios de Producción del folio '+it.folio); bv.onclick=function(){ abrirPedidoDeFolio(it.folio); }; acc.appendChild(bv);
-    } else if(d){
-      var bp=document.createElement('button'); bp.type='button'; bp.className='btn-ghost'; bp.textContent='Mandar a producción'; bp.title='Solo cuando el cliente ya hizo el pedido'; bp.setAttribute('aria-label','Mandar a producción el folio '+it.folio); bp.disabled=!it.pdf; bp.onclick=function(){ abrirEnvioProd(it); }; acc.appendChild(bp);
-    }
+    var d=it.datos, c=(d&&d.cliente)||{}, prod=!!(d && d.produccion);
+    var tr=document.createElement('tr'); if(it.nuevos) tr.className='con-nuevos';
+    var td=function(cls, lbl){ var x=document.createElement('td'); if(cls) x.className=cls; if(lbl) x.setAttribute('data-lbl', lbl); tr.appendChild(x); return x; };
+    var linea=function(padre, cls, txt){ var e=document.createElement('span'); e.className=cls; e.textContent=txt; padre.appendChild(e); return e; };
+    // folio, fecha y archivos
+    var tf=td('folio-c');
+    linea(tf, 'mc-folio', it.folio);
+    linea(tf, 'mc-sub', fechaCorta(it.fecha));
+    if(d){ var ex=[]; if(!it.pdf) ex.push('Sin PDF'); if(it.adjuntos.length) ex.push('📎 '+it.adjuntos.length+(it.adjuntos.length===1?' archivo':' archivos'));
+      if(ex.length){ var sx=linea(tf, 'mc-sub mc-arch'+(it.pdf?'':' falta'), ex.join(' · ')); if(it.adjuntos.length) sx.title=it.adjuntos.map(function(f){ return f.name; }).join('\n'); } }
+    // cliente
+    var tc=td('cli-c','Cliente');
+    linea(tc, 'mc-emp', d ? (c.empresa||c.nombre||empresaDePDF(it)||'—') : (empresaDePDF(it)||'Cargando…'));
+    if(d && (c.nombre||c.email)) linea(tc, 'mc-sub', [c.empresa?c.nombre:'', c.email].filter(Boolean).join(' · '));
+    var tt=td('traje-c','Traje'); tt.textContent = d ? (trajeDe(d)||'—') : ''; if(tt.textContent==='—') tt.className+=' vacio-c';
+    // estado
+    var te=td('estado-c','Estado'), ce=document.createElement('span');
+    if(prod){ ce.className='chip-estado '+(it.dec ? (it.dec.estado==='rechazada'?'rech':'prod') : 'pend'); ce.textContent= it.dec ? (it.dec.estado==='rechazada'?'Rechazada':'Autorizada') : 'Por revisar';
+      ce.title='Mandado a producción el '+fechaCorta(d.produccion.enviado)+(d.produccion.pedido?' · pedido '+d.produccion.pedido:''); }
+    else { ce.className='chip-estado cot'; ce.textContent='Cotización'; ce.title='Aún no se manda a producción'; }
+    te.appendChild(ce);
+    if(prod) linea(te, 'mc-sub', 'En producción');
+    // acciones: PDF · acción principal · más
+    var ta=td('acc-c'); var acc=document.createElement('div'); acc.className='acc'; ta.appendChild(acc);
+    var bd=document.createElement('button'); bd.type='button'; bd.className='btn-ghost mc-ico'; bd.textContent='📥 PDF'; bd.disabled=!it.pdf; bd.title=it.pdf?'Descargar PDF':'Este folio no tiene PDF'; bd.setAttribute('aria-label','Descargar PDF del folio '+it.folio); bd.onclick=function(){ descargarPDFRegistro(it, bd); }; acc.appendChild(bd);
+    var bpri=document.createElement('button'); bpri.type='button';
+    if(prod){ bpri.className=(it.nuevos?'btn-secondary':'btn-ghost')+' mc-pri'; bpri.textContent='💬 Comentarios';
+      if(it.nuevos){ var nb=document.createElement('span'); nb.className='mc-badge'; nb.textContent=it.nuevos; bpri.appendChild(nb); }
+      bpri.setAttribute('aria-label','Comentarios del folio '+it.folio+(it.nuevos?' · '+it.nuevos+(it.nuevos===1?' nuevo':' nuevos'):'')); bpri.onclick=function(){ abrirPedidoDeFolio(it.folio); }; }
+    else { bpri.className='btn-ghost mc-pri'; bpri.textContent='🏭 Mandar a producción'; bpri.title= it.pdf ? 'Solo cuando el cliente ya hizo el pedido' : 'Primero genera el PDF de este folio'; bpri.disabled=!d || !it.pdf;
+      bpri.setAttribute('aria-label','Mandar a producción el folio '+it.folio); bpri.onclick=function(){ abrirEnvioProd(it); }; }
+    acc.appendChild(bpri);
+    var bm=document.createElement('button'); bm.type='button'; bm.className='btn-ghost mc-mas'; bm.textContent='⋯'; bm.setAttribute('aria-haspopup','menu'); bm.setAttribute('aria-expanded','false'); bm.setAttribute('aria-label','Más acciones del folio '+it.folio);
+    bm.onclick=function(e){ e.stopPropagation(); menuMC(bm, [
+      { txt:'📄 Usar como base', dis:!d, title:'Crea una configuración nueva con estos datos; la original no se modifica', fn:function(b){ copiarConfiguracion(it, b); return true; } },
+      { txt:'✉️ Reenviar', fn:function(){ abrirReenvio(it); } }
+    ]); };
+    acc.appendChild(bm);
     tb.appendChild(tr);
   });
 }
+/* menú "⋯" de cada fila de Mis configuraciones */
+var MENU_MC=null;
+function cerrarMenuMC(){ if(!MENU_MC) return; MENU_MC.m.remove(); MENU_MC.btn.setAttribute('aria-expanded','false'); MENU_MC=null; }
+function menuMC(btn, items){
+  var mismo = MENU_MC && MENU_MC.btn===btn; cerrarMenuMC(); if(mismo) return;
+  var m=document.createElement('div'); m.className='mc-menu'; m.setAttribute('role','menu');
+  items.forEach(function(i){ var b=document.createElement('button'); b.type='button'; b.setAttribute('role','menuitem'); b.textContent=i.txt; b.disabled=!!i.dis; if(i.title) b.title=i.title;
+    b.onclick=function(e){ e.stopPropagation(); var seguir=i.fn(b); if(!seguir) cerrarMenuMC(); }; m.appendChild(b); });
+  document.body.appendChild(m);
+  var r=btn.getBoundingClientRect(), w=m.offsetWidth, h=m.offsetHeight;
+  var top = r.bottom+4+h > innerHeight-8 ? r.top-4-h : r.bottom+4;
+  m.style.left=Math.max(8, Math.min(r.right-w, innerWidth-w-8))+'px'; m.style.top=Math.max(8, top)+'px';
+  btn.setAttribute('aria-expanded','true'); MENU_MC={ m:m, btn:btn };
+  var f=m.querySelector('button:not(:disabled)'); if(f) f.focus();
+  m.addEventListener('keydown', function(e){ var bs=[].slice.call(m.querySelectorAll('button:not(:disabled)')), k=bs.indexOf(document.activeElement);
+    if(e.key==='ArrowDown'){ e.preventDefault(); bs[(k+1)%bs.length].focus(); } else if(e.key==='ArrowUp'){ e.preventDefault(); bs[(k-1+bs.length)%bs.length].focus(); }
+    else if(e.key==='Escape'){ e.stopPropagation(); cerrarMenuMC(); btn.focus(); } else if(e.key==='Tab'){ cerrarMenuMC(); } });
+}
+document.addEventListener('click', function(e){ if(MENU_MC && !MENU_MC.m.contains(e.target)) cerrarMenuMC(); });
+window.addEventListener('resize', cerrarMenuMC);
+document.addEventListener('scroll', function(e){ if(MENU_MC && !MENU_MC.m.contains(e.target)) cerrarMenuMC(); }, true);
 function descargarPDFRegistro(it, btn){
   if(btn) btn.disabled=true;
   return bajarArchivo(it.pdf).then(function(b){ return guardarArchivo(it.pdf.name, new Blob([b],{type:'application/pdf'})); })
