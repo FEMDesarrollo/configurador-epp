@@ -1075,6 +1075,7 @@ tr.fila-rech td{opacity:.75}
   .mc-v42 .acc{justify-content:stretch}
   .mc-v42 .acc .mc-pri{flex:1;min-width:0}
 }
+.comp-det{margin-top:12px;font-size:13px}.comp-det summary{cursor:pointer;font-weight:600}.comp-tabla{width:100%;border-collapse:collapse;margin-top:8px;font-size:12px}.comp-tabla th,.comp-tabla td{text-align:left;padding:5px 6px;border-bottom:1px solid #ddd}
 </style>
 </head>
 <body class="bloqueado">
@@ -1312,20 +1313,20 @@ tr.fila-rech td{opacity:.75}
   <div class="grid-2">
     <div class="field" id="wrapExterna"><label for="matExterna">Capa externa (Outer shell)</label>
       <select id="matExterna"></select></div>
-    <div class="field hidden" id="wrapExternaTxt"><label for="matExternaTxt">Capa externa (Outer shell)</label>
-      <input id="matExternaTxt" placeholder="Especificar material (sujeto a validación)"></div>
+    <div class="field hidden" id="wrapExternaTxt"><div class="ul warn">Este tipo de traje no tiene materiales dados de alta en el catálogo. No se puede configurar.</div></div>
     <div class="field" id="wrapColor"><label for="colorExterna">Color de la capa externa</label>
       <select id="colorExterna"></select>
       <div class="swatches" id="swatches" role="group" aria-label="Muestras de color"></div></div>
     <div class="field hidden" id="wrapColorTxt"><label for="colorExternaTxt">Color de la capa externa</label>
       <input id="colorExternaTxt" placeholder="Especificar color"></div>
-    <div class="field"><label for="matHumedad">Barrera contra la humedad (Moisture barrier)</label>
+    <div class="field" id="wrapHumedad"><label for="matHumedad">Barrera contra la humedad (Moisture barrier)</label>
       <select id="matHumedad"></select></div>
-    <div class="field"><label for="matTermica">Barrera térmica (Thermal barrier)</label>
+    <div class="field" id="wrapTermica"><label for="matTermica">Barrera térmica (Thermal barrier)</label>
       <select id="matTermica"></select></div>
   </div>
   <div class="ficha hidden" id="fichaExterna"></div>
   <div class="ul na" id="ulInfo">Las opciones de barrera contra la humedad y barrera térmica se filtran según las combinaciones dadas de alta UL.</div>
+  <details class="comp-det" id="compDet"><summary>Ver composites aprobados (lo que usa el configurador)</summary><div id="compTabla"></div></details>
 </section>
 
 <!-- ===================== SECCIÓN 4 ===================== -->
@@ -1937,7 +1938,11 @@ function actualizarMateriales(){
   var sinExterna = tipo && m && m.externa.length===0;
   mostrar('wrapExterna', !sinExterna);
   mostrar('wrapExternaTxt', !!sinExterna);
-  llenarSelect('matExterna', m ? m.externa : [], tipo ? 'Selecciona...' : 'Primero elige el tipo');
+  var externas = m ? (usaCombinaciones() ? m.externa.filter(tieneCombinaciones) : m.externa) : [];
+  llenarSelect('matExterna', externas, tipo ? 'Selecciona...' : 'Primero elige el tipo');
+  // Forestal (e Industrial sin materiales) solo eligen tela: se ocultan las barreras que no aplican
+  mostrar('wrapHumedad', !tipo || usaCombinaciones());
+  mostrar('wrapTermica', !tipo || usaCombinaciones());
   actualizarColores();
 }
 
@@ -1947,6 +1952,13 @@ function usaCombinaciones(){
   return !!(m && m.humedad.length);
 }
 function unicos(arr){ return arr.filter(function(x,i){ return arr.indexOf(x)===i; }); }
+/* Composites aprobados: una capa externa solo es elegible si tiene al menos una combinación dada de alta */
+function tieneCombinaciones(externa){ return datosProducto.combinacionesUL.some(function(r){ return r[0]===externa; }); }
+function combinacionAprobada(){
+  var e=val('matExterna'), h=val('matHumedad'), t=val('matTermica');
+  if(!e||!h||!t) return null;
+  return datosProducto.combinacionesUL.filter(function(r){ return r[0]===e && r[1]===h && r[2]===t; })[0] || null;
+}
 function actualizarHumedad(){
   var tipo=val('tipoTraje'), e=val('matExterna');
   if(!usaCombinaciones()){
@@ -1990,6 +2002,32 @@ function actualizarColores(){
   actualizarHumedad();
 }
 
+/* Lista de solo lectura: lo que el configurador acepta, tal como lo lee del catálogo */
+function pintarComposites(){
+  var box=$('compTabla'); if(!box) return;
+  box.textContent='';
+  var lista=(datosProducto.composites||[]);
+  if(!lista.length){ box.textContent='El catálogo cargado no tiene la hoja Composites_Aprobados.'; return; }
+  var tabla=document.createElement('table'); tabla.className='comp-tabla';
+  var cab=['Modelo','Tipo','Capa externa','Humedad','Térmica','THL (W/m²)','TPP (cal/cm²)'];
+  var tr0=document.createElement('tr');
+  cab.forEach(function(h){ var th=document.createElement('th'); th.scope='col'; th.textContent=h; tr0.appendChild(th); });
+  var thead=document.createElement('thead'); thead.appendChild(tr0); tabla.appendChild(thead);
+  var tb=document.createElement('tbody');
+  lista.forEach(function(f){
+    var tr=document.createElement('tr');
+    [etiqueta(f.modelo), etiqueta(f.tipo), f.externa, f.humedad, f.termica, f.thl!==null ? f.thl.toFixed(1) : 'N/A', f.tpp.toFixed(1)].forEach(function(v){
+      var td=document.createElement('td'); td.textContent=v; tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+  tabla.appendChild(tb);
+  box.appendChild(tabla);
+  var nota=document.createElement('p'); nota.className='ul na';
+  nota.textContent='Solo lectura. '+lista.length+' filas: estas son las únicas combinaciones que acepta el configurador.';
+  box.appendChild(nota);
+}
+
 function verificarUL(){
   var box=$('ulInfo'), tipo=val('tipoTraje');
   var m = tipo ? datosProducto.materiales[tipo] : null;
@@ -2006,7 +2044,7 @@ function verificarUL(){
     box.textContent='✔ Combinación dada de alta UL · THL: '+(c[3]!==null?c[3].toFixed(1)+' W/m²':'N/A')+' · TPP: '+c[4].toFixed(1)+' cal/cm²';
   } else {
     box.className='ul warn';
-    box.textContent='⚠ Esta combinación no está en la lista de combinaciones dadas de alta UL. Queda sujeta a validación técnica.';
+    box.textContent='✖ Esta combinación no está dada de alta UL y no se puede configurar. Elige otra barrera.';
   }
 }
 
@@ -2136,6 +2174,7 @@ function inicializar(){
 
   var d=datosProducto;
   llenarSelect('tipoTraje', Object.keys(d.tipos));
+  pintarComposites();
   ['z1Aplica','z2Aplica','logoAplica','frAplica'].forEach(function(id){ llenarSelect(id, d.siNo); $(id).value=''; });
   llenarSelect('z1Fijacion', d.fijacionZona1); llenarSelect('z1Tamano', d.tamanos);
   llenarSelect('z2Fijacion', d.fijacionZona2); llenarSelect('z2Tamano', d.tamanos);
@@ -2215,6 +2254,10 @@ function validarFormulario(){
   }
   if(val('reqEsp') && !val('reqEspDet')) return error($('reqEspDet'),'Describe los requisitos especiales que marcaste');
   if(val('clientPhone').replace(/\D/g,'').length<8) return error($('clientPhone'),'El teléfono debe tener al menos 8 dígitos');
+  var tipoUL=val('tipoTraje'), mt=tipoUL ? datosProducto.materiales[tipoUL] : null;
+  if(mt && mt.externa.length===0) return error($('tipoTraje'),'Este tipo no tiene materiales dados de alta en el catálogo');
+  if(mt && !val('matExterna')) return error($('matExterna'),'Selecciona la capa externa');
+  if(usaCombinaciones() && !combinacionAprobada()) return error($('matTermica'),'La combinación de capas no está dada de alta UL');
   return { ok:true };
   function error(el,msg){
     el.classList.add('invalid');
@@ -5359,10 +5402,24 @@ function construirCatalogo(wb){
     d.fichas[m].colores.push(c); if(/^#[0-9a-f]{6}$/i.test(t(r['Hex referencia']))) COLOR_HEX[c]=t(r['Hex referencia']);
   });
   var num=function(v){ var n=parseFloat(String(v).replace(',','.')); return isNaN(n)?null:n; };
-  filas(wb,'Combinaciones_UL').filter(function(r){ return activo(r,'En configurador'); }).forEach(function(r){
-    var tpp=num(r['TPP (cal/cm²)']); if(tpp===null) return;
-    d.combinacionesUL.push([t(r['Capa externa']), t(r['Barrera humedad']), t(r['Barrera térmica']), num(r['THL (W/m²)']), tpp]);
-  });
+  d.composites=[];
+  if(wb.Sheets['Composites_Aprobados']){
+    // Fuente oficial: solo composites con Estado = Aprobado (una fila por modelo)
+    filas(wb,'Composites_Aprobados').filter(function(r){ return activo(r) && t(r['Estado'])==='Aprobado'; }).forEach(function(r){
+      var tpp=num(r['TPP (cal/cm²)']); if(tpp===null) return;
+      var fila={ modelo:t(r['Modelo']), tipo:t(r['Tipo']), externa:t(r['Capa externa']), humedad:t(r['Barrera humedad']), termica:t(r['Barrera térmica']), thl:num(r['THL (W/m²)']), tpp:tpp };
+      d.composites.push(fila);
+      // La validación de capas no depende del modelo: una sola entrada por capas
+      var yaEsta=d.combinacionesUL.some(function(c){ return c[0]===fila.externa && c[1]===fila.humedad && c[2]===fila.termica; });
+      if(!yaEsta) d.combinacionesUL.push([fila.externa, fila.humedad, fila.termica, fila.thl, fila.tpp]);
+    });
+  } else {
+    // Respaldo para catálogos anteriores sin la hoja Composites_Aprobados
+    filas(wb,'Combinaciones_UL').filter(function(r){ return activo(r,'En configurador'); }).forEach(function(r){
+      var tpp=num(r['TPP (cal/cm²)']); if(tpp===null) return;
+      d.combinacionesUL.push([t(r['Capa externa']), t(r['Barrera humedad']), t(r['Barrera térmica']), num(r['THL (W/m²)']), tpp]);
+    });
+  }
   filas(wb,'Cintas').sort(function(a,b){ return (+a['Orden']||0)-(+b['Orden']||0); }).forEach(function(r){
     var m=t(r['Modelo']); d.cintas[m]=d.cintas[m]||{chaqueta:[],pantalon:[]};
     if(/Overol/i.test(t(r['Prenda']))){ (d.cintas[m].overol=d.cintas[m].overol||[]).push(t(r['Opción'])); return; }
