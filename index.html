@@ -1077,6 +1077,7 @@ tr.fila-rech td{opacity:.75}
 }
 .comp-det{margin-top:12px;font-size:13px}.comp-det summary{cursor:pointer;font-weight:600}.comp-tabla{width:100%;border-collapse:collapse;margin-top:8px;font-size:12px}.comp-tabla th,.comp-tabla td{text-align:left;padding:5px 6px;border-bottom:1px solid #ddd}
 .prod-wrap{overflow-x:auto;margin-top:8px}.prod-tabla{width:100%;border-collapse:collapse;font-size:12px}.prod-tabla th,.prod-tabla td{text-align:left;padding:4px 4px;vertical-align:middle}.prod-tabla input,.prod-tabla select{width:100%;min-width:70px;padding:5px 6px;font:inherit}.prod-acciones{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.prod-pdfs{display:flex;flex-direction:column;gap:6px;align-items:flex-start;margin-top:10px}
+.tf-bloque{margin:10px 0 14px;padding:10px;border:1px solid var(--divider);border-radius:10px}.tf-fila{display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap}.tf-fila select{min-width:150px}.tf-fila input{flex:1;min-width:110px}
 </style>
 </head>
 <body class="bloqueado">
@@ -2274,6 +2275,30 @@ function validarFormulario(){
 function textoCampo(el){
   if(el.tagName==='SELECT'){ return el.value ? el.options[el.selectedIndex].textContent : ''; }
   return String(el.value||'').trim();
+}
+/* ===================== TALLAS A FABRICAR (configurador, Ventas) ===================== */
+var TF_PRENDAS=['Chaqueta','Pantal\u00f3n','Overol'];
+function tallasFabLeer(){
+  return [].map.call(document.querySelectorAll('#tfFilas .tf-fila'), function(f){
+    return { prenda:f.querySelector('.tf-prenda').value, talla:f.querySelector('.tf-talla').value.trim() };
+  }).filter(function(x){ return x.prenda || x.talla; });
+}
+function agregarTallaFab(datos){
+  var fila=document.createElement('div'); fila.className='tf-fila';
+  var sel=document.createElement('select'); sel.className='tf-prenda'; sel.setAttribute('aria-label','Prenda');
+  sel.appendChild(new Option('Selecciona...',''));
+  TF_PRENDAS.forEach(function(p){ sel.appendChild(new Option(p,p)); });
+  var t=document.createElement('input'); t.type='text'; t.className='tf-talla'; t.placeholder='Talla (ej. M, 42)'; t.setAttribute('aria-label','Talla');
+  var q=document.createElement('button'); q.type='button'; q.className='btn-ghost btn-sm'; q.textContent='Quitar';
+  q.onclick=function(){ fila.remove(); };
+  fila.appendChild(sel); fila.appendChild(t); fila.appendChild(q);
+  if(datos){ sel.value=datos.prenda||''; t.value=datos.talla||''; }
+  $('tfFilas').appendChild(fila);
+}
+function restaurarTallasFab(lista){
+  $('tfFilas').innerHTML='';
+  (lista||[]).forEach(function(x){ agregarTallaFab(x); });
+  if(!$('tfFilas').children.length) agregarTallaFab();
 }
 function recopilarDatos(){
   var secciones=[];
@@ -5007,6 +5032,7 @@ function abrirEnvioProd(it){
   [['Folio',it.folio],['Cliente',[c.empresa,c.nombre].filter(Boolean).join(' – ')],['Traje',trajeDe(d)]].forEach(function(p){ var dt=document.createElement('dt'); dt.textContent=p[0]; var dd=document.createElement('dd'); dd.textContent=p[1]||'—'; dl.appendChild(dt); dl.appendChild(dd); });
   $('envProdPedido').value=''; $('envProdNota').value=''; document.querySelectorAll('input[name=envProdTipo]').forEach(function(r){ r.checked=false; }); actualizarTipoEnv(); $('envProdConfirmo').checked=false; $('btnEnvProd').disabled=true; $('envProdAviso').checked=true;
   $('envProdEstado').classList.add('hidden');
+  restaurarTallasFab([]);
   $('envProdModal').classList.add('active'); setTimeout(function(){ $('envProdPedido').focus(); },40);
 }
 function cerrarEnvioProd(){ $('envProdModal').classList.remove('active'); }
@@ -5024,9 +5050,12 @@ function confirmarEnvioProd(){
   var tipoEnv=tipoEnvio();
   if(!tipoEnv){ estadoEnv('Indica si es pedido o muestra','warn'); return; }
   if(tipoEnv==='Pedido' && !val('envProdPedido')){ estadoEnv('Un pedido necesita su orden de compra','warn'); $('envProdPedido').focus(); return; }
+  var tallasEnv=tallasFabLeer();
+  if(!tallasEnv.length){ estadoEnv('Indica al menos una talla a producir','warn'); return; }
+  if(tallasEnv.some(function(x){ return !x.prenda || !x.talla; })){ estadoEnv('Cada talla necesita prenda y talla','warn'); return; }
   var d=it.datos||{}, btn=$('btnEnvProd'); btn.disabled=true;
   var ahora=new Date().toISOString();
-  var reg={ folio:it.folio, enviado:ahora, tipo:tipoEnv, pedido:val('envProdPedido'), nota:val('envProdNota'),
+  var reg={ folio:it.folio, enviado:ahora, tipo:tipoEnv, pedido:val('envProdPedido'), nota:val('envProdNota'), tallas:tallasEnv,
     vendedor:{ nombre:(SESION&&SESION.name)||d.representante||'', correo:(SESION&&SESION.username)||'' },
     cliente:d.cliente||{}, traje:d.traje||{}, fechaConfiguracion:d.fecha||'', pdf:it.pdf.name,
     requisitos:((d.campos||{}).reqEsp ? (d.campos.reqEsp+((d.campos||{}).reqEspDet ? ' — '+d.campos.reqEspDet : '')) : ''),
@@ -5048,7 +5077,7 @@ function confirmarEnvioProd(){
     if(!$('envProdAviso').checked) return;
     var c=reg.cliente||{};
     var txt='Hola,\n\n'+reg.vendedor.nombre+' mandó a producción la configuración '+it.folio+'.\n\n'+
-      'Cliente: '+[c.nombre,c.empresa].filter(Boolean).join(' – ')+'\nTraje: '+trajeDe(d)+'\nTipo: '+reg.tipo+'\n'+(reg.pedido?'Orden de compra: '+reg.pedido+'\n':'')+(reg.nota?'\nNota del vendedor:\n'+reg.nota+'\n':'')+
+      'Cliente: '+[c.nombre,c.empresa].filter(Boolean).join(' – ')+'\nTraje: '+trajeDe(d)+'\nTipo: '+reg.tipo+'\n'+'\nTallas: '+reg.tallas.map(function(x){ return x.prenda+' '+x.talla; }).join(', ')+'\n'+(reg.pedido?'Orden de compra: '+reg.pedido+'\n':'')+(reg.nota?'\nNota del vendedor:\n'+reg.nota+'\n':'')+
       '\nLa encuentras en el configurador, en la vista Producción. Se adjunta el PDF.\n\nSaludos,\n'+reg.vendedor.nombre;
     return bajarArchivo(it.pdf).then(function(b){ return correoSimple(EMAIL_PRODUCCION, 'Nuevo pedido a producción – '+(c.empresa||c.nombre||'')+' – '+it.folio, txt, [{ name:it.pdf.name, type:'application/pdf', blob:b }]); });
   }).then(function(){
@@ -5135,6 +5164,12 @@ function pintarPedidos(msg){
     var tk=td(); var ch=document.createElement('span'); ch.className='chip-estado'+(it.nCom?' com':''); ch.textContent = it.nCom ? it.nCom+(it.nCom===1?' comentario':' comentarios') : 'Sin comentarios'; tk.appendChild(ch);
     var ta=td(); var acc=document.createElement('div'); acc.className='acc'; ta.appendChild(acc);
     var b=document.createElement('button'); b.type='button'; b.className='btn-secondary'; b.textContent='Ver pedido'; b.setAttribute('aria-label','Ver el pedido '+it.folio); b.onclick=function(){ abrirPedido(it); }; acc.appendChild(b);
+    if(estadoDe(it)==='autorizada' && puedeCapturar()){
+      var bc=document.createElement('button'); bc.type='button'; bc.className='btn-primary'; bc.textContent='Capturar producción';
+      bc.setAttribute('aria-label','Capturar producción del pedido '+it.folio);
+      bc.onclick=function(){ abrirPedido(it); setTimeout(function(){ var x=$('prodCaptura'); if(x && x.scrollIntoView) x.scrollIntoView({behavior:'smooth',block:'start'}); },250); };
+      acc.appendChild(bc);
+    }
     tb.appendChild(tr);
   });
 }
@@ -5183,28 +5218,26 @@ function abrirPedido(it){
   pintarHilo(null); cargarComentarios(it);
   $('pedidoModal').classList.add('active');
 }
-/* ===================== CAPTURA DE PRODUCCI\u00d3N Y PDF POR PRENDA Y TALLA ===================== */
-var PROD_PRENDAS=['Chaqueta','Pantal\u00f3n','Camisa','Overol'];
+/* ===================== CAPTURA DE PRODUCCI Y PDF POR LOTE ===================== */
 var PROD_PDFS=[];
+function puedeCapturar(){ return PERFILES.indexOf('produccion')>=0 && VISTA==='prod'; }
 function estadoProd(msg, tipo){ var b=$('prodEstado'); b.className='ul '+(tipo||'na'); b.textContent=msg; b.classList.remove('hidden'); }
+/* Una fila por cada talla que puso Ventas. Prenda y talla no se editan aquí. */
 function agregarFilaProd(datos){
   var tr=document.createElement('tr'); tr.className='prod-fila';
+  tr.dataset.prenda=datos.prenda||''; tr.dataset.talla=datos.talla||'';
   var celda=function(el){ var td=document.createElement('td'); td.appendChild(el); tr.appendChild(td); return el; };
-  var selP=document.createElement('select'); selP.className='pf-prenda'; selP.setAttribute('aria-label','Prenda');
-  selP.appendChild(new Option('Selecciona...',''));
-  PROD_PRENDAS.forEach(function(p){ selP.appendChild(new Option(p,p)); });
+  var txt=function(v){ var sp=document.createElement('span'); sp.textContent=v||''; return sp; };
   var campo=function(cls,label,tipo){ var i=document.createElement('input'); i.className=cls; i.type=tipo||'text'; i.setAttribute('aria-label',label); return i; };
-  var talla=campo('pf-talla','Talla'), cod=campo('pf-codigo','C\u00f3digo ERP'), cant=campo('pf-cantidad','Cantidad','number'), lote=campo('pf-lote','N\u00famero de lote');
+  celda(txt(datos.prenda)); celda(txt(datos.talla));
+  var cod=celda(campo('pf-codigo','C\u00f3digo ERP')), cant=celda(campo('pf-cantidad','Cantidad','number')), lote=celda(campo('pf-lote','N\u00famero de lote'));
   cant.min='1'; cant.step='1';
-  var del=document.createElement('button'); del.type='button'; del.className='btn-ghost btn-sm'; del.textContent='Quitar';
-  del.onclick=function(){ tr.remove(); aplicarEdicionProd(); };
-  celda(selP); celda(talla); celda(cod); celda(cant); celda(lote); celda(del);
-  if(datos){ selP.value=datos.prenda||''; talla.value=datos.talla||''; cod.value=datos.codigo||''; cant.value=datos.cantidad||''; lote.value=datos.lote||''; }
+  if(datos.codigo) cod.value=datos.codigo; if(datos.cantidad) cant.value=datos.cantidad; if(datos.lote) lote.value=datos.lote;
   $('prodFilas').appendChild(tr);
 }
 function leerFilasProd(){
   return [].map.call(document.querySelectorAll('#prodFilas tr'), function(tr){
-    return { prenda:tr.querySelector('.pf-prenda').value, talla:tr.querySelector('.pf-talla').value.trim(),
+    return { prenda:tr.dataset.prenda, talla:tr.dataset.talla,
       codigo:tr.querySelector('.pf-codigo').value.trim(), cantidad:parseInt(tr.querySelector('.pf-cantidad').value,10), lote:tr.querySelector('.pf-lote').value.trim() };
   });
 }
@@ -5212,41 +5245,53 @@ function validarCapturaProd(){
   if(!val('prodOP')) return 'Escribe la OP del pedido';
   if(!val('prodSucursal')) return 'Elige la sucursal';
   var filas=leerFilasProd();
-  if(!filas.length) return 'Agrega al menos una prenda y talla';
-  var vistos={};
+  if(!filas.length) return 'Ventas no indicó tallas en este pedido';
   for(var i=0;i<filas.length;i++){
-    var f=filas[i], n=i+1;
-    if(!f.prenda) return 'Fila '+n+': elige la prenda';
-    if(!f.talla) return 'Fila '+n+': escribe la talla';
-    if(!f.codigo) return 'Fila '+n+': escribe el c\u00f3digo ERP';
-    if(!(f.cantidad>0)) return 'Fila '+n+': la cantidad debe ser mayor a cero';
-    if(!f.lote) return 'Fila '+n+': escribe el n\u00famero de lote';
-    var clave=f.prenda+'|'+f.talla+'|'+f.lote;
-    if(vistos[clave]) return 'Fila '+n+': ya hay una fila con la misma prenda, talla y lote';
-    vistos[clave]=true;
+    var f=filas[i], n=i+1, et=f.prenda+' '+f.talla;
+    if(!f.codigo) return 'Talla '+et+': escribe el c\u00f3digo ERP';
+    if(!(f.cantidad>0)) return 'Talla '+et+': la cantidad debe ser mayor a cero';
+    if(!f.lote) return 'Talla '+et+': escribe el n\u00famero de lote';
   }
   return '';
 }
 function aplicarEdicionProd(){
-  var ed=puedeDecidir();
+  var ed=puedeCapturar();
   ['prodOP','prodSucursal'].forEach(function(id){ $(id).disabled=!ed; });
-  document.querySelectorAll('#prodFilas input, #prodFilas select, #prodFilas button').forEach(function(el){ el.disabled=!ed; });
-  $('prodAgregar').hidden=!ed; $('prodGuardar').hidden=!ed;
+  document.querySelectorAll('#prodFilas input').forEach(function(el){ el.disabled=!ed; });
+  $('prodAgregar').hidden=true;
+  $('prodGuardar').hidden=!ed;
   $('prodPDFs').hidden=!(ed && PED.it && PED.it.produccion);
+}
+function cargarConfigProd(it){
+  if(it.config) return Promise.resolve(it.config);
+  var cj=(it.archivos||[]).filter(function(f){ return f.name==='configuracion.json'; })[0];
+  if(!cj) return Promise.resolve(null);
+  return textoDe(cj).then(function(t){ it.config=JSON.parse(t); return it.config; }).catch(function(){ return null; });
+}
+function cargarPedidoProd(it){
+  if(it.pedidoJ) return Promise.resolve(it.pedidoJ);
+  var pj=(it.archivos||[]).filter(function(f){ return f.name==='pedido.json'; })[0];
+  if(!pj) return Promise.resolve(null);
+  return textoDe(pj).then(function(t){ it.pedidoJ=JSON.parse(t); return it.pedidoJ; }).catch(function(){ return null; });
 }
 function pintarCaptura(it){
   var sec=$('prodCaptura'); if(!sec) return;
-  var autorizado=estadoDe(it)==='autorizada';
-  sec.hidden=!autorizado; if(!autorizado) return;
+  sec.hidden=!(estadoDe(it)==='autorizada' && puedeCapturar()); if(sec.hidden) return;
   $('prodOP').value=''; $('prodSucursal').value=''; $('prodFilas').innerHTML=''; $('prodEstado').classList.add('hidden');
   $('prodPDFsLista').innerHTML=''; PROD_PDFS=[];
   var previo=(it.archivos||[]).filter(function(f){ return f.name==='produccion.json'; })[0];
-  var carga = it.produccion ? Promise.resolve(it.produccion)
+  var guardado = it.produccion ? Promise.resolve(it.produccion)
     : (previo ? textoDe(previo).then(function(t){ return JSON.parse(t); }).catch(function(){ return null; }) : Promise.resolve(null));
-  carga.then(function(p){
+  Promise.all([cargarPedidoProd(it), guardado]).then(function(r){
     if(PED.it!==it) return;
-    if(p){ it.produccion=p; $('prodOP').value=p.op||''; $('prodSucursal').value=p.sucursal||''; (p.filas||[]).forEach(function(f){ agregarFilaProd(f); }); }
-    if(!$('prodFilas').children.length) agregarFilaProd();
+    var ped=r[0]||{}, p=r[1];
+    var tallas=ped.tallas||[];
+    if(p){ it.produccion=p; $('prodOP').value=p.op||''; $('prodSucursal').value=p.sucursal||''; }
+    tallas.forEach(function(t){
+      var previa=((p&&p.filas)||[]).filter(function(f){ return f.prenda===t.prenda && f.talla===t.talla; })[0];
+      agregarFilaProd({ prenda:t.prenda, talla:t.talla, codigo:previa&&previa.codigo, cantidad:previa&&previa.cantidad, lote:previa&&previa.lote });
+    });
+    if(!tallas.length){ estadoProd('Ventas no indicó tallas en este pedido. No hay nada que capturar.','warn'); }
     aplicarEdicionProd();
   });
 }
@@ -5257,64 +5302,65 @@ function guardarCapturaProd(){
     capturo:(SESION&&SESION.name)||'', correo:(SESION&&SESION.username)||'', fecha:new Date().toISOString() };
   var btn=$('prodGuardar'); btn.disabled=true; estadoProd('Guardando captura\u2026','na');
   putRuta(RUTA_PROD+'/'+it.folio+'/produccion.json', JSON.stringify(dato,null,1))
-    .then(function(){ it.produccion=dato; estadoProd('Captura guardada. Ya puedes generar los PDFs.','ok'); aplicarEdicionProd(); })
+    .then(function(){ it.produccion=dato; estadoProd('Captura guardada. Ya puedes generar los PDFs, uno por lote.','ok'); aplicarEdicionProd(); })
     .catch(function(e){ estadoProd(e && e.status===403 ? 'Tu cuenta no tiene permiso para escribir en la carpeta de Producci\u00f3n.' : 'No se pudo guardar la captura. Intenta de nuevo.','warn'); })
     .then(function(){ btn.disabled=false; });
-}
-function cargarConfigProd(it){
-  var cj=(it.archivos||[]).filter(function(f){ return f.name==='configuracion.json'; })[0];
-  return cj ? textoDe(cj).then(function(t){ return JSON.parse(t); }).catch(function(){ return null; }) : Promise.resolve(null);
 }
 function filaPDF(k,v){ return v ? '<tr><td style="padding:4px 8px;border:1px solid #ddd;font-weight:bold;width:36%;color:#222944;">'+esc(k)+'</td><td style="padding:4px 8px;border:1px solid #ddd;white-space:pre-wrap;">'+esc(v)+'</td></tr>' : ''; }
 function bloquePDF(titulo, filas){
   return '<div style="background:#1f2545;color:#fff;font-weight:bold;font-size:11px;padding:6px 10px;border-left:4px solid #CF0A2C;text-transform:uppercase;margin-top:10px;">'+esc(titulo)+'</div>'+
     '<table style="width:100%;border-collapse:collapse;font-size:10.5px;">'+filas+'</table>';
 }
-function htmlPDFProd(it, dato, fila, config){
+/* Un PDF por lote: lista las tallas de ese lote */
+function htmlPDFProd(it, dato, lote, filasLote, config){
   var r=it.reg||{}, c=r.cliente||{}, v=r.vendedor||{};
   var cab='<table style="width:100%;border-collapse:collapse;border-bottom:4px solid #CF0A2C;"><tr>'+
     '<td style="padding:6px 0 10px;"><img src="'+LOGO_SRC+'" width="169" height="44" style="height:44px;width:169px;"></td>'+
     '<td style="padding:6px 0 10px;text-align:right;color:#1f2545;"><div style="font-size:14px;font-weight:bold;">Orden de producci\u00f3n</div>'+
     '<div style="font-size:10px;color:#5b6070;">Folio '+esc(it.folio)+'</div></td></tr></table>';
-  var prod=bloquePDF('Datos de producci\u00f3n', filaPDF('OP',dato.op)+filaPDF('Sucursal',dato.sucursal)+filaPDF('Tipo de env\u00edo',r.tipo)+
-    filaPDF('Prenda',fila.prenda)+filaPDF('Talla',fila.talla)+filaPDF('C\u00f3digo ERP',fila.codigo)+filaPDF('Cantidad',String(fila.cantidad))+filaPDF('Lote',fila.lote));
+  var cabeza=bloquePDF('Datos de producci\u00f3n', filaPDF('OP',dato.op)+filaPDF('Sucursal',dato.sucursal)+filaPDF('Tipo de env\u00edo',(it.pedidoJ&&it.pedidoJ.tipo)||r.tipo)+filaPDF('N\u00famero de pedido u OC',(it.pedidoJ&&it.pedidoJ.pedido)||'')+filaPDF('Lote',lote));
+  var tallas='<table style="width:100%;border-collapse:collapse;font-size:10.5px;margin-top:6px;"><tr>'+
+    ['Prenda','Talla','C\u00f3digo ERP','Cantidad'].map(function(h){ return '<th style="padding:4px 8px;border:1px solid #ddd;background:#f2f2f2;text-align:left;">'+h+'</th>'; }).join('')+'</tr>'+
+    filasLote.map(function(f){ return '<tr>'+[f.prenda,f.talla,f.codigo,String(f.cantidad)].map(function(x){ return '<td style="padding:4px 8px;border:1px solid #ddd;">'+esc(x)+'</td>'; }).join('')+'</tr>'; }).join('')+'</table>';
   var venta=bloquePDF('Datos de venta', filaPDF('Cliente',[c.nombre,c.empresa].filter(Boolean).join(' \u00b7 '))+filaPDF('Correo del cliente',c.email)+
     filaPDF('Vendedor',[v.nombre,v.correo].filter(Boolean).join(' \u00b7 '))+filaPDF('Traje',trajeDe(r))+
     filaPDF('Requisitos especiales',(r.campos&&r.campos.reqEsp)?(r.campos.reqEsp+(r.campos.reqEspDet?' \u2014 '+r.campos.reqEspDet:'')):'')+filaPDF('Nota de Ventas',r.nota||''));
-  var cfg=(config&&config.secciones||[]).map(function(sc){
+  var cfg=((config&&config.secciones)||[]).map(function(sc){
     var filas=(sc.filas||[]).map(function(f){ return filaPDF(f[0],f[1]); }).join('');
     return bloquePDF(sc.titulo, filas||'<tr><td style="padding:6px 10px;border:1px solid #ddd;color:#777;">Sin especificaciones</td></tr>');
   }).join('');
-  var nota='<div style="margin-top:12px;font-size:9px;color:#666;">La configuraci\u00f3n mostrada es la del folio completo. La separaci\u00f3n por prenda queda pendiente.</div>';
-  return '<div style="font-family:Helvetica,Arial,sans-serif;color:#212121;font-size:10.5px;width:718px;">'+cab+prod+venta+cfg+nota+'</div>';
+  var nota='<div style="margin-top:12px;font-size:9px;color:#666;">La configuraci\u00f3n mostrada es la del folio completo.</div>';
+  return '<div style="font-family:Helvetica,Arial,sans-serif;color:#212121;font-size:10.5px;width:718px;">'+cab+cabeza+bloquePDF('Tallas de este lote', tallas)+venta+cfg+nota+'</div>';
 }
-function generarPDFProd(it, dato, fila, config){
+function generarPDFProd(it, dato, lote, filasLote, config){
   var sinAcentos=function(x){ return String(x).normalize('NFD').replace(/[\u0300-\u036f]/g,''); };
-  var nombre=sinAcentos(it.folio+'_'+fila.prenda+'_T'+fila.talla+'_L'+fila.lote).replace(/[^A-Za-z0-9_.-]+/g,'-')+'.pdf';
+  var nombre=sinAcentos(it.folio+'_Lote_'+lote).replace(/[^A-Za-z0-9_.-]+/g,'-')+'.pdf';
   var options={ margin:10, filename:nombre, image:{type:'jpeg',quality:0.96}, html2canvas:{scale:2,useCORS:true,scrollX:0,scrollY:0},
     jsPDF:{orientation:'portrait',unit:'mm',format:'a4'}, pagebreak:{mode:['css','legacy'],avoid:['tr']} };
-  return html2pdf().set(options).from(htmlPDFProd(it,dato,fila,config)).toPdf().get('pdf').then(function(pdf){
+  return html2pdf().set(options).from(htmlPDFProd(it,dato,lote,filasLote,config)).toPdf().get('pdf').then(function(pdf){
     try{ marcaAgua(pdf); }catch(e){ console.warn('Marca de agua no aplicada', e); }
     return pdf.output('blob');
-  }).then(function(blob){ return { blob:blob, nombre:nombre, prenda:fila.prenda, talla:fila.talla, lote:fila.lote }; });
+  }).then(function(blob){ return { blob:blob, nombre:nombre, lote:lote, tallas:filasLote.length }; });
 }
 function generarPDFsProd(){
   var it=PED.it; if(!it||!it.produccion) return;
   var err=validarCapturaProd(); if(err){ estadoProd(err,'warn'); return; }
-  var dato=it.produccion, filas=dato.filas||[], btn=$('prodPDFs');
-  btn.disabled=true; estadoProd('Generando '+filas.length+' PDF(s)\u2026','na');
+  var dato=it.produccion, btn=$('prodPDFs');
+  var grupos={}, orden=[];
+  (dato.filas||[]).forEach(function(f){ if(!grupos[f.lote]){ grupos[f.lote]=[]; orden.push(f.lote); } grupos[f.lote].push(f); });
+  btn.disabled=true; estadoProd('Generando '+orden.length+' PDF(s), uno por lote\u2026','na');
   var salida=[];
   cargarConfigProd(it).then(function(config){
-    return filas.reduce(function(p,fila){
+    return orden.reduce(function(p,lote){
       return p.then(function(){
-        return generarPDFProd(it,dato,fila,config).then(function(res){
+        return generarPDFProd(it,dato,lote,grupos[lote],config).then(function(res){
           return putRuta(RUTA_PROD+'/'+it.folio+'/PDF/'+res.nombre, res.blob, 'application/pdf').then(function(){ salida.push(res); });
         });
       });
     }, Promise.resolve());
   }).then(function(){
     PROD_PDFS=salida; pintarPDFsProd();
-    estadoProd(salida.length+' PDF(s) generados y guardados en Producci\u00f3n. Desc\u00e1rgalos abajo.','ok');
+    estadoProd(salida.length+' PDF(s) generados, uno por lote, y guardados en Producci\u00f3n. Desc\u00e1rgalos abajo.','ok');
   }).catch(function(e){
     estadoProd('No se pudieron generar los PDFs. '+(e && e.status===403 ? 'Tu cuenta no tiene permiso para escribir en Producci\u00f3n.' : 'Intenta de nuevo.'),'warn');
   }).then(function(){ btn.disabled=false; });
@@ -5323,7 +5369,7 @@ function pintarPDFsProd(){
   var box=$('prodPDFsLista'); box.innerHTML='';
   PROD_PDFS.forEach(function(res){
     var b=document.createElement('button'); b.type='button'; b.className='btn-ghost btn-sm';
-    b.textContent='Descargar '+res.nombre;
+    b.textContent='Descargar lote '+res.lote+' ('+res.tallas+' talla(s))';
     b.onclick=function(){ b.disabled=true; guardarArchivo(res.nombre, res.blob).catch(function(){ mostrarMensaje('No se pudo descargar '+res.nombre,'error'); }).then(function(){ b.disabled=false; }); };
     box.appendChild(b);
   });
@@ -5941,6 +5987,12 @@ cargarCapacidades();
       <dl class="adm-dl" id="envProdResumen"></dl>
       <p class="hint-txt">Al mandarla a producción, la configuración queda cerrada: ya no se puede modificar. Si el cliente pide un cambio, usa «Usar como base» para generar un folio nuevo.</p>
       <div class="grid-2">
+        <div class="tf-bloque full" id="tallasFabBloque">
+          <div class="t">Tallas a producir</div>
+          <p class="hint-txt">Indica por prenda las tallas que se mandan a producir. Producción completará lote, código ERP y cantidad de cada una; no agregará ni quitará tallas.</p>
+          <div id="tfFilas"></div>
+          <button type="button" class="btn-secondary btn-sm" onclick="agregarTallaFab()">+ Agregar talla</button>
+        </div>
         <fieldset class="field full" style="border:0;padding:0;margin:0"><legend style="font-size:13px;font-weight:600;margin-bottom:6px">Tipo de envío</legend>
           <label class="chk envprod-chk"><input type="radio" name="envProdTipo" value="Pedido" onchange="actualizarTipoEnv()"> Pedido</label>
           <label class="chk envprod-chk"><input type="radio" name="envProdTipo" value="Muestra" onchange="actualizarTipoEnv()"> Muestra</label>
@@ -5975,7 +6027,7 @@ cargarCapacidades();
               <div class="field"><label for="prodSucursal">Sucursal</label><select id="prodSucursal"><option value="">Selecciona...</option><option value="Lerma">Lerma</option><option value="Vallejo">Vallejo</option></select></div>
             </div>
             <div class="prod-wrap"><table class="prod-tabla">
-              <thead><tr><th scope="col">Prenda</th><th scope="col">Talla</th><th scope="col">Código ERP</th><th scope="col">Cantidad</th><th scope="col">Lote</th><th scope="col"><span class="sr-only">Acción</span></th></tr></thead>
+              <thead><tr><th scope="col">Prenda</th><th scope="col">Talla</th><th scope="col">Código ERP</th><th scope="col">Cantidad</th><th scope="col">Lote</th></tr></thead>
               <tbody id="prodFilas"></tbody>
             </table></div>
             <div class="prod-acciones">
