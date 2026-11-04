@@ -5269,6 +5269,7 @@ function cargarConfigProd(it){
   return textoDe(cj).then(function(t){ it.config=JSON.parse(t); return it.config; }).catch(function(){ return null; });
 }
 function cargarPedidoProd(it){
+  if(it.reg && it.reg.tallas) return Promise.resolve(it.reg);
   if(it.pedidoJ) return Promise.resolve(it.pedidoJ);
   var pj=(it.archivos||[]).filter(function(f){ return f.name==='pedido.json'; })[0];
   if(!pj) return Promise.resolve(null);
@@ -5291,7 +5292,7 @@ function pintarCaptura(it){
       var previa=((p&&p.filas)||[]).filter(function(f){ return f.prenda===t.prenda && f.talla===t.talla; })[0];
       agregarFilaProd({ prenda:t.prenda, talla:t.talla, codigo:previa&&previa.codigo, cantidad:previa&&previa.cantidad, lote:previa&&previa.lote });
     });
-    if(!tallas.length){ estadoProd('Ventas no indicó tallas en este pedido. No hay nada que capturar.','warn'); }
+    if(!tallas.length){ estadoProd('Este pedido no tiene tallas registradas, así que no hay filas que capturar. Si se mandó a producción antes de esta versión, Ventas debe volver a mandarlo indicando las tallas a producir.','warn'); }
     aplicarEdicionProd();
   });
 }
@@ -6019,7 +6020,7 @@ cargarCapacidades();
           <dl class="adm-dl" id="pedResumen"></dl>
           <div class="ped-base" id="pedBase" hidden></div><div class="adm-acc" id="pedArchivos"></div>
           <details class="ped-detalle"><summary>Ver la configuración completa</summary><div id="pedSecciones"></div></details>
-          <section class="ped-sec hidden" id="prodCaptura" aria-labelledby="prodTit">
+          <section class="ped-sec" id="prodCaptura" aria-labelledby="prodTit" hidden>
             <h4 id="prodTit">Captura de producción</h4>
             <p class="hint-txt">Una OP y una sucursal para todo el pedido. Luego, una fila por prenda y talla: cada fila genera su propio PDF.</p>
             <div class="grid-2">
