@@ -5377,13 +5377,32 @@ function bloqueCapturaPDF(it, dato, lote, filasLote){
   return '<div style="margin-bottom:6px;">'+cab+tabla+'</div>';
 }
 /* Un PDF por lote: la misma ficha de la configuraci\u00f3n, con el encabezado de captura */
+/* En Producción no se carga la configuración completa: se lee configuracion.json de la carpeta del pedido */
+function datosConfigProd(it){
+  if(it.datos) return Promise.resolve(it.datos);
+  var cj=(it.archivos||[]).filter(function(f){ return f.name.toLowerCase()==='configuracion.json'; })[0];
+  if(!cj) return Promise.reject({ mensaje:'Este pedido no tiene su configuraci\u00f3n en la carpeta de Producci\u00f3n.' });
+  return textoDe(cj).then(function(t){ it.datos=JSON.parse(t); return it.datos; });
+}
+/* Logos de la configuraci\u00f3n: son los archivos de imagen copiados a la carpeta del pedido */
+function logosConfigProd(it){
+  return (it.archivos||[]).filter(function(f){ return /\.(png|jpe?g|gif|webp)$/i.test(f.name) && (!f.size || f.size<=ADJ_MAX_MB*1048576); });
+}
 function generarPDFProd(it, dato, lote, filasLote, config){
   var sinAcentos=function(x){ return String(x).normalize('NFD').replace(/[\u0300-\u036f]/g,''); };
   var nombre=sinAcentos(it.folio+'_Lote_'+lote).replace(/[^A-Za-z0-9_.-]+/g,'-')+'.pdf';
-  var asegurar = it.pendiente ? contenidoCarpeta(it) : Promise.resolve();
-  return asegurar.then(function(){
-    aplicarRegistro(it.datos);          // carga la configuraci\u00f3n guardada del folio
+  return datosConfigProd(it).then(function(datos){
+    aplicarRegistro(datos);             // carga la configuraci\u00f3n guardada del folio
     FOLIO=it.folio;
+    var logos=logosConfigProd(it);
+    if(!logos.length) return;
+    return Promise.all(logos.map(function(f){
+      return bajarArchivo(f).then(function(b){ return new File([b], f.name, { type:(f.file&&f.file.mimeType)||b.type||'image/png' }); }).catch(function(){ return null; });
+    })).then(function(files){
+      agregarAdjuntos(files.filter(Boolean));
+      return new Promise(function(r){ setTimeout(r, 400); });   // deja que los logos se dibujen
+    });
+  }).then(function(){
     return Promise.all([vistaComoImagen('frente'), vistaComoImagen('espalda'), prepararLogosPDF()]);
   }).then(function(imgs){
     return crearPDF(imgs[0], imgs[1], imgs[2], bloqueCapturaPDF(it, dato, lote, filasLote));
@@ -5409,7 +5428,11 @@ function generarPDFsProd(){
     PROD_PDFS=salida; pintarPDFsProd();
     estadoProd(salida.length+' PDF(s) generados, uno por lote, y guardados en Producci\u00f3n. Desc\u00e1rgalos abajo.','ok');
   }).catch(function(e){
-    estadoProd('No se pudieron generar los PDFs. '+(e && e.status===403 ? 'Tu cuenta no tiene permiso para escribir en Producci\u00f3n.' : 'Intenta de nuevo.'),'warn');
+    var motivo = e && e.mensaje ? e.mensaje
+      : (e && e.status===403 ? 'Tu cuenta no tiene permiso para escribir en Producci\u00f3n.'
+      : (e && (e.status===429 || e.status===503) ? 'SharePoint est\u00e1 ocupado. Intenta en unos minutos.'
+      : 'Ocurri\u00f3 un error al generar el PDF' + (e && e.message ? ' ('+e.message+')' : '') + '.'));
+    estadoProd('No se pudieron generar los PDFs. '+motivo,'warn');
   }).then(function(){ btn.disabled=false; });
 }
 function pintarPDFsProd(){
